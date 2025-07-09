@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Calendar, Package, ShieldCheck, Tag } from 'lucide-react';
 import type { InventoryItem } from '@/types';
+import { TroubleshootingAssistant } from './components/troubleshooting-assistant';
 
 const statusVariant: Record<InventoryItem['status'], 'default' | 'secondary' | 'destructive'> = {
   'In Stock': 'default',
@@ -65,7 +66,7 @@ export default function InventoryDetailPage({ params }: { params: { id: string }
           </Card>
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 flex flex-col gap-8">
             <Card>
                 <CardHeader>
                     <CardTitle>Description</CardTitle>
@@ -74,6 +75,7 @@ export default function InventoryDetailPage({ params }: { params: { id: string }
                     <p className="text-sm text-muted-foreground whitespace-pre-wrap">{item.description}</p>
                 </CardContent>
             </Card>
+            {item.type === 'Device' && <TroubleshootingAssistant machineName={item.name} />}
         </div>
       </div>
     </div>

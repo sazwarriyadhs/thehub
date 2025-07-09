@@ -38,6 +38,7 @@ const prompt = ai.definePrompt({
   - Appointment Scheduling: Manage bookings for product demos, training sessions, and consultations with clients.
   - Reporting and Analytics: Generate reports on inventory levels, service performance, client demographics, and revenue trends.
   - AI-Powered Product Recommendation Tool: Generate product recommendations for clients to purchase from your catalog.
+  - AI-Powered Troubleshooting Assistant: Provides step-by-step guidance for machine issues, available on the inventory detail page.
   - Realtime Map: Display real-time location of your service technicians.
   - Client Portal: A dedicated portal for your clients to view their history and appointments with you.
   - Machine Monitoring: Track the lifecycle of each machine from acquisition to end-of-use.

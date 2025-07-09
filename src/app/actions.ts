@@ -2,6 +2,7 @@
 
 import { getProductRecommendations } from '@/ai/flows/ai-product-recommendations';
 import { aiHelpAssistant } from '@/ai/flows/ai-help-assistant';
+import { getTroubleshootingAssistance } from '@/ai/flows/ai-troubleshooting-assistant';
 
 type ActionResult<T> = {
     data?: T;
@@ -36,4 +37,20 @@ export async function getHelp(
         console.error(e);
         return { error: 'Failed to get help. Please try again.' };
     }
+}
+
+export async function getTroubleshootingSteps(
+  machineName: string,
+  problemDescription: string
+): Promise<ActionResult<Awaited<ReturnType<typeof getTroubleshootingAssistance>>>> {
+  try {
+    if (!machineName || !problemDescription) {
+      return { error: 'Machine name and problem description are required.' };
+    }
+    const result = await getTroubleshootingAssistance({ machineName, problemDescription });
+    return { data: result };
+  } catch (e: any) {
+    console.error(e);
+    return { error: 'Failed to generate troubleshooting steps. Please try again.' };
+  }
 }
