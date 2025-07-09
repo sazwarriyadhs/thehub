@@ -13,16 +13,17 @@ import VectorSource from 'ol/source/Vector';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { fromLonLat } from 'ol/proj';
-import { Style, Circle, Fill, Stroke } from 'ol/style';
+import { Style, Icon } from 'ol/style';
 import Overlay from 'ol/Overlay';
 import { X } from 'lucide-react';
 
 type MapViewProps = {
   machines?: DeployedMachine[];
   activeMachine?: DeployedMachine | null;
+  stableMachinesKey?: string;
 };
 
-export default function MapView({ machines = [], activeMachine }: MapViewProps) {
+export default function MapView({ machines = [], activeMachine, stableMachinesKey }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const vectorLayerRef = useRef<VectorLayer<VectorSource<Point>> | null>(null);
@@ -35,18 +36,16 @@ export default function MapView({ machines = [], activeMachine }: MapViewProps) 
   // Effect for initializing the map
   useEffect(() => {
     if (mapRef.current && !mapInstanceRef.current) { // Only run if map not initialized
-      const rootStyle = getComputedStyle(document.documentElement);
-      const primaryColor = `hsl(${rootStyle.getPropertyValue('--primary').trim()})`;
-      const primaryForegroundColor = `hsl(${rootStyle.getPropertyValue('--primary-foreground').trim()})`;
-
       const vectorSource = new VectorSource();
       const vectorLayer = new VectorLayer({
         source: vectorSource,
         style: new Style({
-          image: new Circle({
-            radius: 7,
-            fill: new Fill({ color: primaryColor }),
-            stroke: new Stroke({ color: primaryForegroundColor, width: 2 }),
+          image: new Icon({
+            anchor: [0.5, 1],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'fraction',
+            src: '/images/marker.png',
+            scale: 0.8,
           }),
         }),
       });
@@ -129,7 +128,7 @@ export default function MapView({ machines = [], activeMachine }: MapViewProps) 
         vectorSource.addFeatures(features);
       }
     }
-  }, [machines]); // Re-run when machines array changes
+  }, [machines, stableMachinesKey]); // Re-run when machines array changes
 
   // Effect for panning to active machine
   useEffect(() => {
