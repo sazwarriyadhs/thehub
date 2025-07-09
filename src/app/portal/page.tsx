@@ -6,13 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/page-header';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   Calendar,
   Mail,
   Phone,
   LogOut,
   Heart,
-  Bot,
   CheckCircle,
   AlertCircle,
   XCircle,
@@ -42,12 +43,21 @@ export default function ClientDashboardPage() {
     <div className="flex flex-col gap-8">
         <header className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-                <Bot className="w-8 h-8 text-primary" />
+                <Image 
+                    src="/images/logo.png" 
+                    alt="AesthetiCare Pro Logo"
+                    width={32}
+                    height={32}
+                    className="rounded-md object-contain"
+                    data-ai-hint="logo"
+                />
                 <h1 className="text-xl font-bold text-foreground">AesthetiCare Pro Portal</h1>
             </div>
-            <Button variant="ghost">
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
+            <Button variant="ghost" asChild>
+                <Link href="/login">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                </Link>
             </Button>
         </header>
 
