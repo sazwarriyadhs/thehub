@@ -1,9 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { LogIn, Newspaper, ChevronRight } from 'lucide-react';
+import Autoplay from "embla-carousel-autoplay"
+import React from 'react';
 
 const sliderServices = [
   {
@@ -61,6 +65,10 @@ const brandLogos = [
 ];
 
 export default function HomePage() {
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnMouseEnter: true })
+  )
+
   return (
     <main className="flex min-h-screen flex-col items-center bg-muted/40">
       {/* Header Section */}
@@ -173,6 +181,7 @@ export default function HomePage() {
         <div className="container mx-auto">
            <h3 className="text-center text-lg font-semibold text-muted-foreground mb-8">Merek Terkemuka yang Kami Distribusikan</h3>
            <Carousel
+            plugins={[plugin.current]}
             opts={{
               align: "start",
               loop: true,
