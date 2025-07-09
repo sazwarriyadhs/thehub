@@ -49,12 +49,11 @@ export default function HomePage() {
 
             <Card className="text-left overflow-hidden flex flex-col">
                 <Image 
-                    src="https://placehold.co/600x400.png"
+                    src="/images/client.jpeg"
                     alt="Client Portal"
                     width={600}
                     height={400}
                     className="w-full h-48 object-cover"
-                    data-ai-hint="clinic reception"
                 />
                 <CardContent className="p-6 flex flex-col flex-grow">
                      <h2 className="text-2xl font-semibold mb-2">Untuk Klinik & Dokter</h2>
