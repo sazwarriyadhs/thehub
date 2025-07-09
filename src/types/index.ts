@@ -33,6 +33,10 @@ export type Client = {
   phone: string;
   joinDate: string;
   avatar: string;
+  penanggungJawab: {
+    nama: string;
+    jabatan: string;
+  };
   treatmentHistory: string;
   preferences: string[];
   location: {

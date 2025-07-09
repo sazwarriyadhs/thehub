@@ -32,6 +32,8 @@ export const clientFormSchema = z.object({
     phone: z.string().min(10, { message: 'Please enter a valid phone number.' }),
     joinDate: z.date({ required_error: 'Join date is required.' }),
     avatar: z.string().url({ message: 'Please enter a valid URL for the avatar.' }).optional().or(z.literal('')),
+    penanggungJawabNama: z.string().min(3, { message: 'Nama penanggung jawab harus diisi.' }),
+    penanggungJawabJabatan: z.string().min(3, { message: 'Jabatan penanggung jawab harus diisi.' }),
     treatmentHistory: z.string().min(10, { message: 'History must be at least 10 characters.' }),
     preferences: z.string().transform((val) => val.split(',').map(s => s.trim())).optional(),
     locationAddress: z.string().min(10, { message: 'Address must be at least 10 characters.' }),

@@ -86,6 +86,8 @@ export async function saveClient(formData: FormData) {
     phone: formData.get('phone'),
     joinDate: new Date(formData.get('joinDate') as string),
     avatar: formData.get('avatar'),
+    penanggungJawabNama: formData.get('penanggungJawabNama'),
+    penanggungJawabJabatan: formData.get('penanggungJawabJabatan'),
     treatmentHistory: formData.get('treatmentHistory'),
     preferences: formData.get('preferences'),
     locationAddress: formData.get('locationAddress'),
@@ -106,7 +108,16 @@ export async function saveClient(formData: FormData) {
   
   // Reconstruct nested objects for logging
   const finalData = {
-      ...clientData,
+      name: clientData.name,
+      email: clientData.email,
+      phone: clientData.phone,
+      joinDate: clientData.joinDate,
+      avatar: clientData.avatar,
+      penanggungJawab: {
+        nama: clientData.penanggungJawabNama,
+        jabatan: clientData.penanggungJawabJabatan,
+      },
+      treatmentHistory: clientData.treatmentHistory,
       preferences: clientData.preferences || [],
       location: {
           address: clientData.locationAddress,
@@ -114,22 +125,15 @@ export async function saveClient(formData: FormData) {
           lng: clientData.locationLng,
       },
   };
-  
-  // In a real app, you'd handle this more cleanly, but for logging it's fine.
-  const tempFinalData: any = finalData;
-  delete tempFinalData.locationAddress;
-  delete tempFinalData.locationLat;
-  delete tempFinalData.locationLng;
-
 
   try {
     if (id) {
-      console.log(`Updating client ${id}:`, tempFinalData);
-      // e.g., await db.client.update({ where: { id }, data: tempFinalData });
+      console.log(`Updating client ${id}:`, finalData);
+      // e.g., await db.client.update({ where: { id }, data: finalData });
     } else {
       const newId = `cli-${Date.now()}`;
-      console.log(`Creating new client ${newId}:`, {id: newId, ...tempFinalData});
-      // e.g., await db.client.create({ data: { id: newId, ...tempFinalData } });
+      console.log(`Creating new client ${newId}:`, {id: newId, ...finalData});
+      // e.g., await db.client.create({ data: { id: newId, ...finalData } });
     }
   } catch (e: any) {
     console.error('Failed to save client:', e);

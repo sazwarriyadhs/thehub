@@ -31,6 +31,8 @@ export function ClientForm({ client }: ClientFormProps) {
     ...client,
     joinDate: typeof client.joinDate === 'string' ? parseISO(client.joinDate) : new Date(client.joinDate),
     preferences: client.preferences.join(', '),
+    penanggungJawabNama: client.penanggungJawab.nama,
+    penanggungJawabJabatan: client.penanggungJawab.jabatan,
     locationAddress: client.location.address,
     locationLat: client.location.lat,
     locationLng: client.location.lng,
@@ -40,6 +42,8 @@ export function ClientForm({ client }: ClientFormProps) {
     phone: '',
     joinDate: new Date(),
     avatar: 'https://placehold.co/100x100.png',
+    penanggungJawabNama: '',
+    penanggungJawabJabatan: '',
     treatmentHistory: '',
     preferences: '',
     locationAddress: '',
@@ -176,6 +180,38 @@ export function ClientForm({ client }: ClientFormProps) {
                 </FormItem>
             )}
         />
+        <div className="space-y-4 rounded-md border p-4">
+            <h3 className="font-medium">Penanggung Jawab</h3>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <FormField
+                    control={form.control}
+                    name="penanggungJawabNama"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Nama</FormLabel>
+                        <FormControl>
+                            <Input placeholder="e.g., Dr. Andreas" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="penanggungJawabJabatan"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Jabatan</FormLabel>
+                        <FormControl>
+                            <Input placeholder="e.g., Kepala Cabang" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            </div>
+        </div>
+
         <FormField
             control={form.control}
             name="preferences"
@@ -196,10 +232,10 @@ export function ClientForm({ client }: ClientFormProps) {
           name="treatmentHistory"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Client Notes / History</FormLabel>
+              <FormLabel>Purchase History & Notes</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Detailed description of client history, focus areas, etc."
+                  placeholder="Detailed description of client purchase history, notes, shipment info etc."
                   className="resize-y min-h-[100px]"
                   {...field}
                 />

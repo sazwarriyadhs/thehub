@@ -4,13 +4,13 @@ export const inventoryItems: InventoryItem[] = [
   // Devices
   { id: 'inv-001', name: 'Sofwave™', type: 'Device', quantity: 3, purchaseDate: '2023-01-15', warrantyEndDate: '2025-01-15', status: 'In Stock', imageUrl: 'https://regenesis.co.id/wp-content/uploads/2023/06/Sofwave-1.png', description: 'From Sofwave Medical. 3D Ultrasound for face/neck lifting, fine lines, and cellulite.', clientId: 'cli-001' },
   { id: 'inv-002', name: 'Indiba Deep Care', type: 'Device', quantity: 1, purchaseDate: '2023-02-20', warrantyEndDate: '2025-02-20', status: 'In Stock', imageUrl: 'https://regenesis.co.id/wp-content/uploads/2023/06/Indiba-Deep-Care-1.png', description: 'From INDIBA®. Radio Frequency for body contouring, cellulite, post-surgery care, and circumference reduction.', clientId: 'cli-003' },
-  { id: 'inv-003', name: 'Vbeam Perfecta®', type: 'Device', quantity: 2, purchaseDate: '2022-11-20', warrantyEndDate: '2024-11-20', status: 'In Stock', imageUrl: 'https://regenesis.co.id/wp-content/uploads/2023/06/Vbeam-Prima.png', description: 'From Candela. Pulsed-Dye Laser (PDL) for rosacea, vascular issues, pigmentation, acne scars, and keloids.' },
+  { id: 'inv-003', name: 'Vbeam Perfecta®', type: 'Device', quantity: 2, purchaseDate: '2022-11-20', warrantyEndDate: '2024-11-20', status: 'In Stock', imageUrl: 'https://regenesis.co.id/wp-content/uploads/2023/06/Vbeam-Prima.png', description: 'From Candela. Pulsed-Dye Laser (PDL) for rosacea, vascular issues, pigmentation, acne scars, and keloids.', clientId: 'cli-001' },
   { id: 'inv-004', name: 'PicoWay®', type: 'Device', quantity: 1, purchaseDate: '2023-08-01', warrantyEndDate: '2025-08-01', status: 'In Stock', imageUrl: 'https://aspmedica.com/wp-content/uploads/2023/11/PicoWay-1.jpg', description: 'From Candela. Picosecond Laser for pigmentation (melasma, nevi), tattoo removal, and collagen remodeling.', clientId: 'cli-004' },
-  { id: 'inv-005', name: 'BiAxis QS™', type: 'Device', quantity: 1, purchaseDate: '2023-09-10', warrantyEndDate: '2025-09-10', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From BiAxis. Q-switched Laser for acne scars, freckles, pigmentation, and tattoo removal.' },
+  { id: 'inv-005', name: 'BiAxis QS™', type: 'Device', quantity: 1, purchaseDate: '2023-09-10', warrantyEndDate: '2025-09-10', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From BiAxis. Q-switched Laser for acne scars, freckles, pigmentation, and tattoo removal.', clientId: 'cli-002' },
   { id: 'inv-006', name: 'Ultra V', type: 'Device', quantity: 100, purchaseDate: '2024-04-01', warrantyEndDate: 'N/A', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Benang polydioxanone (PDO) untuk nose augmentation, volumizing, dan stimulasi kolagen.' },
   { id: 'inv-007', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock', imageUrl: 'https://regenesis.co.id/wp-content/uploads/2023/06/Morpheus8-1.png', description: 'From InMode. RF Microneedling for wrinkles, skin laxity, and cellulite.', clientId: 'cli-001' },
   { id: 'inv-008', name: 'Frax Pro', type: 'Device', quantity: 2, purchaseDate: '2024-03-01', warrantyEndDate: '2026-03-01', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From Ellipse / Candela. Non-ablative fractional laser for skin resurfacing, improving texture, and collagen stimulation.' },
-  { id: 'inv-009', name: 'Divine Pro', type: 'Device', quantity: 1, purchaseDate: '2024-05-10', warrantyEndDate: '2026-05-10', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From Pollogen / Lumenis. Multi-treatment platform for facial rejuvenation, dermal volumizing, and skin firming.' },
+  { id: 'inv-009', name: 'Divine Pro', type: 'Device', quantity: 1, purchaseDate: '2024-05-10', warrantyEndDate: '2026-05-10', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From Pollogen / Lumenis. Multi-treatment platform for facial rejuvenation, dermal volumizing, and skin firming.', clientId: 'cli-002' },
   { id: 'inv-010', name: 'OxyGeneo & Pollogen', type: 'Device', quantity: 3, purchaseDate: '2024-06-20', warrantyEndDate: '2026-06-20', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From Pollogen / Lumenis. Combines Oxygenation, RF, and Ultrasound for skin brightening, pigmentation, and anti-aging.' },
   { id: 'inv-011', name: 'BiAxis Pico™', type: 'Device', quantity: 2, purchaseDate: '2024-07-01', warrantyEndDate: '2026-07-01', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From BiAxis. Picosecond Laser for pigmentation (melasma, nevi), tattoo, and collagen remodeling.' },
   { id: 'inv-012', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'From BiAxis. Laser for improving melasma, pigmentation, and tattoo removal with minimal downtime.', clientId: 'cli-002' },
@@ -101,8 +101,12 @@ export const clients: Client[] = [
     email: 'info@dermaster.com',
     phone: '021-555-1111',
     joinDate: '2022-05-15',
-    avatar: 'https://placehold.co/600x400.png',
-    treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.',
+    avatar: 'https://placehold.co/100x100.png',
+    penanggungJawab: {
+      nama: 'Dr. Andreas',
+      jabatan: 'Kepala Cabang Kemang'
+    },
+    treatmentHistory: 'Klien lama dengan beberapa cabang. Fokus utama pada perawatan HIFU, CoolSculpting, dan filler. Riwayat pembelian mencakup: 1x Sofwave™, 1x Vbeam Perfecta®, 1x Morpheus8. Pengiriman terakhir: Morpheus8 (Juni 2023). Membutuhkan pasokan rutin produk skincare.',
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
     location: { address: 'Jl. Kemang Sel. No.99, RT.1/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730', lat: -6.262846, lng: 106.812211 }
   },
@@ -113,7 +117,11 @@ export const clients: Client[] = [
     phone: '021-555-2222',
     joinDate: '2021-09-01',
     avatar: 'https://placehold.co/100x100.png',
-    treatmentHistory: 'Memiliki banyak cabang di area Jabodetabek. Menawarkan solusi estetika all-in-one, termasuk PRP, laser CO₂, serta produk skincare untuk klinik dan homecare. Klien ini telah membeli mesin Laser Biaxis QS dari distributor.',
+    penanggungJawab: {
+      nama: 'Ibu Rina',
+      jabatan: 'Manajer Pembelian'
+    },
+    treatmentHistory: 'Jaringan klinik besar dengan fokus pada perawatan laser dan produk skincare. Riwayat pembelian: 1x BiAxis QS™, 1x Divine Pro, 1x Laser Biaxis QS. Klien potensial untuk upgrade teknologi laser dan produk pendukungnya.',
     preferences: ['PRP', 'Laser CO₂', 'Skincare'],
     location: { address: 'Jl. Boulevard Gading Serpong, Tangerang', lat: -6.2349, lng: 106.6294 }
   },
@@ -124,7 +132,11 @@ export const clients: Client[] = [
     phone: '031-555-3333',
     joinDate: '2023-02-20',
     avatar: 'https://placehold.co/100x100.png',
-    treatmentHistory: 'Spesialis dalam perawatan anti-penuaan, seperti kerutan, pigmentasi, dan penghilangan tahi lalat. Sangat direkomendasikan untuk perawatan facial dan anti-aging.',
+    penanggungJawab: {
+      nama: 'Dr. Liana',
+      jabatan: 'Pemilik'
+    },
+    treatmentHistory: 'Klinik butik dengan spesialisasi anti-aging. Riwayat pembelian: 1x Indiba Deep Care. Klien setia yang menghargai kualitas dan hasil. Pengiriman alat berjalan lancar dan instalasi telah selesai pada Februari 2023.',
     preferences: ['Anti-Aging', 'Pigmentasi', 'Facial'],
     location: { address: 'Jl. HR Muhammad No.41, Pradahkalikendal, Kec. Dukuhpakis, Surabaya, Jawa Timur 60226', lat: -7.2892, lng: 112.6732 }
   },
@@ -135,8 +147,12 @@ export const clients: Client[] = [
     phone: '0361-555-4444',
     joinDate: '2023-11-10',
     avatar: 'https://placehold.co/100x100.png',
-    treatmentHistory: 'Cabang di Bali dan Batam. Populer untuk layanan microneedling dan thread lift (tarik benang).',
-    preferences: ['Microneedling', 'Thread Lift'],
+    penanggungJawab: {
+      nama: 'Bapak Dewa',
+      jabatan: 'Direktur Operasional'
+    },
+    treatmentHistory: 'Klinik populer di Bali dengan fokus pada prosedur invasif minimal. Riwayat pembelian: 1x PicoWay®. Menunjukkan minat pada teknologi thread lift. Pengiriman PicoWay® dilakukan pada November 2023.',
+    preferences: ['Microneedling', 'Thread Lift', 'Laser'],
     location: { address: 'Jl. Teuku Umar No.18A, Denpasar, Bali', lat: -8.6756, lng: 115.2040 }
   },
 ];

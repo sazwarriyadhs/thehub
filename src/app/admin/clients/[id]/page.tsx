@@ -20,6 +20,9 @@ import {
     BrainCircuit,
     HelpCircle,
     Edit,
+    User,
+    Building,
+    History,
 } from 'lucide-react';
 import type { ClientRequest } from '@/types';
 
@@ -70,6 +73,13 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
               <CardTitle>{client.name}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="flex items-start gap-3">
+                <Building className="w-5 h-5 text-muted-foreground mt-1 shrink-0" />
+                <div>
+                    <p className="text-sm font-medium">{client.penanggungJawab.nama}</p>
+                    <p className="text-xs text-muted-foreground">{client.penanggungJawab.jabatan}</p>
+                </div>
+              </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-muted-foreground" />
                 <span className="text-sm">{client.email}</span>
@@ -100,7 +110,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
         <div className="lg:col-span-2 flex flex-col gap-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>Client Notes / History</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><History className="w-5 h-5" /> Purchase History & Notes</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-sm text-muted-foreground whitespace-pre-wrap">{client.treatmentHistory}</p>
@@ -109,8 +119,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Deployed Machines ({deployedMachines.length})</CardTitle>
-                    <CardDescription>Equipment currently installed at this client's location.</CardDescription>
+                    <CardTitle className="flex items-center gap-2"><Package className="w-5 h-5" /> Deployed Machines ({deployedMachines.length})</CardTitle>
+                    <CardDescription>Equipment currently installed and active at this client's location.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {deployedMachines.length > 0 ? (
@@ -118,8 +128,11 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                             {deployedMachines.map(machine => (
                                 <li key={machine.id} className="flex items-center justify-between p-3 rounded-lg border">
                                     <div className="flex items-center gap-3">
-                                        <Package className="w-5 h-5 text-muted-foreground" />
-                                        <span className="font-medium">{machine.name}</span>
+                                        <Image src={machine.imageUrl} alt={machine.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint="medical device" />
+                                        <div>
+                                            <span className="font-medium">{machine.name}</span>
+                                            <p className="text-xs text-muted-foreground">Purchased: {machine.purchaseDate}</p>
+                                        </div>
                                     </div>
                                     <Button asChild variant="ghost" size="icon">
                                         <Link href={`/admin/inventory/${machine.id}`}>
