@@ -21,10 +21,10 @@ const customIcon = () => new DivIcon({
 });
 
 type MapViewProps = {
-  machines: DeployedMachine[];
+  machines?: DeployedMachine[];
 };
 
-export default function MapView({ machines }: MapViewProps) {
+export default function MapView({ machines = [] }: MapViewProps) {
   // Default center of the map (e.g., around Indonesia)
   const mapCenter: [number, number] = [-2.5489, 118.0149];
 
@@ -33,7 +33,7 @@ export default function MapView({ machines }: MapViewProps) {
       center={mapCenter}
       zoom={5}
       scrollWheelZoom={true}
-      className="w-full h-[600px]"
+      className="w-full h-full"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

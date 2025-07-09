@@ -35,7 +35,7 @@ export default function MapPage() {
         description="Locations of your devices at client clinics."
       />
       <Card>
-        <CardContent className="p-0 overflow-hidden rounded-lg">
+        <CardContent className="p-0 overflow-hidden rounded-lg h-[600px]">
            {deployedMachines.length > 0 ? (
             <MapView machines={deployedMachines} />
           ) : (
