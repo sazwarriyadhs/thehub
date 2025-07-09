@@ -51,7 +51,8 @@ export async function getTroubleshootingSteps(
     }
     const result = await getTroubleshootingAssistance({ machineName, problemDescription });
     return { data: result };
-  } catch (e: any) {
+  } catch (e: any)
+  {
     console.error(e);
     return { error: 'Failed to generate troubleshooting steps. Please try again.' };
   }
@@ -88,6 +89,18 @@ export async function requestService(
   }
 }
 
+function toRoman(num: number): string {
+    const roman: { [key: string]: number } = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 };
+    let str = '';
+    for (const i of Object.keys(roman)) {
+        const q = Math.floor(num / roman[i]);
+        num -= q * roman[i];
+        str += i.repeat(q);
+    }
+    return str;
+}
+
+
 export async function generateWorkOrderPdf(
   serviceRecordId: string
 ): Promise<ActionResult<string>> {
@@ -102,71 +115,152 @@ export async function generateWorkOrderPdf(
     const { width, height } = page.getSize();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    
+    const textWidth = (text: string, size: number, f: any) => f.widthOfTextAtSize(text, size);
 
-    let y = height - 50;
-
-    const drawText = (text: string, x: number, yPos: number, options: { font?: any; size?: number; color?: any } = {}) => {
+    const drawText = (text: string, x: number, yPos: number, options: { font?: any; size?: number; color?: any; align?: 'left' | 'center' | 'right', maxWidth?: number, lineHeight?: number } = {}) => {
+        const size = options.size || 11;
+        const f = options.font || font;
+        let xPos = x;
+        if (options.align === 'center') {
+            xPos = (width - textWidth(text, size, f)) / 2;
+        } else if (options.align === 'right') {
+            xPos = width - x - textWidth(text, size, f);
+        }
         page.drawText(text, {
-            x,
+            x: xPos,
             y: yPos,
-            font: options.font || font,
-            size: options.size || 11,
+            font: f,
+            size: size,
             color: options.color || rgb(0, 0, 0),
+            maxWidth: options.maxWidth,
+            lineHeight: options.lineHeight
         });
     };
 
+    let y = height - 50;
+
     // Header
-    drawText('AesthetiCare Pro', 50, y, { font: boldFont, size: 24, color: rgb(0.2, 0.1, 0.5) });
-    drawText('SURAT TUGAS / WORK ORDER', 50, y - 25, { font: boldFont, size: 18 });
-    y -= 70;
+    drawText('SURAT TUGAS', 0, y, { font: boldFont, size: 16, align: 'center' });
+    y -= 18;
+
+    const recordDate = new Date(record.date);
+    const monthRoman = toRoman(recordDate.getMonth() + 1);
+    const year = recordDate.getFullYear();
+    const noSurat = `No: ${record.id.replace('ser-', '002')}/ST/SAH/${monthRoman}/${year}`;
+    drawText(noSurat, 0, y, { size: 11, align: 'center' });
     
-    // Line Separator
+    const noSuratWidth = textWidth(noSurat, 11, font);
     page.drawLine({
-        start: { x: 50, y: y },
-        end: { x: width - 50, y: y },
+        start: { x: (width - noSuratWidth) / 2, y: y - 2 },
+        end: { x: (width + noSuratWidth) / 2, y: y - 2 },
         thickness: 1,
-        color: rgb(0.8, 0.8, 0.8),
     });
+    y -= 40;
+
+    drawText('Yang bertanda tangan di bawah ini:', 50, y);
     y -= 25;
 
-    // Service Details
-    const details = [
-      { label: 'Service ID:', value: record.id },
-      { label: 'Date:', value: record.date },
-      { label: 'Technician:', value: record.technician },
-      { label: 'Client:', value: record.clientName },
-      { label: 'Location:', value: record.clientLocation },
-      { label: 'Equipment:', value: record.equipment },
-      { label: 'Duration:', value: record.duration },
+    // Signatory Details
+    const signatoryDetails = [
+      { label: 'Nama', value: 'Tri Endah Ariwati' },
+      { label: 'Jabatan', value: 'Direktur Utama' },
+      { label: 'Instansi', value: 'Serenity Aestheticare Hub' },
     ];
-
-    details.forEach(detail => {
-      drawText(detail.label, 70, y, { font: boldFont });
-      drawText(detail.value, 180, y);
-      y -= 20;
+    signatoryDetails.forEach(detail => {
+      drawText(detail.label, 60, y);
+      drawText(':', 140, y);
+      drawText(detail.value, 150, y);
+      y -= 15;
     });
-    
     y -= 15;
-    page.drawLine({ start: { x: 50, y: y }, end: { x: width - 50, y: y }, thickness: 0.5, color: rgb(0.8, 0.8, 0.8) });
+
+    drawText('Dengan ini memberikan tugas kepada tim berikut:', 50, y);
     y -= 25;
 
-    // Problem and Solution
-    drawText('Identifikasi Masalah:', 50, y, { font: boldFont, size: 14 });
-    y -= 20;
-    page.drawText(record.problemIdentification, { x: 60, y, font, size: 10, lineHeight: 14, maxWidth: width - 120 });
-    y -= 60; // Approximate height for problem description
-    
-    drawText('Solusi / Pekerjaan yang Dilakukan:', 50, y, { font: boldFont, size: 14 });
-    y -= 20;
-    page.drawText(record.solution, { x: 60, y, font, size: 10, lineHeight: 14, maxWidth: width - 120 });
+    // Team Details
+    const teamDetails = [
+        { label: 'Nama', value: record.technician },
+        { label: 'Jabatan', value: 'Supervisor' }
+    ];
+    teamDetails.forEach(detail => {
+      drawText(detail.label, 60, y);
+      drawText(':', 140, y);
+      drawText(detail.value, 150, y);
+      y -= 15;
+    });
 
-    // Footer for signatures
-    y = 100;
-    drawText('Technician Signature:', 70, y, { font: font, size: 10 });
-    page.drawLine({ start: { x: 70, y: y - 10 }, end: { x: 250, y: y - 10 }, thickness: 0.5 });
+    drawText('Nama Anggota Tim:', 60, y);
+    y -= 15;
+    drawText('- ..................................', 60, y); y-=15;
+    drawText('- ..................................', 60, y); y-=15;
+    drawText('- ..................................', 60, y); y-=15;
+    drawText('- ..................................', 60, y); y-=15;
+    y -= 15;
+
+    // Assignment Details
+    drawText('Maksud dan Tujuan Penugasan', 50, y, { font: boldFont });
+    y -= 20;
+    drawText('Melaksanakan kegiatan troubleshooting teknis dan pemantauan sistem pelayanan pada unit/klien berikut:', 50, y, { font, size: 11, lineHeight: 14, maxWidth: width - 100 });
+    y -= 35;
+
+    const assignmentDetails = [
+        { label: 'Nama Klien / Cabang', value: record.clientName },
+        { label: 'Lokasi', value: record.clientLocation },
+        { label: 'Jenis Masalah', value: record.problemIdentification },
+    ];
+    assignmentDetails.forEach(detail => {
+      drawText(detail.label, 60, y);
+      drawText(':', 200, y);
+      const valueLines = Math.ceil(textWidth(detail.value, 11, font) / (width - 270));
+      drawText(detail.value, 210, y, { font, size: 11, lineHeight: 14, maxWidth: width - 270 });
+      y -= (valueLines * 14) + 6;
+    });
+    y -= 10;
+
+    // Duration
+    drawText('Durasi Penugasan', 50, y, { font: boldFont });
+    y -= 20;
+    drawText(`Tanggal ${record.date} s.d. (selesai)`, 50, y);
+    y-=15;
+    drawText('(dapat diperpanjang sesuai kebutuhan penyelesaian masalah)', 50, y, { font, size: 10, lineHeight: 12, maxWidth: width - 100 });
+    y -= 30;
+
+    // Obligations
+    drawText('Kewajiban Tim', 50, y, { font: boldFont });
+    y -= 20;
+    const obligations = [
+        'Melaksanakan pemeriksaan dan tindakan troubleshooting sesuai SOP.',
+        'Menyusun laporan harian dan berita acara troubleshooting.',
+        'Menginformasikan progres pekerjaan secara berkala kepada koordinator teknis.',
+        'Melaporkan hasil akhir penanganan melalui dokumentasi tertulis.'
+    ];
+    obligations.forEach((item, index) => {
+        drawText(`${index + 1}.`, 50, y);
+        const itemLines = Math.ceil(textWidth(item, 11, font) / (width - 130));
+        drawText(item, 70, y, { font, size: 11, lineHeight: 14, maxWidth: width - 130 });
+        y -= (itemLines * 14) + 4;
+    });
+    y -= 15;
     
-    drawText('Client Signature:', width - 250, y, { font: font, size: 10 });
-    page.drawLine({ start: { x: width - 250, y: y - 10 }, end: { x: width - 70, y: y - 10 }, thickness: 0.5 });
+    // Closing
+    drawText('Penutup', 50, y, { font: boldFont });
+    y -= 20;
+    drawText('Demikian surat tugas ini disampaikan. Diharapkan dapat dilaksanakan dengan penuh tanggung jawab dan dilaporkan hasilnya kepada pihak manajemen.', 50, y, { font, size: 11, lineHeight: 14, maxWidth: width - 100 });
+
+    // Signature
+    let signatureY = 150;
+    const today = new Date();
+    const formattedDate = `${today.getDate()} ${today.toLocaleString('id-ID', { month: 'long' })} ${today.getFullYear()}`;
+    drawText(`Jakarta, ${formattedDate}`, width - 250, signatureY);
+    signatureY -= 15;
+    drawText('Serenity Aestheticare Hub', width - 250, signatureY);
+    signatureY -= 60;
+    drawText('( Ttd & Stempel )', width - 250, signatureY);
+    signatureY -= 25;
+    drawText('Tri Endah Ariwati', width - 250, signatureY, { font: boldFont });
+    signatureY -= 15;
+    drawText('Direktur Utama', width - 250, signatureY);
 
     const pdfBytes = await pdfDoc.save();
     const pdfBase64 = Buffer.from(pdfBytes).toString('base64');
