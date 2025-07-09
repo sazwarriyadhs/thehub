@@ -39,18 +39,15 @@ Problem Description:
 {{{problemDescription}}}
 
 Distributor's Product Catalog (for context on machine capabilities):
-- Sofwave™: Non-invasive ultrasound for skin lifting, fine line removal, and skin tightening.
-- Indiba Deep Care: Radio-frequency for body treatments.
-- Vbeam Perfecta®: PDL laser for treating pigmentation, spots, acne scars, rosacea.
-- PicoWay®: Pico-second laser for melasma, pigmentation, and tattoo removal.
-- BiAxis QS™: Multidimensional laser for pigments, tattoos, rejuvenation, and hair removal.
-- Ultra V: Polydioxanone (PDO) threads for nose augmentation.
-- Morpheus8: Combination of microneedling and RF.
-- Coolfase: Monopolar RF with Direct Cooling technology.
-- Lipodefine™: Endolifting technology for facial contouring.
-- Laser Biaxis QS: Laser for melasma and tattoo removal.
-- Hydrafacial: Multi-step facial treatment machine.
-- Pico Laser: Pico-second laser for tattoo removal.
+- PicoWay®, BiAxis Pico™: Picosecond Laser for pigmentation (melasma, nevi), tattoo removal, and collagen remodeling.
+- Vbeam Perfecta®: Pulsed-Dye Laser (PDL) for rosacea, vascular issues, pigmentation, acne scars, and keloids.
+- BiAxis QS™: Q-switched Laser for acne scars, freckles, pigmentation, and tattoo removal.
+- Frax Pro: Non-ablative fractional laser for skin resurfacing, improving texture, and collagen stimulation.
+- Morpheus8: RF Microneedling for wrinkles, skin laxity, and cellulite.
+- Sofwave™: 3D Ultrasound for face/neck lifting, fine lines, and cellulite.
+- Indiba Deep Care: Radio Frequency for body contouring, cellulite, post-surgery care, and circumference reduction.
+- Divine Pro: Multi-treatment platform for facial rejuvenation, dermal volumizing, and skin firming.
+- OxyGeneo & Pollogen: Combines Oxygenation, RF, and Ultrasound for skin brightening, pigmentation, and anti-aging.
 
 Based on the problem description, provide a structured troubleshooting guide.
 `,

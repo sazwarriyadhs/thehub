@@ -48,19 +48,17 @@ Based on the following client profile, recommend products from the distributor's
 Explain why each product is a good fit for their practice. Format the response for clarity.
 
 Distributor's Product Catalog:
-- Sofwave™: Non-invasive ultrasound for skin lifting, fine line removal, and skin tightening, including face and neck.
-- Indiba Deep Care: Radio-frequency for body treatments, helps in circumference reduction & faster recovery.
-- Vbeam Perfecta®: PDL laser for treating pigmentation, spots, acne scars, rosacea, stretch marks, and more.
-- PicoWay®: Pico-second laser for melasma, pigmentation, and tattoo removal.
-- BiAxis QS™: Multidimensional laser for pigments, tattoos, rejuvenation, and hair removal.
-- Ultra V: Polydioxanone (PDO) threads for nose augmentation, volumizing, and collagen stimulation.
-- Morpheus8: Combination of microneedling and RF to address fine lines and cellulite.
-- Coolfase: Monopolar RF with Direct Cooling technology for skin tightening and contouring.
-- Lipodefine™: Endolifting technology using fat melting and collagen stimulation for double chin and facial contouring.
-- Laser Biaxis QS: Laser for improving melasma, pigmentation, and tattoo removal with minimal downtime.
-- Hydrafacial: A multi-step facial treatment that cleanses, exfoliates, extracts, and hydrates the skin.
-- Pico Laser: Advanced pico-second laser for tattoo removal and skin revitalization.
+- PicoWay®, BiAxis Pico™: Picosecond Laser for pigmentation (melasma, nevi), tattoo removal, and collagen remodeling.
+- Vbeam Perfecta®: Pulsed-Dye Laser (PDL) for rosacea, vascular issues, pigmentation, acne scars, and keloids.
+- BiAxis QS™: Q-switched Laser for acne scars, freckles, pigmentation, and tattoo removal.
+- Frax Pro: Non-ablative fractional laser for skin resurfacing, improving texture, and collagen stimulation.
+- Morpheus8: RF Microneedling for wrinkles, skin laxity, and cellulite.
+- Sofwave™: 3D Ultrasound for face/neck lifting, fine lines, and cellulite.
+- Indiba Deep Care: Radio Frequency for body contouring, cellulite, post-surgery care, and circumference reduction.
+- Divine Pro: Multi-treatment platform for facial rejuvenation, dermal volumizing, and skin firming.
+- OxyGeneo & Pollogen: Combines Oxygenation, RF, and Ultrasound for skin brightening, pigmentation, and anti-aging.
 - Geneskin® Serum: Skincare product for post-procedure care.
+- Other skincare products like cleansers and creams.
 
 Client Profile:
 {{{clientProfile}}}`,
