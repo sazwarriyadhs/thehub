@@ -1,14 +1,14 @@
-import type { InventoryItem, ServiceRecord, Client, Appointment, Technician } from '@/types';
+import type { InventoryItem, ServiceRecord, Client, Appointment } from '@/types';
 
 export const inventoryItems: InventoryItem[] = [
   // Devices
-  { id: 'inv-001', name: 'Sofwave™', type: 'Device', quantity: 3, purchaseDate: '2023-01-15', warrantyEndDate: '2025-01-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Ultrasonik non-invasif untuk skin lifting, penghapusan garis halus, dan pengencangan kulit, termasuk wajah dan leher.' },
-  { id: 'inv-002', name: 'Indiba Deep Care', type: 'Device', quantity: 1, purchaseDate: '2023-02-20', warrantyEndDate: '2025-02-20', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Radio-frequency untuk perawatan tubuh, membantu pengurangan lingkar tubuh & pemulihan lebih cepat.' },
+  { id: 'inv-001', name: 'Sofwave™', type: 'Device', quantity: 3, purchaseDate: '2023-01-15', warrantyEndDate: '2025-01-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Ultrasonik non-invasif untuk skin lifting, penghapusan garis halus, dan pengencangan kulit, termasuk wajah dan leher.', clientId: 'cli-001' },
+  { id: 'inv-002', name: 'Indiba Deep Care', type: 'Device', quantity: 1, purchaseDate: '2023-02-20', warrantyEndDate: '2025-02-20', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Radio-frequency untuk perawatan tubuh, membantu pengurangan lingkar tubuh & pemulihan lebih cepat.', clientId: 'cli-003' },
   { id: 'inv-003', name: 'Vbeam Perfecta®', type: 'Device', quantity: 2, purchaseDate: '2022-11-20', warrantyEndDate: '2024-11-20', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser PDL untuk perawatan pigmentasi, flek, bekas jerawat, rosacea, stretch mark, dan masih banyak lagi.' },
-  { id: 'inv-004', name: 'PicoWay®', type: 'Device', quantity: 1, purchaseDate: '2023-08-01', warrantyEndDate: '2025-08-01', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser pico-second untuk melasma, pigmentasi, dan hapus tato.' },
+  { id: 'inv-004', name: 'PicoWay®', type: 'Device', quantity: 1, purchaseDate: '2023-08-01', warrantyEndDate: '2025-08-01', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser pico-second untuk melasma, pigmentasi, dan hapus tato.', clientId: 'cli-004' },
   { id: 'inv-005', name: 'BiAxis QS™', type: 'Device', quantity: 1, purchaseDate: '2023-09-10', warrantyEndDate: '2025-09-10', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser multidimensional untuk pigmen, tato, peremajaan, dan hair removal.' },
   { id: 'inv-006', name: 'Ultra V', type: 'Device', quantity: 100, purchaseDate: '2024-04-01', warrantyEndDate: 'N/A', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Benang polydioxanone (PDO) untuk nose augmentation, volumizing, dan stimulasi kolagen.' },
-  { id: 'inv-007', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Kombinasi microneedling dan RF untuk mengatasi garis halus dan selulit.' },
+  { id: 'inv-007', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Kombinasi microneedling dan RF untuk mengatasi garis halus dan selulit.', clientId: 'cli-001' },
   { id: 'inv-008', name: 'Coolfase', type: 'Device', quantity: 1, purchaseDate: '2023-10-25', warrantyEndDate: '2025-10-25', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Monopolar RF dengan teknologi pendinginan langsung (Direct Cooling), untuk skin tightening dan contouring.' },
   { id: 'inv-009', name: 'Lipodefine™', type: 'Device', quantity: 1, purchaseDate: '2023-11-30', warrantyEndDate: '2025-11-30', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Teknologi endolifting dengan metode melting fat dan stimulasi kolagen untuk double chin dan kontur wajah.' },
   { id: 'inv-010', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: `Laser untuk perbaikan melasma, pigmentasi, dan penghapusan tato dengan downtime minimal.
@@ -19,7 +19,7 @@ Fitur:
 - Energi Maksimum: Hingga 2,2 J per pulsa
 - Ukuran Spot: 1,5–7 mm (dengan penyesuaian 0,5 mm)
 - Aplikasi: Pigment, tato, jerawat, kolagen, penghapusan rambut halus
-- Produksi & Distribusi: Made in Germany; distribusi resmi oleh Regenesis Indonesia (sertifikasi AKL)` },
+- Produksi & Distribusi: Made in Germany; distribusi resmi oleh Regenesis Indonesia (sertifikasi AKL)`, clientId: 'cli-002' },
   
   // Skincare and Consumables
   { id: 'inv-101', name: 'Geneskin® Serum', type: 'Skincare', quantity: 8, purchaseDate: '2024-03-01', warrantyEndDate: '2025-03-01', status: 'Low Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Skincare product for post-procedure care.' },
@@ -44,7 +44,8 @@ export const clients: Client[] = [
     joinDate: '2022-05-15', 
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
-    preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'] 
+    preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
+    location: { address: 'Jl. Gatot Subroto No.Kav. 58, Jakarta Selatan', lat: -6.229386, lng: 106.809386 }
   },
   { 
     id: 'cli-002', 
@@ -54,7 +55,8 @@ export const clients: Client[] = [
     joinDate: '2021-09-01', 
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Memiliki banyak cabang di area Jabodetabek. Menawarkan solusi estetika all-in-one, termasuk PRP, laser CO₂, serta produk skincare untuk klinik dan homecare. Klien ini telah membeli mesin Laser Biaxis QS dari distributor.', 
-    preferences: ['PRP', 'Laser CO₂', 'Skincare'] 
+    preferences: ['PRP', 'Laser CO₂', 'Skincare'],
+    location: { address: 'Jl. Boulevard Gading Serpong, Tangerang', lat: -6.2349, lng: 106.6294 }
   },
   { 
     id: 'cli-003', 
@@ -64,7 +66,8 @@ export const clients: Client[] = [
     joinDate: '2023-02-20', 
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Spesialis dalam perawatan anti-penuaan, seperti kerutan, pigmentasi, dan penghilangan tahi lalat. Sangat direkomendasikan untuk perawatan facial dan anti-aging.', 
-    preferences: ['Anti-Aging', 'Pigmentasi', 'Facial'] 
+    preferences: ['Anti-Aging', 'Pigmentasi', 'Facial'],
+    location: { address: 'Jl. HR Muhammad No.41, Surabaya', lat: -7.2892, lng: 112.6732 }
   },
   { 
     id: 'cli-004', 
@@ -74,7 +77,8 @@ export const clients: Client[] = [
     joinDate: '2023-11-10', 
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Cabang di Bali dan Batam. Populer untuk layanan microneedling dan thread lift (tarik benang).', 
-    preferences: ['Microneedling', 'Thread Lift'] 
+    preferences: ['Microneedling', 'Thread Lift'],
+    location: { address: 'Jl. Teuku Umar No.18A, Denpasar, Bali', lat: -8.6756, lng: 115.2040 }
   },
 ];
 
@@ -84,12 +88,6 @@ export const appointments: Appointment[] = [
   { id: 'apt-003', clientName: 'Profira Clinic Surabaya', clientId: 'cli-003', service: 'Konsultasi Perangkat Anti-Aging', date: '2024-07-22', time: '11:00 AM', status: 'Pending' },
   { id: 'apt-004', clientName: 'Miracle Aesthetic Clinic', clientId: 'cli-004', service: 'Training Morpheus8', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
   { id: 'apt-005', clientName: 'Dermaster Clinic', clientId: 'cli-001', service: 'Maintenance Perangkat Sofwave™', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
-];
-
-export const technicians: Technician[] = [
-    { id: 'tech-001', name: 'John Doe', position: { lat: 34.0522, lng: -118.2437 } },
-    { id: 'tech-002', name: 'Jane Smith', position: { lat: 34.056, lng: -118.25 } },
-    { id: 'tech-003', name: 'Mike Johnson', position: { lat: 34.048, lng: -118.24 } },
 ];
 
 export const revenueData = [

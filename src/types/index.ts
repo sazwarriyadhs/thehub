@@ -8,6 +8,7 @@ export type InventoryItem = {
   status: 'In Stock' | 'Low Stock' | 'Out of Stock';
   imageUrl: string;
   description: string;
+  clientId?: string;
 };
 
 export type ServiceRecord = {
@@ -29,6 +30,11 @@ export type Client = {
   avatar: string;
   treatmentHistory: string;
   preferences: string[];
+  location: {
+    address: string;
+    lat: number;
+    lng: number;
+  };
 };
 
 export type Appointment = {
@@ -41,10 +47,12 @@ export type Appointment = {
   status: 'Confirmed' | 'Pending' | 'Cancelled';
 };
 
-export type Technician = {
+export type DeployedMachine = {
   id: string;
   name: string;
-  position: {
+  clientName: string;
+  location: {
+    address: string;
     lat: number;
     lng: number;
   };

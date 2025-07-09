@@ -1,29 +1,66 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import { Icon } from 'leaflet';
+import Link from 'next/link';
+import type { DeployedMachine } from '@/types';
 
-export function MapView() {
-  // The Vis.GL map component would be used here, but requires an API key.
-  // This placeholder is shown instead.
-  // Example usage would be:
-  // import {APIProvider, Map} from '@vis.gl/react-google-maps';
-  // <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-  //   <Map center={{lat: 34.0522, lng: -118.2437}} zoom={12} className="w-full h-[600px] rounded-lg" />
-  // </APIProvider>
+// Fix for default icon issue with webpack
+const customIcon = new Icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+type MapViewProps = {
+  machines: DeployedMachine[];
+};
+
+export default function MapView({ machines }: MapViewProps) {
+  // Default center of the map (e.g., around Indonesia)
+  const mapCenter: [number, number] = [-2.5489, 118.0149];
 
   return (
-    <Card className="w-full h-[600px]">
-      <CardHeader>
-        <CardTitle>Map Unavailable</CardTitle>
-      </CardHeader>
-      <CardContent className="h-full flex flex-col items-center justify-center text-center gap-4">
-        <MapPin className="w-16 h-16 text-muted-foreground" />
-        <p className="text-lg font-medium">The map feature is not yet configured.</p>
-        <p className="text-muted-foreground">
-          Please provide a Google Maps API key in your environment variables to enable this feature.
-        </p>
-      </CardContent>
-    </Card>
+    <MapContainer
+      center={mapCenter}
+      zoom={5}
+      scrollWheelZoom={true}
+      className="w-full h-[600px]"
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+
+      {machines.map((machine) => (
+        <Marker
+          key={machine.id}
+          position={[machine.location.lat, machine.location.lng]}
+          icon={customIcon}
+        >
+          <Popup>
+            <div className="font-sans">
+              <h3 className="font-bold text-base mb-1">{machine.name}</h3>
+              <div className="text-sm text-muted-foreground mb-1">
+                <span className="font-medium text-foreground">Client:</span> {machine.clientName}
+              </div>
+              <div className="text-xs text-muted-foreground mb-2">
+                {machine.location.address}
+              </div>
+              <Link
+                href={`/admin/inventory/${machine.id}`}
+                className="text-primary text-sm font-medium hover:underline"
+              >
+                View Machine Details
+              </Link>
+            </div>
+          </Popup>
+        </Marker>
+      ))}
+    </MapContainer>
   );
 }
