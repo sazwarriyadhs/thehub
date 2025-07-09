@@ -61,6 +61,7 @@ export type DeployedMachine = {
 export type ClientRequest = {
   id: string;
   clientName: string;
+  clientId: string;
   requestType: 'Service' | 'Inquiry' | 'Troubleshoot';
   details: string;
   status: 'New' | 'In Progress' | 'Resolved';

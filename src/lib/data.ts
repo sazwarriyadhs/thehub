@@ -55,7 +55,7 @@ export const clients: Client[] = [
     email: 'contact@natasha-skin.com', 
     phone: '021-555-2222', 
     joinDate: '2021-09-01', 
-    avatar: 'https://placehold.co/100x100', 
+    avatar: 'https://placehold.co/100x100.png', 
     treatmentHistory: 'Memiliki banyak cabang di area Jabodetabek. Menawarkan solusi estetika all-in-one, termasuk PRP, laser CO₂, serta produk skincare untuk klinik dan homecare. Klien ini telah membeli mesin Laser Biaxis QS dari distributor.', 
     preferences: ['PRP', 'Laser CO₂', 'Skincare'],
     location: { address: 'Jl. Boulevard Gading Serpong, Tangerang', lat: -6.2349, lng: 106.6294 }
@@ -66,7 +66,7 @@ export const clients: Client[] = [
     email: 'info@profira-clinic.com', 
     phone: '031-555-3333', 
     joinDate: '2023-02-20', 
-    avatar: 'https://placehold.co/100x100', 
+    avatar: 'https://placehold.co/100x100.png', 
     treatmentHistory: 'Spesialis dalam perawatan anti-penuaan, seperti kerutan, pigmentasi, dan penghilangan tahi lalat. Sangat direkomendasikan untuk perawatan facial dan anti-aging.', 
     preferences: ['Anti-Aging', 'Pigmentasi', 'Facial'],
     location: { address: 'Jl. HR Muhammad No.41, Pradahkalikendal, Kec. Dukuhpakis, Surabaya, Jawa Timur 60226', lat: -7.2892, lng: 112.6732 }
@@ -77,7 +77,7 @@ export const clients: Client[] = [
     email: 'bali@miracle-clinic.com', 
     phone: '0361-555-4444', 
     joinDate: '2023-11-10', 
-    avatar: 'https://placehold.co/100x100', 
+    avatar: 'https://placehold.co/100x100.png', 
     treatmentHistory: 'Cabang di Bali dan Batam. Populer untuk layanan microneedling dan thread lift (tarik benang).', 
     preferences: ['Microneedling', 'Thread Lift'],
     location: { address: 'Jl. Teuku Umar No.18A, Denpasar, Bali', lat: -8.6756, lng: 115.2040 }
@@ -93,10 +93,10 @@ export const appointments: Appointment[] = [
 ];
 
 export const clientRequests: ClientRequest[] = [
-  { id: 'req-001', clientName: 'Dermaster Clinic', requestType: 'Service', details: 'Request for annual maintenance on Sofwave™.', status: 'New', date: '2024-07-28' },
-  { id: 'req-002', clientName: 'Natasha Skin Clinic', requestType: 'Troubleshoot', details: 'Laser Biaxis QS is showing an error code E-05.', status: 'New', date: '2024-07-27' },
-  { id: 'req-003', clientName: 'Miracle Aesthetic Clinic', requestType: 'Inquiry', details: 'Question about Ultra V thread compatibility with new procedure.', status: 'In Progress', date: '2024-07-26' },
-  { id: 'req-004', clientName: 'Profira Clinic Surabaya', requestType: 'Service', details: 'Indiba Deep Care handpiece is not heating correctly.', status: 'New', date: '2024-07-28' },
+  { id: 'req-001', clientName: 'Dermaster Clinic', clientId: 'cli-001', requestType: 'Service', details: 'Request for annual maintenance on Sofwave™.', status: 'New', date: '2024-07-28' },
+  { id: 'req-002', clientName: 'Natasha Skin Clinic', clientId: 'cli-002', requestType: 'Troubleshoot', details: 'Laser Biaxis QS is showing an error code E-05.', status: 'New', date: '2024-07-27' },
+  { id: 'req-003', clientName: 'Miracle Aesthetic Clinic', clientId: 'cli-004', requestType: 'Inquiry', details: 'Question about Ultra V thread compatibility with new procedure.', status: 'In Progress', date: '2024-07-26' },
+  { id: 'req-004', clientName: 'Profira Clinic Surabaya', clientId: 'cli-003', requestType: 'Service', details: 'Indiba Deep Care handpiece is not heating correctly.', status: 'New', date: '2024-07-28' },
 ];
 
 export const revenueData = [
