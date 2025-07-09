@@ -15,7 +15,6 @@ import {
   Calendar,
   Mail,
   Phone,
-  LogOut,
   Heart,
   CheckCircle,
   AlertCircle,
@@ -61,26 +60,6 @@ export default function ClientDashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-        <header className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                 <Image 
-                    src="/images/logo.png" 
-                    alt="AesthetiCare Pro Logo"
-                    width={32}
-                    height={32}
-                    className="rounded-md object-contain"
-                    data-ai-hint="logo"
-                 />
-                <h1 className="text-xl font-bold text-foreground">AesthetiCare Pro Portal</h1>
-            </div>
-            <Button variant="ghost" asChild>
-                <Link href="/login">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                </Link>
-            </Button>
-        </header>
-
         <PageHeader
             title={`Welcome back, ${client.name}!`}
             description="Here's a summary of your account with us."
