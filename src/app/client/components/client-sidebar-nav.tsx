@@ -9,22 +9,26 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   SidebarTrigger,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import {
   LayoutDashboard,
   CalendarDays,
   LifeBuoy,
   LogOut,
-  User,
-  Package,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HelpAssistant } from '@/components/help-assistant';
 import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { clients } from '@/lib/data';
+
+const LOGGED_IN_CLIENT_ID = 'cli-001';
 
 export function ClientSidebarNav() {
   const pathname = usePathname();
+  const client = clients.find((c) => c.id === LOGGED_IN_CLIENT_ID);
 
   const navLinks = [
     { href: '/client/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -55,6 +59,21 @@ export function ClientSidebarNav() {
         </div>
       </SidebarHeader>
       <SidebarContent>
+        {client && (
+            <>
+                <div className="p-2 flex flex-col items-center text-center gap-2 group-data-[collapsible=icon]:hidden">
+                    <Avatar className="w-20 h-20">
+                        <AvatarImage src={client.avatar} alt={client.name} data-ai-hint="person portrait" />
+                        <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <p className="font-semibold">{client.name}</p>
+                        <p className="text-xs text-muted-foreground">{client.email}</p>
+                    </div>
+                </div>
+                <SidebarSeparator className="my-2" />
+            </>
+        )}
         <SidebarMenu>
           {navLinks.map((item) => (
             <SidebarMenuItem key={item.label}>

@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   SidebarTrigger,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import {
   LayoutDashboard,
@@ -24,6 +25,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HelpAssistant } from './help-assistant';
 import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export function SidebarNav() {
   const pathname = usePathname();
@@ -81,7 +83,20 @@ export function SidebarNav() {
           <SidebarTrigger className="group-data-[collapsible=icon]:mx-auto" />
         </div>
       </SidebarHeader>
+      
       <SidebarContent>
+        <div className="p-2 flex flex-col items-center text-center gap-2 group-data-[collapsible=icon]:hidden">
+            <Avatar className="w-20 h-20">
+                <AvatarImage src="https://placehold.co/100x100.png" alt="Admin User" data-ai-hint="person portrait" />
+                <AvatarFallback>AD</AvatarFallback>
+            </Avatar>
+            <div>
+                <p className="font-semibold">Admin</p>
+                <p className="text-xs text-muted-foreground">admin@aestheticare.pro</p>
+            </div>
+        </div>
+        <SidebarSeparator className="my-2" />
+
         <SidebarMenu>{renderLinks(navLinks)}</SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
