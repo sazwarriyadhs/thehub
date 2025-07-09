@@ -1,4 +1,4 @@
-import type { InventoryItem, ServiceRecord, Client, Appointment } from '@/types';
+import type { InventoryItem, ServiceRecord, Client, Appointment, ClientRequest } from '@/types';
 
 export const inventoryItems: InventoryItem[] = [
   // Devices
@@ -88,6 +88,13 @@ export const appointments: Appointment[] = [
   { id: 'apt-003', clientName: 'Profira Clinic Surabaya', clientId: 'cli-003', service: 'Konsultasi Perangkat Anti-Aging', date: '2024-07-22', time: '11:00 AM', status: 'Pending' },
   { id: 'apt-004', clientName: 'Miracle Aesthetic Clinic', clientId: 'cli-004', service: 'Training Morpheus8', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
   { id: 'apt-005', clientName: 'Dermaster Clinic', clientId: 'cli-001', service: 'Maintenance Perangkat Sofwave™', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
+];
+
+export const clientRequests: ClientRequest[] = [
+  { id: 'req-001', clientName: 'Dermaster Clinic', requestType: 'Service', details: 'Request for annual maintenance on Sofwave™.', status: 'New', date: '2024-07-28' },
+  { id: 'req-002', clientName: 'Natasha Skin Clinic', requestType: 'Troubleshoot', details: 'Laser Biaxis QS is showing an error code E-05.', status: 'New', date: '2024-07-27' },
+  { id: 'req-003', clientName: 'Miracle Aesthetic Clinic', requestType: 'Inquiry', details: 'Question about Ultra V thread compatibility with new procedure.', status: 'In Progress', date: '2024-07-26' },
+  { id: 'req-004', clientName: 'Profira Clinic Surabaya', requestType: 'Service', details: 'Indiba Deep Care handpiece is not heating correctly.', status: 'New', date: '2024-07-28' },
 ];
 
 export const revenueData = [

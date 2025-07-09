@@ -57,3 +57,12 @@ export type DeployedMachine = {
     lng: number;
   };
 };
+
+export type ClientRequest = {
+  id: string;
+  clientName: string;
+  requestType: 'Service' | 'Inquiry' | 'Troubleshoot';
+  details: string;
+  status: 'New' | 'In Progress' | 'Resolved';
+  date: string;
+};

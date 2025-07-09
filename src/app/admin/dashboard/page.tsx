@@ -1,11 +1,52 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign, Users, Box, Wrench } from 'lucide-react';
+'use client';
+
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { DollarSign, Users, Box, Wrench, Bell, BrainCircuit, HelpCircle, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
 import { RevenueChart } from '@/components/charts/revenue-chart';
 import { ClientDemographicsChart } from '@/components/charts/client-demographics-chart';
 import { InventoryStatusChart } from '@/components/charts/inventory-status-chart';
+import { clientRequests, clients, inventoryItems } from '@/lib/data';
+import type { DeployedMachine, ClientRequest } from '@/types';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import dynamic from 'next/dynamic';
+
+const MapView = dynamic(() => import('@/components/map-view'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-muted rounded-lg flex items-center justify-center"><p>Loading map...</p></div>
+});
+
+const requestIcons: Record<ClientRequest['requestType'], React.ElementType> = {
+  'Service': Wrench,
+  'Troubleshoot': BrainCircuit,
+  'Inquiry': HelpCircle,
+};
+
+const requestStatusVariant: Record<ClientRequest['status'], 'default' | 'secondary' | 'destructive'> = {
+  'New': 'destructive',
+  'In Progress': 'secondary',
+  'Resolved': 'default',
+};
 
 export default function DashboardPage() {
+  const deployedMachines: DeployedMachine[] = [];
+  const clientMap = new Map(clients.map(c => [c.id, c]));
+
+  inventoryItems.forEach(item => {
+    if (item.type === 'Device' && item.clientId) {
+      const client = clientMap.get(item.clientId);
+      if (client) {
+        deployedMachines.push({
+          id: item.id,
+          name: item.name,
+          clientName: client.name,
+          location: client.location,
+        });
+      }
+    }
+  });
+
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
@@ -66,6 +107,49 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      <div className="grid gap-8 lg:grid-cols-3">
+        <Card className="lg:col-span-1">
+          <CardHeader className="flex flex-row items-center gap-2">
+            <Bell className="w-5 h-5" />
+            <CardTitle className="text-xl">Client Requests & Alerts</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {clientRequests.map((request) => {
+              const Icon = requestIcons[request.requestType];
+              return (
+                <div key={request.id} className="flex items-start gap-3">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary shrink-0 mt-1">
+                    <Icon className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                  <div className="flex-grow">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium">{request.clientName}</p>
+                       <Badge variant={requestStatusVariant[request.status]}>{request.status}</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{request.details}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{request.date}</p>
+                  </div>
+                </div>
+              )
+            })}
+             <Button className="w-full mt-2" variant="outline">
+                View All Requests <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+           <CardHeader>
+            <CardTitle className="text-xl">Deployed Machine Map</CardTitle>
+            <CardDescription>Real-time locations of your devices at client clinics.</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[400px] p-0 overflow-hidden rounded-b-lg">
+             <MapView machines={deployedMachines} />
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid gap-8 md:grid-cols-2">
         <Card>
           <CardHeader>
