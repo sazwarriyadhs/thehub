@@ -2,18 +2,22 @@
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Icon } from 'leaflet';
+import { DivIcon } from 'leaflet';
+import { renderToString } from 'react-dom/server';
 import Link from 'next/link';
 import type { DeployedMachine } from '@/types';
+import { SquareTerminal } from 'lucide-react';
 
-// Fix for default icon issue with webpack
-const customIcon = new Icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
+const customIcon = () => new DivIcon({
+  html: renderToString(
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary shadow-lg ring-2 ring-primary-foreground">
+      <SquareTerminal className="h-5 w-5 text-primary-foreground" />
+    </div>
+  ),
+  className: 'bg-transparent border-0',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
 });
 
 type MapViewProps = {
@@ -40,7 +44,7 @@ export default function MapView({ machines }: MapViewProps) {
         <Marker
           key={machine.id}
           position={[machine.location.lat, machine.location.lng]}
-          icon={customIcon}
+          icon={customIcon()}
         >
           <Popup>
             <div className="font-sans">
