@@ -7,7 +7,7 @@ import { serviceRecords } from '@/lib/data';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { inventoryFormSchema } from '@/lib/schemas';
+import { inventoryFormSchema, clientFormSchema } from '@/lib/schemas';
 
 type ActionResult<T> = {
     data?: T;
@@ -76,6 +76,83 @@ export async function deleteInventoryItem(id: string) {
     }
     
     revalidatePath('/admin/inventory');
+}
+
+export async function saveClient(formData: FormData) {
+  const data = {
+    id: formData.get('id') || undefined,
+    name: formData.get('name'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    joinDate: new Date(formData.get('joinDate') as string),
+    avatar: formData.get('avatar'),
+    treatmentHistory: formData.get('treatmentHistory'),
+    preferences: formData.get('preferences'),
+    locationAddress: formData.get('locationAddress'),
+    locationLat: formData.get('locationLat'),
+    locationLng: formData.get('locationLng'),
+  };
+
+  const validatedFields = await clientFormSchema.safeParseAsync(data);
+
+  if (!validatedFields.success) {
+    console.error('Validation Errors:', validatedFields.error.flatten().fieldErrors);
+    return {
+      error: 'Invalid fields submitted.',
+    };
+  }
+
+  const { id, ...clientData } = validatedFields.data;
+  
+  // Reconstruct nested objects for logging
+  const finalData = {
+      ...clientData,
+      preferences: clientData.preferences || [],
+      location: {
+          address: clientData.locationAddress,
+          lat: clientData.locationLat,
+          lng: clientData.locationLng,
+      },
+  };
+  
+  // In a real app, you'd handle this more cleanly, but for logging it's fine.
+  const tempFinalData: any = finalData;
+  delete tempFinalData.locationAddress;
+  delete tempFinalData.locationLat;
+  delete tempFinalData.locationLng;
+
+
+  try {
+    if (id) {
+      console.log(`Updating client ${id}:`, tempFinalData);
+      // e.g., await db.client.update({ where: { id }, data: tempFinalData });
+    } else {
+      const newId = `cli-${Date.now()}`;
+      console.log(`Creating new client ${newId}:`, {id: newId, ...tempFinalData});
+      // e.g., await db.client.create({ data: { id: newId, ...tempFinalData } });
+    }
+  } catch (e: any) {
+    console.error('Failed to save client:', e);
+    return { error: 'Failed to save client. Please try again.' };
+  }
+  
+  revalidatePath('/admin/clients');
+  redirect('/admin/clients');
+}
+
+export async function deleteClient(id: string) {
+    try {
+        if (!id) {
+            return { error: 'Client ID is required.' };
+        }
+        console.log(`Deleting client ${id}`);
+        // e.g., await db.client.delete({ where: { id } });
+    } catch (e: any) {
+        console.error('Failed to delete client:', e);
+        return { error: 'Failed to delete client. Please try again.' };
+    }
+    
+    revalidatePath('/admin/clients');
 }
 
 

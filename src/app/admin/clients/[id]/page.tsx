@@ -19,6 +19,7 @@ import {
     Wrench,
     BrainCircuit,
     HelpCircle,
+    Edit,
 } from 'lucide-react';
 import type { ClientRequest } from '@/types';
 
@@ -48,7 +49,15 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={client.name} description={`Client Profile & History`} />
+      <div className="flex items-center justify-between">
+        <PageHeader title={client.name} description={`Client Profile & History`} />
+        <Button asChild>
+            <Link href={`/admin/clients/${client.id}/edit`}>
+                <Edit />
+                Edit Client
+            </Link>
+        </Button>
+      </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-1 flex flex-col gap-8">
@@ -58,7 +67,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                 <AvatarImage src={client.avatar} alt={client.name} data-ai-hint="person portrait" />
                 <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <h2 className="text-2xl font-semibold font-headline">{client.name}</h2>
+              <CardTitle>{client.name}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">

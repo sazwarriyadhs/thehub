@@ -6,8 +6,8 @@ export const inventoryFormSchema = z.object({
   type: z.enum(['Device', 'Skincare'], { required_error: 'Type is required.' }),
   quantity: z.coerce.number().min(0, { message: 'Quantity cannot be negative.' }),
   purchaseDate: z.date({ required_error: 'Purchase date is required.' }),
-  warrantyEndDate: z.string().transform(async (val, ctx) => {
-    if (val === '') return undefined;
+  warrantyEndDate: z.string().transform((val, ctx) => {
+    if (val === '' || val === undefined || val === null) return undefined;
     const date = new Date(val);
     if (isNaN(date.getTime())) {
       ctx.addIssue({
@@ -22,4 +22,19 @@ export const inventoryFormSchema = z.object({
   description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
   imageUrl: z.string().url({ message: 'Please enter a valid URL.' }).optional().or(z.literal('')),
   clientId: z.string().optional(),
+});
+
+
+export const clientFormSchema = z.object({
+    id: z.string().optional(),
+    name: z.string().min(3, { message: 'Name must be at least 3 characters.' }),
+    email: z.string().email({ message: 'Please enter a valid email address.' }),
+    phone: z.string().min(10, { message: 'Please enter a valid phone number.' }),
+    joinDate: z.date({ required_error: 'Join date is required.' }),
+    avatar: z.string().url({ message: 'Please enter a valid URL for the avatar.' }).optional().or(z.literal('')),
+    treatmentHistory: z.string().min(10, { message: 'History must be at least 10 characters.' }),
+    preferences: z.string().transform((val) => val.split(',').map(s => s.trim())).optional(),
+    locationAddress: z.string().min(10, { message: 'Address must be at least 10 characters.' }),
+    locationLat: z.coerce.number(),
+    locationLng: z.coerce.number(),
 });
