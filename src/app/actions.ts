@@ -20,7 +20,7 @@ export const inventoryFormSchema = z.object({
   type: z.enum(['Device', 'Skincare'], { required_error: 'Type is required.' }),
   quantity: z.coerce.number().min(0, { message: 'Quantity cannot be negative.' }),
   purchaseDate: z.date({ required_error: 'Purchase date is required.' }),
-  warrantyEndDate: z.string().transform((val, ctx) => {
+  warrantyEndDate: z.string().transform(async (val, ctx) => {
     if (val === '') return undefined;
     const date = new Date(val);
     if (isNaN(date.getTime())) {
@@ -54,7 +54,7 @@ export async function saveInventoryItem(formData: FormData) {
     clientId: formData.get('clientId') || undefined,
   };
 
-  const validatedFields = inventoryFormSchema.safeParse(data);
+  const validatedFields = await inventoryFormSchema.safeParseAsync(data);
 
   if (!validatedFields.success) {
     console.error('Validation Errors:', validatedFields.error.flatten().fieldErrors);
