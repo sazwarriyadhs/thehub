@@ -45,7 +45,7 @@ export const clients: Client[] = [
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
-    location: { address: 'Jl. Gatot Subroto No.Kav. 58, Jakarta Selatan', lat: -6.229386, lng: 106.809386 }
+    location: { address: 'Jl. Metro Pondok Indah No.7, Jakarta Selatan', lat: -6.262846, lng: 106.784532 }
   },
   { 
     id: 'cli-002', 
