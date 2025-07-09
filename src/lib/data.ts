@@ -20,6 +20,8 @@ Fitur:
 - Ukuran Spot: 1,5–7 mm (dengan penyesuaian 0,5 mm)
 - Aplikasi: Pigment, tato, jerawat, kolagen, penghapusan rambut halus
 - Produksi & Distribusi: Made in Germany; distribusi resmi oleh Regenesis Indonesia (sertifikasi AKL)`, clientId: 'cli-002' },
+  { id: 'inv-011', name: 'Hydrafacial', type: 'Device', quantity: 2, purchaseDate: '2024-07-01', warrantyEndDate: '2026-07-01', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'A multi-step facial treatment that cleanses, exfoliates, extracts, and hydrates the skin using patented Vortex-Fusing technology.' },
+  { id: 'inv-012', name: 'Pico Laser', type: 'Device', quantity: 3, purchaseDate: '2024-07-15', warrantyEndDate: '2026-07-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Advanced pico-second laser for effective tattoo removal, pigmentation correction, and overall skin revitalization.' },
   
   // Skincare and Consumables
   { id: 'inv-101', name: 'Geneskin® Serum', type: 'Skincare', quantity: 8, purchaseDate: '2024-03-01', warrantyEndDate: '2025-03-01', status: 'Low Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Skincare product for post-procedure care.' },
@@ -45,7 +47,7 @@ export const clients: Client[] = [
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
-    location: { address: 'Jl. Metro Pondok Indah No.7, Jakarta Selatan', lat: -6.262846, lng: 106.784532 }
+    location: { address: 'Jl. Metro Pondok Indah, Sektor II, Blok UE No. 3, Jakarta Selatan', lat: -6.262846, lng: 106.784532 }
   },
   { 
     id: 'cli-002', 
@@ -114,6 +116,6 @@ export const clientDemographicsData = [
 ];
   
 export const inventoryStatusData = [
-    { name: 'Devices', inStock: 13, lowStock: 0, outOfStock: 0 },
+    { name: 'Devices', inStock: 18, lowStock: 0, outOfStock: 0 },
     { name: 'Skincare', inStock: 50, lowStock: 8, outOfStock: 1 },
 ];

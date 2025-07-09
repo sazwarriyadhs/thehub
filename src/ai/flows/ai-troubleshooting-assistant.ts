@@ -49,6 +49,8 @@ Distributor's Product Catalog (for context on machine capabilities):
 - Coolfase: Monopolar RF with Direct Cooling technology.
 - Lipodefine™: Endolifting technology for facial contouring.
 - Laser Biaxis QS: Laser for melasma and tattoo removal.
+- Hydrafacial: Multi-step facial treatment machine.
+- Pico Laser: Pico-second laser for tattoo removal.
 
 Based on the problem description, provide a structured troubleshooting guide.
 `,

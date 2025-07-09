@@ -58,6 +58,8 @@ Distributor's Product Catalog:
 - Coolfase: Monopolar RF with Direct Cooling technology for skin tightening and contouring.
 - Lipodefine™: Endolifting technology using fat melting and collagen stimulation for double chin and facial contouring.
 - Laser Biaxis QS: Laser for improving melasma, pigmentation, and tattoo removal with minimal downtime.
+- Hydrafacial: A multi-step facial treatment that cleanses, exfoliates, extracts, and hydrates the skin.
+- Pico Laser: Advanced pico-second laser for tattoo removal and skin revitalization.
 - Geneskin® Serum: Skincare product for post-procedure care.
 
 Client Profile:
