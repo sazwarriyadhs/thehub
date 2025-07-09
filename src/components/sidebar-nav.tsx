@@ -17,12 +17,12 @@ import {
   CalendarDays,
   Map,
   LifeBuoy,
-  Bot,
   Activity,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HelpAssistant } from './help-assistant';
+import Image from 'next/image';
 
 export function SidebarNav() {
   const pathname = usePathname();
@@ -63,7 +63,14 @@ export function SidebarNav() {
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <Bot className="w-8 h-8 text-primary" />
+          <Image 
+            src="/images/logo.png" 
+            alt="AesthetiCare Pro Logo"
+            width={32}
+            height={32}
+            className="rounded-md object-contain"
+            data-ai-hint="logo"
+          />
           <div className="flex flex-col">
             <h2 className="text-lg font-semibold tracking-tight font-headline">
               AesthetiCare

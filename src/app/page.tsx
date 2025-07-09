@@ -1,4 +1,4 @@
-import { Bot, LogIn } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
@@ -8,9 +8,15 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-muted/40 p-4 sm:p-6 lg:p-8">
       <div className="container max-w-5xl text-center">
-        <div className="mb-6 flex justify-center items-center gap-3">
-          <Bot className="w-12 h-12 text-primary" />
-          <h1 className="text-4xl md:text-5xl font-bold font-headline">AesthetiCare Pro</h1>
+        <div className="mb-8 flex justify-center">
+          <Image 
+            src="/images/logo.png" 
+            alt="AesthetiCare Pro Logo" 
+            width={300} 
+            height={80} 
+            data-ai-hint="logo"
+            className="object-contain"
+          />
         </div>
         <p className="text-lg text-muted-foreground mb-10 max-w-3xl mx-auto">
           Platform lengkap untuk distributor mesin dan produk estetika.

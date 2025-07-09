@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Bot, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -43,10 +44,16 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
-            <div className="flex justify-center items-center gap-2 mb-2">
-                <Bot className="w-10 h-10 text-primary" />
+            <div className="flex justify-center items-center mb-4">
+                <Image 
+                  src="/images/logo.png" 
+                  alt="AesthetiCare Pro Logo" 
+                  width={200} 
+                  height={50}
+                  data-ai-hint="logo"
+                  className="object-contain"
+                />
             </div>
-            <CardTitle className="text-2xl">AesthetiCare Pro</CardTitle>
             <CardDescription>Sign in to continue</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
