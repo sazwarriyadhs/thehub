@@ -1,8 +1,7 @@
 import { PageHeader } from '@/components/page-header';
 import { inventoryItems, clients } from '@/lib/data';
 import type { DeployedMachine } from '@/types';
-import { Card, CardContent } from '@/components/ui/card';
-import { MapDisplay } from './components/map-display';
+import { MapPageClient } from './components/map-page-client';
 
 export default function MapPage() {
   const deployedMachines: DeployedMachine[] = [];
@@ -26,13 +25,9 @@ export default function MapPage() {
     <div className="flex flex-col gap-8">
       <PageHeader
         title="Deployed Machine Map"
-        description="Locations of your devices at client clinics."
+        description="Locations of your devices at client clinics. Search to find specific locations."
       />
-      <Card>
-        <CardContent className="p-0 overflow-hidden rounded-lg h-[600px]">
-           <MapDisplay machines={deployedMachines} />
-        </CardContent>
-      </Card>
+      <MapPageClient initialMachines={deployedMachines} />
     </div>
   );
 }

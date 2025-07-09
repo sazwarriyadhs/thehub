@@ -19,9 +19,10 @@ import { X } from 'lucide-react';
 
 type MapViewProps = {
   machines?: DeployedMachine[];
+  activeMachine?: DeployedMachine | null;
 };
 
-export default function MapView({ machines = [] }: MapViewProps) {
+export default function MapView({ machines = [], activeMachine }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const vectorLayerRef = useRef<VectorLayer<VectorSource<Point>> | null>(null);
@@ -71,6 +72,7 @@ export default function MapView({ machines = [] }: MapViewProps) {
 
       map.on('click', (event) => {
         const feature = map.forEachFeatureAtPixel(event.pixel, f => f);
+        popupOverlay.setPosition(undefined); // Close existing popups on any click
         
         if (feature) {
           const machine = feature.get('machineData') as DeployedMachine;
@@ -88,8 +90,6 @@ export default function MapView({ machines = [] }: MapViewProps) {
               `;
           }
           popupOverlay.setPosition(coordinates);
-        } else {
-          popupOverlay.setPosition(undefined);
         }
       });
 
@@ -126,6 +126,18 @@ export default function MapView({ machines = [] }: MapViewProps) {
       }
     }
   }, [machines]); // Re-run when machines array changes
+
+  // Effect for panning to active machine
+  useEffect(() => {
+      if (mapInstanceRef.current && activeMachine) {
+          const view = mapInstanceRef.current.getView();
+          view.animate({
+              center: fromLonLat([activeMachine.location.lng, activeMachine.location.lat]),
+              zoom: 14,
+              duration: 1000,
+          });
+      }
+  }, [activeMachine]);
 
   return (
     <div className="w-full h-full relative">
