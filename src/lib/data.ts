@@ -2,7 +2,7 @@ import type { InventoryItem, ServiceRecord, Client, Appointment, ClientRequest }
 
 export const inventoryItems: InventoryItem[] = [
   // Devices
-  { id: 'inv-001', name: 'Sofwave™', type: 'Device', quantity: 3, purchaseDate: '2023-01-15', warrantyEndDate: '2025-01-15', status: 'In Stock', imageUrl: 'https://placehold.co/512x512.png', description: 'Ultrasonik non-invasif untuk skin lifting, penghapusan garis halus, dan pengencangan kulit, termasuk wajah dan leher.', clientId: 'cli-001' },
+  { id: 'inv-001', name: 'Sofwave™', type: 'Device', quantity: 3, purchaseDate: '2023-01-15', warrantyEndDate: '2025-01-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Ultrasonik non-invasif untuk skin lifting, penghapusan garis halus, dan pengencangan kulit, termasuk wajah dan leher.', clientId: 'cli-001' },
   { id: 'inv-002', name: 'Indiba Deep Care', type: 'Device', quantity: 1, purchaseDate: '2023-02-20', warrantyEndDate: '2025-02-20', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Radio-frequency untuk perawatan tubuh, membantu pengurangan lingkar tubuh & pemulihan lebih cepat.', clientId: 'cli-003' },
   { id: 'inv-003', name: 'Vbeam Perfecta®', type: 'Device', quantity: 2, purchaseDate: '2022-11-20', warrantyEndDate: '2024-11-20', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser PDL untuk perawatan pigmentasi, flek, bekas jerawat, rosacea, stretch mark, dan masih banyak lagi.' },
   { id: 'inv-004', name: 'PicoWay®', type: 'Device', quantity: 1, purchaseDate: '2023-08-01', warrantyEndDate: '2025-08-01', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser pico-second untuk melasma, pigmentasi, dan hapus tato.', clientId: 'cli-004' },
@@ -47,7 +47,7 @@ export const clients: Client[] = [
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
-    location: { address: 'Jl. Metro Pondok Indah, Sektor II, Blok UE No. 3, Jakarta Selatan', lat: -6.262846, lng: 106.784532 }
+    location: { address: 'Jl. Kemang Sel. No.99, RT.1/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730', lat: -6.262846, lng: 106.812211 }
   },
   { 
     id: 'cli-002', 
