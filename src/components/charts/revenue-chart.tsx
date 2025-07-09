@@ -1,13 +1,25 @@
 'use client';
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
+import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 import { revenueData } from '@/lib/data';
-import { ChartTooltipContent } from '@/components/ui/chart';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from '@/components/ui/chart';
+
+const chartConfig = {
+  revenue: {
+    label: 'Revenue',
+    color: 'hsl(var(--primary))',
+  },
+} satisfies ChartConfig;
 
 export function RevenueChart() {
   return (
-    <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={revenueData}>
+    <ChartContainer config={chartConfig} className="min-h-[350px] w-full">
+      <BarChart accessibilityLayer data={revenueData}>
         <XAxis
           dataKey="month"
           stroke="hsl(var(--muted-foreground))"
@@ -22,12 +34,12 @@ export function RevenueChart() {
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
         />
-        <Tooltip
-            cursor={{ fill: 'hsl(var(--accent))' }}
-            content={<ChartTooltipContent />}
+        <ChartTooltip
+          cursor={{ fill: 'hsl(var(--accent))' }}
+          content={<ChartTooltipContent />}
         />
-        <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
       </BarChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   );
 }

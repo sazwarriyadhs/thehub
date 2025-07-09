@@ -1,23 +1,30 @@
 'use client';
 
-import { Pie, PieChart, ResponsiveContainer, Tooltip, Cell } from 'recharts';
+import { Pie, PieChart, Cell } from 'recharts';
 import { clientDemographicsData } from '@/lib/data';
-import { ChartTooltipContent } from '@/components/ui/chart';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+  ChartLegend,
+  ChartLegendContent,
+} from '@/components/ui/chart';
 
-const COLORS = [
-    'hsl(var(--primary))',
-    'hsl(var(--chart-2))',
-    'hsl(var(--chart-3))',
-    'hsl(var(--chart-4))',
-];
+const chartConfig = {
+  '18-25': { label: '18-25', color: 'hsl(var(--primary))' },
+  '26-35': { label: '26-35', color: 'hsl(var(--chart-2))' },
+  '36-45': { label: '36-45', color: 'hsl(var(--chart-3))' },
+  '46plus': { label: '46+', color: 'hsl(var(--chart-4))' },
+} satisfies ChartConfig;
 
 export function ClientDemographicsChart() {
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ChartContainer config={chartConfig} className="min-h-[350px] w-full">
       <PieChart>
-        <Tooltip
-            cursor={{ fill: 'hsl(var(--accent))' }}
-            content={<ChartTooltipContent nameKey="ageGroup" />}
+        <ChartTooltip
+          cursor={{ fill: 'hsl(var(--accent))' }}
+          content={<ChartTooltipContent nameKey="ageGroup" />}
         />
         <Pie
           data={clientDemographicsData}
@@ -26,14 +33,18 @@ export function ClientDemographicsChart() {
           cx="50%"
           cy="50%"
           outerRadius={120}
-          fill="hsl(var(--primary))"
-          label={(props) => `${props.ageGroup} (${props.percent.toFixed(0)}%)`}
+          label={({ ageGroup, percent }) =>
+            `${chartConfig[ageGroup as keyof typeof chartConfig]?.label} (${(
+              (percent || 0) * 100
+            ).toFixed(0)}%)`
+          }
         >
-            {clientDemographicsData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
+          {clientDemographicsData.map((entry) => (
+            <Cell key={`cell-${entry.ageGroup}`} fill={`var(--color-${entry.ageGroup})`} />
+          ))}
         </Pie>
+        <ChartLegend content={<ChartLegendContent nameKey="ageGroup" />} />
       </PieChart>
-    </ResponsiveContainer>
+    </ChartContainer>
   );
 }

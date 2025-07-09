@@ -50,10 +50,10 @@ export const clientDemographicsData = [
     { ageGroup: '18-25', value: 25 },
     { ageGroup: '26-35', value: 45 },
     { ageGroup: '36-45', value: 20 },
-    { ageGroup: '46+', value: 10 },
+    { ageGroup: '46plus', value: 10 },
 ];
   
 export const inventoryStatusData = [
-    { name: 'Devices', 'In Stock': 6, 'Low Stock': 0, 'Out of Stock': 0 },
-    { name: 'Skincare', 'In Stock': 50, 'Low Stock': 8, 'Out of Stock': 1 },
+    { name: 'Devices', inStock: 6, lowStock: 0, outOfStock: 0 },
+    { name: 'Skincare', inStock: 50, lowStock: 8, outOfStock: 1 },
 ];
