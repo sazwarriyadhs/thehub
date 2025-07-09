@@ -8,7 +8,7 @@ export const inventoryItems: InventoryItem[] = [
   { id: 'inv-004', name: 'PicoWay®', type: 'Device', quantity: 1, purchaseDate: '2023-08-01', warrantyEndDate: '2025-08-01', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser pico-second untuk melasma, pigmentasi, dan hapus tato.', clientId: 'cli-004' },
   { id: 'inv-005', name: 'BiAxis QS™', type: 'Device', quantity: 1, purchaseDate: '2023-09-10', warrantyEndDate: '2025-09-10', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser multidimensional untuk pigmen, tato, peremajaan, dan hair removal.' },
   { id: 'inv-006', name: 'Ultra V', type: 'Device', quantity: 100, purchaseDate: '2024-04-01', warrantyEndDate: 'N/A', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Benang polydioxanone (PDO) untuk nose augmentation, volumizing, dan stimulasi kolagen.' },
-  { id: 'inv-007', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Kombinasi microneedling dan RF untuk mengatasi garis halus dan selulit.', clientId: 'cli-001' },
+  { id: 'inv-007', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock', imageUrl: '/images/Morpheus-8.png', description: 'Kombinasi microneedling dan RF untuk mengatasi garis halus dan selulit.', clientId: 'cli-001' },
   { id: 'inv-008', name: 'Coolfase', type: 'Device', quantity: 1, purchaseDate: '2023-10-25', warrantyEndDate: '2025-10-25', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Monopolar RF dengan teknologi pendinginan langsung (Direct Cooling), untuk skin tightening dan contouring.' },
   { id: 'inv-009', name: 'Lipodefine™', type: 'Device', quantity: 1, purchaseDate: '2023-11-30', warrantyEndDate: '2025-11-30', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Teknologi endolifting dengan metode melting fat dan stimulasi kolagen untuk double chin dan kontur wajah.' },
   { id: 'inv-010', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: `Laser untuk perbaikan melasma, pigmentasi, dan penghapusan tato dengan downtime minimal.
@@ -44,7 +44,7 @@ export const clients: Client[] = [
     email: 'info@dermaster.com', 
     phone: '021-555-1111', 
     joinDate: '2022-05-15', 
-    avatar: '/images/dermaster.png', 
+    avatar: 'https://placehold.co/100x100.png', 
     treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
     location: { address: 'Jl. Kemang Sel. No.99, RT.1/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730', lat: -6.262846, lng: 106.812211 }
