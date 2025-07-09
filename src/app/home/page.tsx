@@ -9,13 +9,13 @@ const sliderServices = [
   {
     title: 'Teknologi Laser Canggih',
     description: 'Solusi presisi untuk pigmentasi, peremajaan kulit, dan penghapusan tato dengan downtime minimal.',
-    image: 'https://placehold.co/1200x600.png',
+    image: 'https://regenesis.co.id/wp-content/uploads/2023/06/Vbeam-Prima.png',
     aiHint: 'laser treatment',
   },
   {
     title: 'Perawatan RF & Ultrasound',
     description: 'Mengencangkan kulit, membentuk kontur wajah dan tubuh, serta mengurangi kerutan tanpa prosedur bedah.',
-    image: 'https://placehold.co/1200x600.png',
+    image: 'https://regenesis.co.id/wp-content/uploads/2023/06/Sofwave-1.png',
     aiHint: 'ultrasound therapy',
   },
   {
