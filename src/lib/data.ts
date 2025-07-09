@@ -1,19 +1,30 @@
 import type { InventoryItem, ServiceRecord, Client, Appointment, Technician } from '@/types';
 
 export const inventoryItems: InventoryItem[] = [
-  { id: 'inv-001', name: 'Sofwave™ Device', type: 'Device', quantity: 3, purchaseDate: '2023-01-15', warrantyEndDate: '2025-01-15', status: 'In Stock' },
-  { id: 'inv-002', name: 'Vbeam Perfecta®', type: 'Device', quantity: 2, purchaseDate: '2022-11-20', warrantyEndDate: '2024-11-20', status: 'In Stock' },
-  { id: 'inv-003', name: 'Geneskin® Serum', type: 'Skincare', quantity: 8, purchaseDate: '2024-03-01', warrantyEndDate: '2025-03-01', status: 'Low Stock' },
-  { id: 'inv-004', name: 'HydraFacial Machine', type: 'Device', quantity: 1, purchaseDate: '2023-05-10', warrantyEndDate: '2025-05-10', status: 'In Stock' },
-  { id: 'inv-005', name: 'Vitamin C Cleanser', type: 'Skincare', quantity: 50, purchaseDate: '2024-02-18', warrantyEndDate: '2025-02-18', status: 'In Stock' },
-  { id: 'inv-006', name: 'Retinol Cream', type: 'Skincare', quantity: 0, purchaseDate: '2024-01-05', warrantyEndDate: '2025-01-05', status: 'Out of Stock' },
+  // Devices
+  { id: 'inv-001', name: 'Sofwave™', type: 'Device', quantity: 3, purchaseDate: '2023-01-15', warrantyEndDate: '2025-01-15', status: 'In Stock' },
+  { id: 'inv-002', name: 'Indiba Deep Care', type: 'Device', quantity: 1, purchaseDate: '2023-02-20', warrantyEndDate: '2025-02-20', status: 'In Stock' },
+  { id: 'inv-003', name: 'Vbeam Perfecta®', type: 'Device', quantity: 2, purchaseDate: '2022-11-20', warrantyEndDate: '2024-11-20', status: 'In Stock' },
+  { id: 'inv-004', name: 'PicoWay®', type: 'Device', quantity: 1, purchaseDate: '2023-08-01', warrantyEndDate: '2025-08-01', status: 'In Stock' },
+  { id: 'inv-005', name: 'BiAxis QS™', type: 'Device', quantity: 1, purchaseDate: '2023-09-10', warrantyEndDate: '2025-09-10', status: 'In Stock' },
+  { id: 'inv-006', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock' },
+  { id: 'inv-007', name: 'Coolfase', type: 'Device', quantity: 1, purchaseDate: '2023-10-25', warrantyEndDate: '2025-10-25', status: 'In Stock' },
+  { id: 'inv-008', name: 'Lipodefine™', type: 'Device', quantity: 1, purchaseDate: '2023-11-30', warrantyEndDate: '2025-11-30', status: 'In Stock' },
+  { id: 'inv-009', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock' },
+  
+  // Skincare and Consumables
+  { id: 'inv-101', name: 'Geneskin® Serum', type: 'Skincare', quantity: 8, purchaseDate: '2024-03-01', warrantyEndDate: '2025-03-01', status: 'Low Stock' },
+  { id: 'inv-102', name: 'Vitamin C Cleanser', type: 'Skincare', quantity: 50, purchaseDate: '2024-02-18', warrantyEndDate: '2025-02-18', status: 'In Stock' },
+  { id: 'inv-103', name: 'Retinol Cream', type: 'Skincare', quantity: 0, purchaseDate: '2024-01-05', warrantyEndDate: '2025-01-05', status: 'Out of Stock' },
+  { id: 'inv-104', name: 'Ultra V', type: 'Skincare', quantity: 100, purchaseDate: '2024-04-01', warrantyEndDate: '2025-04-01', status: 'In Stock' },
 ];
 
 export const serviceRecords: ServiceRecord[] = [
-  { id: 'ser-001', equipment: 'Sofwave™ Device', serviceType: 'Maintenance', date: '2024-06-15', technician: 'John Doe', cost: 250, status: 'Scheduled' },
+  { id: 'ser-001', equipment: 'Sofwave™', serviceType: 'Maintenance', date: '2024-06-15', technician: 'John Doe', cost: 250, status: 'Scheduled' },
   { id: 'ser-002', equipment: 'Vbeam Perfecta®', serviceType: 'Calibration', date: '2024-05-20', technician: 'Jane Smith', cost: 180, status: 'Completed' },
-  { id: 'ser-003', equipment: 'HydraFacial Machine', serviceType: 'Repair', date: '2024-06-01', technician: 'Mike Johnson', cost: 500, status: 'In Progress' },
-  { id: 'ser-004', equipment: 'Sofwave™ Device', serviceType: 'Maintenance', date: '2023-12-15', technician: 'John Doe', cost: 250, status: 'Completed' },
+  { id: 'ser-003', equipment: 'Morpheus8', serviceType: 'Repair', date: '2024-06-01', technician: 'Mike Johnson', cost: 500, status: 'In Progress' },
+  { id: 'ser-004', equipment: 'Sofwave™', serviceType: 'Maintenance', date: '2023-12-15', technician: 'John Doe', cost: 250, status: 'Completed' },
+  { id: 'ser-005', equipment: 'PicoWay®', serviceType: 'Maintenance', date: '2024-07-01', technician: 'Jane Smith', cost: 300, status: 'Scheduled' },
 ];
 
 export const clients: Client[] = [
@@ -54,6 +65,6 @@ export const clientDemographicsData = [
 ];
   
 export const inventoryStatusData = [
-    { name: 'Devices', inStock: 6, lowStock: 0, outOfStock: 0 },
-    { name: 'Skincare', inStock: 50, lowStock: 8, outOfStock: 1 },
+    { name: 'Devices', inStock: 13, lowStock: 0, outOfStock: 0 },
+    { name: 'Skincare', inStock: 150, lowStock: 8, outOfStock: 1 },
 ];
