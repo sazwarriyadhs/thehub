@@ -3,8 +3,8 @@ import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Client Portal - Serenity AesthetiCare Hub',
-  description: 'Manage your appointments and view your history.',
+  title: 'Client Portal - AesthetiCare Pro',
+  description: 'Manage your orders, appointments, and view your history with AesthetiCare Pro.',
 };
 
 export default function PortalLayout({

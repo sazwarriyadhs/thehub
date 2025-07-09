@@ -15,6 +15,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     notFound();
   }
 
+  const clientProfile = `Client: ${client.name}\nHistory and Focus: ${client.treatmentHistory}`;
+
   return (
     <div className="flex flex-col gap-8">
       <PageHeader title={client.name} description={`Client Profile & History`} />
@@ -56,13 +58,13 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
         <div className="lg:col-span-2 flex flex-col gap-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>Treatment History</CardTitle>
+                    <CardTitle>Client Notes / History</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-sm text-muted-foreground whitespace-pre-wrap">{client.treatmentHistory}</p>
                 </CardContent>
             </Card>
-            <ProductRecommender treatmentHistory={client.treatmentHistory} />
+            <ProductRecommender clientProfile={clientProfile} />
         </div>
       </div>
     </div>

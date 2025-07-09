@@ -6,8 +6,8 @@ import { SidebarInset } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Serenity AesthetiCare Hub',
-  description: 'Manage your aesthetic care practice with ease.',
+  title: 'AesthetiCare Pro',
+  description: 'Your all-in-one platform for distributing aesthetic machines and products.',
 };
 
 export default function RootLayout({

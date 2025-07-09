@@ -74,8 +74,8 @@ export const appointments: Appointment[] = [
   { id: 'apt-001', clientName: 'Klinik Estetika Jakarta', clientId: 'cli-001', service: 'Pelatihan PicoWay®', date: '2024-07-20', time: '10:00 AM', status: 'Confirmed' },
   { id: 'apt-002', clientName: 'Dr. Amanda Sari, Sp.KK', clientId: 'cli-002', service: 'Demo Sofwave™', date: '2024-07-21', time: '02:00 PM', status: 'Confirmed' },
   { id: 'apt-003', clientName: 'Dr. Budi Santoso', clientId: 'cli-004', service: 'Konsultasi Perangkat', date: '2024-07-22', time: '11:00 AM', status: 'Pending' },
-  { id: 'apt-004', clientName: 'Surabaya Beauty Clinic', clientId: 'cli-003', service: 'Follow-up Indiba', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
-  { id: 'apt-005', clientName: 'Dr. Amanda Sari, Sp.KK', clientId: 'cli-002', service: 'Pemasangan Morpheus8', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
+  { id: 'apt-004', clientName: 'Surabaya Beauty Clinic', clientId: 'cli-003', service: 'Training Indiba', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
+  { id: 'apt-005', clientName: 'Dr. Amanda Sari, Sp.KK', clientId: 'cli-002', service: 'Training Morpheus8', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
 ];
 
 export const technicians: Technician[] = [

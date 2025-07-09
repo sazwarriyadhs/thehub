@@ -9,13 +9,13 @@ type ActionResult<T> = {
 }
 
 export async function generateRecommendations(
-  clientTreatmentHistory: string
+  clientProfile: string
 ): Promise<ActionResult<Awaited<ReturnType<typeof getProductRecommendations>>>> {
   try {
-    if (!clientTreatmentHistory) {
-      return { error: 'Treatment history is required.' };
+    if (!clientProfile) {
+      return { error: 'Client profile is required.' };
     }
-    const result = await getProductRecommendations({ clientTreatmentHistory });
+    const result = await getProductRecommendations({ clientProfile });
     return { data: result };
   } catch (e: any) {
     console.error(e);

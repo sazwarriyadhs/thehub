@@ -43,7 +43,7 @@ export default function ClientDashboardPage() {
         <header className="flex items-center justify-between">
             <div className="flex items-center gap-3">
                 <Bot className="w-8 h-8 text-primary" />
-                <h1 className="text-xl font-bold text-foreground">Client Portal</h1>
+                <h1 className="text-xl font-bold text-foreground">AesthetiCare Pro Portal</h1>
             </div>
             <Button variant="ghost">
                 <LogOut className="mr-2 h-4 w-4" />
@@ -52,16 +52,16 @@ export default function ClientDashboardPage() {
         </header>
 
         <PageHeader
-            title={`Welcome back, ${client.name.split(' ')[0]}!`}
-            description="Here's a summary of your account."
+            title={`Welcome back, ${client.name}!`}
+            description="Here's a summary of your account with us."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Upcoming Appointments</CardTitle>
-                        <CardDescription>Your next scheduled visits.</CardDescription>
+                        <CardTitle>Upcoming Demos &amp; Trainings</CardTitle>
+                        <CardDescription>Your next scheduled sessions.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         {upcomingAppointments.length > 0 ? (
@@ -90,7 +90,7 @@ export default function ClientDashboardPage() {
                         ) : (
                             <div className="text-center text-muted-foreground py-8">
                                 <p>You have no upcoming appointments.</p>
-                                <Button size="sm" className="mt-4">Schedule a Visit</Button>
+                                <Button size="sm" className="mt-4">Request a Demo</Button>
                             </div>
                         )}
                     </CardContent>
@@ -98,8 +98,8 @@ export default function ClientDashboardPage() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Treatment History</CardTitle>
-                        <CardDescription>A log of your past treatments.</CardDescription>
+                        <CardTitle>Notes &amp; History</CardTitle>
+                        <CardDescription>A log of your purchase history and our notes.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm text-muted-foreground whitespace-pre-wrap">{client.treatmentHistory}</p>
@@ -131,7 +131,7 @@ export default function ClientDashboardPage() {
                         <div className="flex items-start gap-3">
                             <Heart className="w-5 h-5 text-muted-foreground mt-1 flex-shrink-0" />
                             <div>
-                                <h4 className="font-medium">Preferences</h4>
+                                <h4 className="font-medium">Focus Areas</h4>
                                 <div className="flex flex-wrap gap-2 mt-2">
                                     {client.preferences.map(pref => <Badge key={pref} variant="secondary">{pref}</Badge>)}
                                 </div>

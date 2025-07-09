@@ -2,10 +2,10 @@
 'use server';
 
 /**
- * @fileOverview AI-powered skincare product recommendation flow.
+ * @fileOverview AI-powered product recommendation flow for a distributor's clients.
  *
- * This file defines a Genkit flow that provides skincare product recommendations based on a client's treatment history.
- * - `getProductRecommendations` -  A function that takes a client's treatment history as input and returns personalized product recommendations.
+ * This file defines a Genkit flow that provides product recommendations from a distributor's catalog to its clients (clinics and doctors).
+ * - `getProductRecommendations` -  A function that takes a client's profile and returns personalized product recommendations.
  * - `ProductRecommendationsInput` - The input type for the `getProductRecommendations` function.
  * - `ProductRecommendationsOutput` - The output type for the `getProductRecommendations` function.
  */
@@ -15,9 +15,9 @@ import {z} from 'genkit';
 
 // Define the input schema for the flow
 const ProductRecommendationsInputSchema = z.object({
-  clientTreatmentHistory: z
+  clientProfile: z
     .string()
-    .describe("A detailed history of the client's past aesthetic treatments and skincare products used."),
+    .describe("A profile of the client (an aesthetic clinic or doctor), including their focus areas and purchase history."),
 });
 
 export type ProductRecommendationsInput = z.infer<typeof ProductRecommendationsInputSchema>;
@@ -26,7 +26,7 @@ export type ProductRecommendationsInput = z.infer<typeof ProductRecommendationsI
 const ProductRecommendationsOutputSchema = z.object({
   productRecommendations: z
     .string()
-    .describe("A list of skincare product recommendations tailored to the client's treatment history."),
+    .describe("A list of recommended products from the distributor's catalog, tailored to the client's practice."),
 });
 
 export type ProductRecommendationsOutput = z.infer<typeof ProductRecommendationsOutputSchema>;
@@ -43,7 +43,12 @@ const productRecommendationsPrompt = ai.definePrompt({
   name: 'productRecommendationsPrompt',
   input: {schema: ProductRecommendationsInputSchema},
   output: {schema: ProductRecommendationsOutputSchema},
-  prompt: `Based on the following client treatment history:\n\n{{{clientTreatmentHistory}}}\n\nRecommend skincare products that would be most effective for the client. Explain why each product is recommended in relation to their treatment history.\n\nFormat your response as a list of product names with a short explanation for each.`,
+  prompt: `You are an expert sales assistant for an aesthetic device and product distributor. Your clients are aesthetic clinics and doctors.
+Based on the following client profile, recommend products from the distributor's catalog that this client should consider purchasing.
+Explain why each product is a good fit for their practice. Format the response for clarity.
+
+Client Profile:
+{{{clientProfile}}}`,
 });
 
 // Define the Genkit flow

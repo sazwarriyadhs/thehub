@@ -13,16 +13,16 @@ import { Loader2, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
-  history: z.string().min(20, {
-    message: 'Treatment history must be at least 20 characters.',
+  profile: z.string().min(20, {
+    message: 'Client profile must be at least 20 characters.',
   }),
 });
 
 type ProductRecommenderProps = {
-  treatmentHistory: string;
+  clientProfile: string;
 };
 
-export function ProductRecommender({ treatmentHistory }: ProductRecommenderProps) {
+export function ProductRecommender({ clientProfile }: ProductRecommenderProps) {
   const [recommendations, setRecommendations] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -30,7 +30,7 @@ export function ProductRecommender({ treatmentHistory }: ProductRecommenderProps
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      history: treatmentHistory || '',
+      profile: clientProfile || '',
     },
   });
 
@@ -38,7 +38,7 @@ export function ProductRecommender({ treatmentHistory }: ProductRecommenderProps
     setIsLoading(true);
     setRecommendations(null);
 
-    const result = await generateRecommendations(values.history);
+    const result = await generateRecommendations(values.profile);
     
     if (result.error) {
         toast({
@@ -60,19 +60,19 @@ export function ProductRecommender({ treatmentHistory }: ProductRecommenderProps
           <CardHeader>
             <CardTitle>AI Product Recommendations</CardTitle>
             <CardDescription>
-              Generate personalized skincare product recommendations based on the client&apos;s treatment history.
+              Generate product recommendations from your catalog for this client based on their profile and purchase patterns.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <FormField
               control={form.control}
-              name="history"
+              name="profile"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Treatment History</FormLabel>
+                  <FormLabel>Client Profile &amp; History</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="e.g., Client has received two sessions of micro-needling..."
+                      placeholder="e.g., Klinik berfokus pada perawatan laser dan peremajaan kulit..."
                       className="min-h-[120px]"
                       {...field}
                     />

@@ -46,9 +46,9 @@ export function SidebarNav() {
           <Bot className="w-8 h-8 text-primary" />
           <div className="flex flex-col">
             <h2 className="text-lg font-semibold tracking-tight font-headline">
-              Serenity
+              AesthetiCare
             </h2>
-            <p className="text-sm text-muted-foreground -mt-1">AesthetiCare</p>
+            <p className="text-sm text-muted-foreground -mt-1">Pro</p>
           </div>
         </div>
       </SidebarHeader>

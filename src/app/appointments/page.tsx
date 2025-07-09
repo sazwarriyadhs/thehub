@@ -18,7 +18,7 @@ export default function AppointmentsPage() {
       <div className="flex items-center justify-between">
         <PageHeader
           title="Appointments"
-          description="Manage bookings for consultations, treatments, and follow-ups."
+          description="Manage bookings for client demos, training sessions, and consultations."
         />
         <Button>
           <PlusCircle />
