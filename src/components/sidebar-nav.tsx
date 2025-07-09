@@ -8,6 +8,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import {
   LayoutDashboard,
@@ -60,35 +61,38 @@ export function SidebarNav() {
     ));
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center gap-2">
-          <Image 
-            src="/images/logo.png" 
-            alt="AesthetiCare Pro Logo"
-            width={32}
-            height={32}
-            className="rounded-md object-contain"
-            data-ai-hint="logo"
-          />
-          <div className="flex flex-col">
-            <h2 className="text-lg font-semibold tracking-tight font-headline">
-              AesthetiCare
-            </h2>
-            <p className="text-sm text-muted-foreground -mt-1">Pro</p>
+        <div className="flex w-full items-center justify-between px-1">
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:hidden">
+            <Image 
+              src="/images/logo.png" 
+              alt="AesthetiCare Pro Logo"
+              width={32}
+              height={32}
+              className="rounded-md object-contain"
+              data-ai-hint="logo"
+            />
+            <div className="flex flex-col">
+              <h2 className="text-lg font-semibold tracking-tight font-headline">
+                AesthetiCare
+              </h2>
+              <p className="text-sm text-muted-foreground -mt-1">Pro</p>
+            </div>
           </div>
+          <SidebarTrigger className="group-data-[collapsible=icon]:mx-auto" />
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>{renderLinks(mainLinks)}</SidebarMenu>
         
         <div>
-          <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Operations</div>
+          <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider group-data-[collapsible=icon]:hidden">Operations</div>
           <SidebarMenu>{renderLinks(operationsLinks)}</SidebarMenu>
         </div>
 
         <div>
-            <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Clients</div>
+            <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider group-data-[collapsible=icon]:hidden">Clients</div>
             <SidebarMenu>{renderLinks(clientLinks)}</SidebarMenu>
         </div>
 

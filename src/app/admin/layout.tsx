@@ -8,7 +8,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <SidebarNav />
       <SidebarInset>
         <div className="p-4 sm:p-6 lg:p-8">{children}</div>
