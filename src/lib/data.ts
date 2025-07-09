@@ -30,11 +30,76 @@ Fitur:
 ];
 
 export const serviceRecords: ServiceRecord[] = [
-  { id: 'ser-001', equipment: 'Sofwave™', serviceType: 'Maintenance', date: '2024-06-15', technician: 'John Doe', cost: 250, status: 'Scheduled' },
-  { id: 'ser-002', equipment: 'Vbeam Perfecta®', serviceType: 'Calibration', date: '2024-05-20', technician: 'Jane Smith', cost: 180, status: 'Completed' },
-  { id: 'ser-003', equipment: 'Morpheus8', serviceType: 'Repair', date: '2024-06-01', technician: 'Mike Johnson', cost: 500, status: 'In Progress' },
-  { id: 'ser-004', equipment: 'Sofwave™', serviceType: 'Maintenance', date: '2023-12-15', technician: 'John Doe', cost: 250, status: 'Completed' },
-  { id: 'ser-005', equipment: 'PicoWay®', serviceType: 'Maintenance', date: '2024-07-01', technician: 'Jane Smith', cost: 300, status: 'Scheduled' },
+  { 
+    id: 'ser-001', 
+    equipment: 'Sofwave™', 
+    serviceType: 'Maintenance', 
+    date: '2024-06-15', 
+    technician: 'John Doe', 
+    cost: 250, 
+    status: 'Scheduled',
+    clientName: 'Dermaster Clinic',
+    clientLocation: 'Jl. Kemang Sel. No.99, Jakarta Selatan',
+    problemIdentification: 'Klien meminta perawatan rutin tahunan sesuai jadwal.',
+    solution: 'Pemeriksaan standar, pembersihan filter, dan pembaruan perangkat lunak telah dijadwalkan.',
+    duration: '3 jam'
+  },
+  { 
+    id: 'ser-002', 
+    equipment: 'Vbeam Perfecta®', 
+    serviceType: 'Calibration', 
+    date: '2024-05-20', 
+    technician: 'Jane Smith', 
+    cost: 180, 
+    status: 'Completed',
+    clientName: 'Profira Clinic Surabaya',
+    clientLocation: 'Jl. HR Muhammad No.41, Surabaya',
+    problemIdentification: 'Output energi laser sedikit di bawah ambang batas yang ditentukan setelah 1 tahun penggunaan.',
+    solution: 'Kalibrasi ulang output daya laser. Pengujian setelah kalibrasi menunjukkan tingkat energi yang optimal. Membersihkan optik.',
+    duration: '2 jam'
+  },
+  { 
+    id: 'ser-003', 
+    equipment: 'Morpheus8', 
+    serviceType: 'Repair', 
+    date: '2024-06-01', 
+    technician: 'Mike Johnson', 
+    cost: 500, 
+    status: 'In Progress',
+    clientName: 'Dermaster Clinic',
+    clientLocation: 'Jl. Kemang Sel. No.99, Jakarta Selatan',
+    problemIdentification: 'Layar sentuh tidak merespons di bagian kanan bawah. Klien telah mencoba me-restart mesin beberapa kali.',
+    solution: 'Tim teknisi sedang dalam proses mendiagnosis apakah ini masalah perangkat keras (digitizer) atau perangkat lunak. Penggantian layar mungkin diperlukan.',
+    duration: 'Berkelanjutan'
+  },
+  { 
+    id: 'ser-004', 
+    equipment: 'Sofwave™', 
+    serviceType: 'Maintenance', 
+    date: '2023-12-15', 
+    technician: 'John Doe', 
+    cost: 250, 
+    status: 'Completed',
+    clientName: 'Dermaster Clinic',
+    clientLocation: 'Jl. Kemang Sel. No.99, Jakarta Selatan',
+    problemIdentification: 'Perawatan rutin preventif sesuai jadwal pabrikan.',
+    solution: 'Semua sistem diperiksa, filter diganti, dan perangkat lunak diperbarui ke versi terbaru. Mesin berfungsi sesuai spesifikasi.',
+    duration: '4 jam'
+  },
+  { 
+    id: 'ser-005', 
+    equipment: 'PicoWay®', 
+    serviceType: 'Maintenance', 
+    date: '2024-07-01', 
+    technician: 'Jane Smith', 
+    cost: 300, 
+    status: 'Scheduled',
+    clientName: 'Miracle Aesthetic Clinic',
+    clientLocation: 'Jl. Teuku Umar No.18A, Denpasar, Bali',
+    problemIdentification: 'Jadwal pemeliharaan 6 bulan untuk memastikan kinerja puncak.',
+    solution: 'Akan dilakukan pembersihan optik, pemeriksaan sistem pendingin, dan verifikasi output energi.',
+    duration: '3 jam'
+  },
 ];
 
 export const clients: Client[] = [

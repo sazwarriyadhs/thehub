@@ -19,6 +19,11 @@ export type ServiceRecord = {
   technician: string;
   cost: number;
   status: 'Scheduled' | 'In Progress' | 'Completed';
+  clientName: string;
+  clientLocation: string;
+  problemIdentification: string;
+  solution: string;
+  duration: string;
 };
 
 export type Client = {
