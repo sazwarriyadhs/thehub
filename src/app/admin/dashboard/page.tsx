@@ -6,12 +6,12 @@ import { PageHeader } from '@/components/page-header';
 import { RevenueChart } from '@/components/charts/revenue-chart';
 import { ClientDemographicsChart } from '@/components/charts/client-demographics-chart';
 import { InventoryStatusChart } from '@/components/charts/inventory-status-chart';
-import { clientRequests } from '@/lib/data';
-import type { ClientRequest } from '@/types';
+import { clientRequests, clients, inventoryItems } from '@/lib/data';
+import type { ClientRequest, DeployedMachine } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 const requestIcons: Record<ClientRequest['requestType'], React.ElementType> = {
   'Service': Wrench,
@@ -25,7 +25,30 @@ const requestStatusVariant: Record<ClientRequest['status'], 'default' | 'seconda
   'Resolved': 'default',
 };
 
+const MapView = dynamic(() => import('@/components/map-view'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-muted rounded-lg flex items-center justify-center"><p>Loading map...</p></div>
+});
+
+
 export default function DashboardPage() {
+  const deployedMachines: DeployedMachine[] = [];
+  const clientMap = new Map(clients.map(c => [c.id, c]));
+
+  inventoryItems.forEach(item => {
+    if (item.type === 'Device' && item.clientId) {
+      const client = clientMap.get(item.clientId);
+      if (client) {
+        deployedMachines.push({
+          id: item.id,
+          name: item.name,
+          clientName: client.name,
+          location: client.location,
+        });
+      }
+    }
+  });
+
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
@@ -112,8 +135,10 @@ export default function DashboardPage() {
                 </div>
               )
             })}
-             <Button className="w-full mt-2" variant="outline">
-                View All Requests <ArrowRight className="ml-2 h-4 w-4" />
+             <Button className="w-full mt-2" variant="outline" asChild>
+                <Link href="/admin/services">
+                    View All Requests <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
             </Button>
           </CardContent>
         </Card>
@@ -121,23 +146,16 @@ export default function DashboardPage() {
         <Card className="lg:col-span-2 flex flex-col">
           <CardHeader>
             <CardTitle className="text-xl">Deployed Machine Map</CardTitle>
-            <CardDescription>Real-time locations of your devices at client clinics.</CardDescription>
+            <CardDescription>Real-time locations of your devices at client clinics. <Link href="/admin/map" className="text-primary hover:underline">View fullscreen</Link>.</CardDescription>
           </CardHeader>
-          <CardContent className="p-0 flex-grow relative rounded-b-lg overflow-hidden">
-            <Link href="/admin/map" className="block w-full h-full group">
-              <Image
-                src="https://placehold.co/800x400.png"
-                alt="Map of deployed machines"
-                fill
-                className="object-cover"
-                data-ai-hint="world map"
-              />
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button>
-                  View Full Map <ArrowRight className="ml-2" />
-                </Button>
-              </div>
-            </Link>
+          <CardContent className="p-0 flex-grow rounded-b-lg overflow-hidden h-[400px]">
+             {deployedMachines.length > 0 ? (
+                <MapView machines={deployedMachines} />
+            ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-center gap-4">
+                    <p>No machines with client locations assigned.</p>
+                </div>
+            )}
           </CardContent>
         </Card>
       </div>
