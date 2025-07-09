@@ -39,15 +39,15 @@ Problem Description:
 {{{problemDescription}}}
 
 Distributor's Product Catalog (for context on machine capabilities):
-- PicoWay®, BiAxis Pico™: Picosecond Laser for pigmentation (melasma, nevi), tattoo removal, and collagen remodeling.
-- Vbeam Perfecta®: Pulsed-Dye Laser (PDL) for rosacea, vascular issues, pigmentation, acne scars, and keloids.
-- BiAxis QS™: Q-switched Laser for acne scars, freckles, pigmentation, and tattoo removal.
-- Frax Pro: Non-ablative fractional laser for skin resurfacing, improving texture, and collagen stimulation.
-- Morpheus8: RF Microneedling for wrinkles, skin laxity, and cellulite.
-- Sofwave™: 3D Ultrasound for face/neck lifting, fine lines, and cellulite.
-- Indiba Deep Care: Radio Frequency for body contouring, cellulite, post-surgery care, and circumference reduction.
-- Divine Pro: Multi-treatment platform for facial rejuvenation, dermal volumizing, and skin firming.
-- OxyGeneo & Pollogen: Combines Oxygenation, RF, and Ultrasound for skin brightening, pigmentation, and anti-aging.
+- PicoWay® (by Candela), BiAxis Pico™ (by BiAxis): Picosecond Laser for pigmentation (melasma, nevi), tattoo removal, and collagen remodeling.
+- Vbeam Perfecta® (by Candela): Pulsed-Dye Laser (PDL) for rosacea, vascular issues, pigmentation, acne scars, and keloids.
+- BiAxis QS™ (by BiAxis): Q-switched Laser for acne scars, freckles, pigmentation, and tattoo removal.
+- Frax Pro (by Ellipse / Candela): Non-ablative fractional laser for skin resurfacing, improving texture, and collagen stimulation.
+- Morpheus8 (by InMode): RF Microneedling for wrinkles, skin laxity, and cellulite.
+- Sofwave™ (by Sofwave Medical): 3D Ultrasound for face/neck lifting, fine lines, and cellulite.
+- Indiba Deep Care (by INDIBA®): Radio Frequency for body contouring, cellulite, post-surgery care, and circumference reduction.
+- Divine Pro (by Pollogen / Lumenis): Multi-treatment platform for facial rejuvenation, dermal volumizing, and skin firming.
+- OxyGeneo & Pollogen (by Pollogen / Lumenis): Combines Oxygenation, RF, and Ultrasound for skin brightening, pigmentation, and anti-aging.
 
 Based on the problem description, provide a structured troubleshooting guide.
 `,
