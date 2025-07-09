@@ -28,18 +28,54 @@ export const serviceRecords: ServiceRecord[] = [
 ];
 
 export const clients: Client[] = [
-  { id: 'cli-001', name: 'Emma Watson', email: 'emma@example.com', phone: '123-456-7890', joinDate: '2022-03-10', avatar: 'https://placehold.co/100x100', treatmentHistory: 'Client has received two sessions of micro-needling in the past 6 months to address acne scars. Also completed a full course of Vbeam Perfecta® for rosacea.', preferences: ['Organic Products', 'Evening Appointments'] },
-  { id: 'cli-002', name: 'Daniel Radcliffe', email: 'daniel@example.com', phone: '234-567-8901', joinDate: '2023-08-22', avatar: 'https://placehold.co/100x100', treatmentHistory: 'Regular monthly HydraFacial treatments for general skin health and hydration. Used Geneskin® products for post-treatment care.', preferences: ['Express Services'] },
-  { id: 'cli-003', name: 'Scarlett Johansson', email: 'scarlett@example.com', phone: '345-678-9012', joinDate: '2021-11-05', avatar: 'https://placehold.co/100x100', treatmentHistory: 'One session of Sofwave™ for skin tightening on the lower face and neck. Expressed interest in non-invasive anti-aging solutions.', preferences: ['Anti-Aging', 'Minimal Downtime'] },
-  { id: 'cli-004', name: 'Chris Evans', email: 'chris@example.com', phone: '456-789-0123', joinDate: '2024-01-15', avatar: 'https://placehold.co/100x100', treatmentHistory: 'Initial consultation completed. No treatments yet. Concerned about sun damage and fine lines.', preferences: ['Preventative Care'] },
+  { 
+    id: 'cli-001', 
+    name: 'Klinik Estetika Jakarta', 
+    email: 'info@klinik-jakarta.com', 
+    phone: '021-555-0101', 
+    joinDate: '2022-03-10', 
+    avatar: 'https://placehold.co/100x100', 
+    treatmentHistory: 'Klinik ini berfokus pada perawatan laser dan peremajaan kulit. Pengguna rutin perangkat PicoWay® dan Vbeam Perfecta®. Sering membeli produk Geneskin® untuk perawatan pasca-prosedur.', 
+    preferences: ['Perawatan Laser', 'Pembelian Grosir'] 
+  },
+  { 
+    id: 'cli-002', 
+    name: 'Dr. Amanda Sari, Sp.KK', 
+    email: 'dr.amanda@aestheticare.id', 
+    phone: '0812-3456-7890', 
+    joinDate: '2023-08-22', 
+    avatar: 'https://placehold.co/100x100', 
+    treatmentHistory: 'Spesialis dalam solusi anti-penuaan non-invasif. Pengguna setia perangkat Sofwave™ dan Morpheus8. Lebih menyukai benang Ultra V untuk contouring wajah.', 
+    preferences: ['Anti-Penuaan', 'Non-Invasif'] 
+  },
+  { 
+    id: 'cli-003', 
+    name: 'Surabaya Beauty Clinic', 
+    email: 'contact@sby-beauty.com', 
+    phone: '031-555-0202', 
+    joinDate: '2021-11-05', 
+    avatar: 'https://placehold.co/100x100', 
+    treatmentHistory: 'Menawarkan berbagai perawatan tubuh menggunakan Indiba Deep Care. Klien reguler untuk Morpheus8 guna mengatasi selulit dan peremajaan kulit.', 
+    preferences: ['Perawatan Tubuh', 'Teknologi RF'] 
+  },
+  { 
+    id: 'cli-004', 
+    name: 'Dr. Budi Santoso', 
+    email: 'dr.budi@mediskin.co.id', 
+    phone: '0856-7890-1234', 
+    joinDate: '2024-01-15', 
+    avatar: 'https://placehold.co/100x100', 
+    treatmentHistory: 'Baru menyelesaikan konsultasi awal. Tertarik pada teknologi Laser Biaxis QS untuk perawatan pigmentasi dan penghapusan tato dengan downtime minimal.', 
+    preferences: ['Penghapusan Tato', 'Pigmentasi'] 
+  },
 ];
 
 export const appointments: Appointment[] = [
-  { id: 'apt-001', clientName: 'Emma Watson', clientId: 'cli-001', service: 'Micro-needling', date: '2024-07-20', time: '10:00 AM', status: 'Confirmed' },
-  { id: 'apt-002', clientName: 'Daniel Radcliffe', clientId: 'cli-002', service: 'HydraFacial', date: '2024-07-21', time: '02:00 PM', status: 'Confirmed' },
-  { id: 'apt-003', clientName: 'Chris Evans', clientId: 'cli-004', service: 'Consultation', date: '2024-07-22', time: '11:00 AM', status: 'Pending' },
-  { id: 'apt-004', clientName: 'Scarlett Johansson', clientId: 'cli-003', service: 'Sofwave™ Follow-up', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
-  { id: 'apt-005', clientName: 'Jessica Alba', clientId: 'cli-005', service: 'Vbeam Perfecta®', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
+  { id: 'apt-001', clientName: 'Klinik Estetika Jakarta', clientId: 'cli-001', service: 'Pelatihan PicoWay®', date: '2024-07-20', time: '10:00 AM', status: 'Confirmed' },
+  { id: 'apt-002', clientName: 'Dr. Amanda Sari, Sp.KK', clientId: 'cli-002', service: 'Demo Sofwave™', date: '2024-07-21', time: '02:00 PM', status: 'Confirmed' },
+  { id: 'apt-003', clientName: 'Dr. Budi Santoso', clientId: 'cli-004', service: 'Konsultasi Perangkat', date: '2024-07-22', time: '11:00 AM', status: 'Pending' },
+  { id: 'apt-004', clientName: 'Surabaya Beauty Clinic', clientId: 'cli-003', service: 'Follow-up Indiba', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
+  { id: 'apt-005', clientName: 'Dr. Amanda Sari, Sp.KK', clientId: 'cli-002', service: 'Pemasangan Morpheus8', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
 ];
 
 export const technicians: Technician[] = [
