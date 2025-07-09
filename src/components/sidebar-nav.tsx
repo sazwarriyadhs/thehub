@@ -17,8 +17,6 @@ import {
   CalendarDays,
   Map,
   LifeBuoy,
-  Moon,
-  Sun,
   Bot,
   Activity,
 } from 'lucide-react';
@@ -26,18 +24,40 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HelpAssistant } from './help-assistant';
 
-const menuItems = [
-  { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/inventory', label: 'Inventory', icon: Box },
-  { href: '/admin/services', label: 'Services', icon: Wrench },
-  { href: '/admin/monitoring', label: 'Monitoring', icon: Activity },
-  { href: '/admin/clients', label: 'Clients', icon: Users },
-  { href: '/admin/appointments', label: 'Appointments', icon: CalendarDays },
-  { href: '/admin/map', label: 'Technician Map', icon: Map },
-];
-
 export function SidebarNav() {
   const pathname = usePathname();
+
+  const mainLinks = [{ href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard }];
+  const operationsLinks = [
+    { href: '/admin/inventory', label: 'Inventory', icon: Box },
+    { href: '/admin/services', label: 'Services', icon: Wrench },
+    { href: '/admin/monitoring', label: 'Monitoring', icon: Activity },
+  ];
+  const clientLinks = [
+    { href: '/admin/clients', label: 'Clients', icon: Users },
+    { href: '/admin/appointments', label: 'Appointments', icon: CalendarDays },
+  ];
+  const mapLink = [{ href: '/admin/map', label: 'Technician Map', icon: Map }];
+
+  const renderLinks = (links: typeof mainLinks) =>
+    links.map((item) => (
+      <SidebarMenuItem key={item.label}>
+        <SidebarMenuButton
+          asChild
+          isActive={
+            item.href === '/admin/dashboard'
+              ? pathname === item.href
+              : pathname.startsWith(item.href)
+          }
+          tooltip={item.label}
+        >
+          <Link href={item.href}>
+            <item.icon />
+            <span>{item.label}</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    ));
 
   return (
     <Sidebar>
@@ -53,26 +73,19 @@ export function SidebarNav() {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
-          {menuItems.map((item) => (
-            <SidebarMenuItem key={item.label}>
-              <SidebarMenuButton
-                asChild
-                isActive={
-                  item.href === '/admin/dashboard'
-                    ? pathname === item.href
-                    : pathname.startsWith(item.href)
-                }
-                tooltip={item.label}
-              >
-                <Link href={item.href}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+        <SidebarMenu>{renderLinks(mainLinks)}</SidebarMenu>
+        
+        <div>
+          <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Operations</div>
+          <SidebarMenu>{renderLinks(operationsLinks)}</SidebarMenu>
+        </div>
+
+        <div>
+            <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Clients</div>
+            <SidebarMenu>{renderLinks(clientLinks)}</SidebarMenu>
+        </div>
+
+        <SidebarMenu>{renderLinks(mapLink)}</SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
         <HelpAssistant>
