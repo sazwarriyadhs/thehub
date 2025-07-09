@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DollarSign, Users, Box, Wrench, Bell, BrainCircuit, HelpCircle, ArrowRight, MapPin } from 'lucide-react';
+import { DollarSign, Users, Box, Wrench, Bell, BrainCircuit, HelpCircle, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
 import { RevenueChart } from '@/components/charts/revenue-chart';
 import { ClientDemographicsChart } from '@/components/charts/client-demographics-chart';
@@ -11,7 +11,7 @@ import type { ClientRequest, DeployedMachine } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import Image from 'next/image';
+import { MapDisplay } from '../map/components/map-display';
 
 const requestIcons: Record<ClientRequest['requestType'], React.ElementType> = {
   'Service': Wrench,
@@ -143,25 +143,7 @@ export default function DashboardPage() {
             <CardDescription>Real-time locations of your devices at client clinics. <Link href="/admin/map" className="text-primary hover:underline">View fullscreen</Link>.</CardDescription>
           </CardHeader>
           <CardContent className="p-0 flex-grow rounded-b-lg overflow-hidden h-[400px]">
-             {deployedMachines.length > 0 ? (
-                <Link href="/admin/map" className="block w-full h-full relative group">
-                    <Image
-                        src="https://placehold.co/800x400.png"
-                        alt="Map of deployed machines"
-                        fill
-                        className="object-cover"
-                        data-ai-hint="world map"
-                    />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <p className="text-white font-semibold text-lg">View Interactive Map</p>
-                    </div>
-                </Link>
-            ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-center gap-4 bg-muted">
-                    <MapPin className="w-12 h-12 text-muted-foreground" />
-                    <p className="text-muted-foreground">No machines with client locations assigned.</p>
-                </div>
-            )}
+             <MapDisplay machines={deployedMachines} />
           </CardContent>
         </Card>
       </div>
