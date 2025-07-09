@@ -24,91 +24,85 @@ type MapViewProps = {
 export default function MapView({ machines = [] }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
+  const vectorLayerRef = useRef<VectorLayer<VectorSource<Point>> | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const popupContentRef = useRef<HTMLDivElement>(null);
   const popupCloserRef = useRef<HTMLButtonElement>(null);
 
   const mapCenter: [number, number] = [118.0149, -2.5489]; // [lon, lat]
 
+  // Effect for initializing the map
   useEffect(() => {
-    if (!mapRef.current || mapInstanceRef.current) {
-      return; // Already initialized or container not ready
-    }
+    if (mapRef.current && !mapInstanceRef.current) { // Only run if map not initialized
+      const vectorSource = new VectorSource();
+      const vectorLayer = new VectorLayer({
+        source: vectorSource,
+        style: new Style({
+          image: new Circle({
+            radius: 7,
+            fill: new Fill({ color: 'hsl(var(--primary))' }),
+            stroke: new Stroke({ color: 'hsl(var(--primary-foreground))', width: 2 }),
+          }),
+        }),
+      });
+      vectorLayerRef.current = vectorLayer;
 
-    const vectorSource = new VectorSource({
-      features: machines.map(machine => new Feature({
-        geometry: new Point(fromLonLat([machine.location.lng, machine.location.lat])),
-        machineData: machine,
-      })),
-    });
-
-    const markerStyle = new Style({
-      image: new Circle({
-        radius: 7,
-        fill: new Fill({ color: 'hsl(var(--primary))' }),
-        stroke: new Stroke({ color: 'hsl(var(--primary-foreground))', width: 2 }),
-      }),
-    });
-
-    const vectorLayer = new VectorLayer({
-      source: vectorSource,
-      style: markerStyle,
-    });
-    
-    const popupOverlay = new Overlay({
-      element: popupRef.current!,
-      autoPan: { animation: { duration: 250 } },
-      offset: [0, -15],
-      positioning: 'bottom-center'
-    });
-    
-    const map = new Map({
-      target: mapRef.current!,
-      layers: [
-        new TileLayer({ source: new OSM() }),
-        vectorLayer
-      ],
-      view: new View({
-        center: fromLonLat(mapCenter),
-        zoom: 5,
-      }),
-      overlays: [popupOverlay],
-    });
-
-    mapInstanceRef.current = map;
-
-    map.on('click', (event) => {
-      const feature = map.forEachFeatureAtPixel(event.pixel, f => f);
+      const popupOverlay = new Overlay({
+        element: popupRef.current!,
+        autoPan: { animation: { duration: 250 } },
+        offset: [0, -15],
+        positioning: 'bottom-center'
+      });
       
-      if (feature) {
-        const machine = feature.get('machineData') as DeployedMachine;
-        const coordinates = (feature.getGeometry() as Point).getCoordinates();
-        if (popupContentRef.current) {
-            popupContentRef.current.innerHTML = `
-              <h3 class="font-bold text-base mb-1">${machine.name}</h3>
-              <div class="text-sm text-muted-foreground mb-1">
-                <span class="font-medium text-foreground">Client:</span> ${machine.clientName}
-              </div>
-              <div class="text-xs text-muted-foreground mb-2">${machine.location.address}</div>
-              <a href="/admin/inventory/${machine.id}" class="text-primary text-sm font-medium hover:underline">
-                View Machine Details
-              </a>
-            `;
-        }
-        popupOverlay.setPosition(coordinates);
-      } else {
-        popupOverlay.setPosition(undefined);
-      }
-    });
+      const map = new Map({
+        target: mapRef.current!,
+        layers: [
+          new TileLayer({ source: new OSM() }),
+          vectorLayer
+        ],
+        view: new View({
+          center: fromLonLat(mapCenter),
+          zoom: 5,
+        }),
+        overlays: [popupOverlay],
+      });
 
-    if (popupCloserRef.current) {
-      popupCloserRef.current.onclick = () => {
-        popupOverlay.setPosition(undefined);
-        popupCloserRef.current?.blur();
-        return false;
-      };
+      mapInstanceRef.current = map;
+
+      map.on('click', (event) => {
+        const feature = map.forEachFeatureAtPixel(event.pixel, f => f);
+        
+        if (feature) {
+          const machine = feature.get('machineData') as DeployedMachine;
+          const coordinates = (feature.getGeometry() as Point).getCoordinates();
+          if (popupContentRef.current) {
+              popupContentRef.current.innerHTML = `
+                <h3 class="font-bold text-base mb-1">${machine.name}</h3>
+                <div class="text-sm text-muted-foreground mb-1">
+                  <span class="font-medium text-foreground">Client:</span> ${machine.clientName}
+                </div>
+                <div class="text-xs text-muted-foreground mb-2">${machine.location.address}</div>
+                <a href="/admin/inventory/${machine.id}" class="text-primary text-sm font-medium hover:underline">
+                  View Machine Details
+                </a>
+              `;
+          }
+          popupOverlay.setPosition(coordinates);
+        } else {
+          popupOverlay.setPosition(undefined);
+        }
+      });
+
+      if (popupCloserRef.current) {
+        popupCloserRef.current.onclick = () => {
+          popupOverlay.setPosition(undefined);
+          popupCloserRef.current?.blur();
+          return false;
+        };
+      }
     }
 
+    // Cleanup function on unmount
     return () => {
       if (mapInstanceRef.current) {
         mapInstanceRef.current.setTarget(undefined);
@@ -116,7 +110,22 @@ export default function MapView({ machines = [] }: MapViewProps) {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run only once on mount
+  }, []); // Empty dependency array to run only once on mount and unmount
+
+  // Effect for updating markers when machines prop changes
+  useEffect(() => {
+    if (vectorLayerRef.current) {
+      const vectorSource = vectorLayerRef.current.getSource();
+      if (vectorSource) {
+        vectorSource.clear(); // Clear existing markers
+        const features = machines.map(machine => new Feature({
+          geometry: new Point(fromLonLat([machine.location.lng, machine.location.lat])),
+          machineData: machine,
+        }));
+        vectorSource.addFeatures(features);
+      }
+    }
+  }, [machines]); // Re-run when machines array changes
 
   return (
     <div className="w-full h-full relative">
