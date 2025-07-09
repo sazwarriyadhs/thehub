@@ -20,10 +20,9 @@ import { X } from 'lucide-react';
 type MapViewProps = {
   machines?: DeployedMachine[];
   activeMachine?: DeployedMachine | null;
-  stableMachinesKey?: string;
 };
 
-export default function MapView({ machines = [], activeMachine, stableMachinesKey }: MapViewProps) {
+export default function MapView({ machines = [], activeMachine }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const vectorLayerRef = useRef<VectorLayer<VectorSource<Point>> | null>(null);
@@ -44,7 +43,7 @@ export default function MapView({ machines = [], activeMachine, stableMachinesKe
             anchor: [0.5, 1],
             anchorXUnits: 'fraction',
             anchorYUnits: 'fraction',
-            src: '/images/marker.png',
+            src: '/images/marking.png',
             scale: 0.8,
           }),
         }),
@@ -128,7 +127,7 @@ export default function MapView({ machines = [], activeMachine, stableMachinesKe
         vectorSource.addFeatures(features);
       }
     }
-  }, [machines, stableMachinesKey]); // Re-run when machines array changes
+  }, [machines]); // Re-run when machines array changes
 
   // Effect for panning to active machine
   useEffect(() => {
