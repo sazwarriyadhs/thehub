@@ -25,7 +25,7 @@ export default function LoginPage() {
     setTimeout(() => {
       if (email === 'admin@aestheticare.pro' && password === 'password') {
         router.push('/admin/dashboard');
-      } else if (email === 'info@klinik-jakarta.com' && password === 'password') {
+      } else if (email === 'info@dermaster.com' && password === 'password') {
         router.push('/client/dashboard');
       } else {
         toast({
@@ -76,7 +76,7 @@ export default function LoginPage() {
             </div>
              <p className="text-xs text-muted-foreground pt-2">
                 <strong>Admin:</strong> admin@aestheticare.pro<br/>
-                <strong>Client:</strong> info@klinik-jakarta.com<br/>
+                <strong>Client:</strong> info@dermaster.com<br/>
                 <strong>Password:</strong> password
              </p>
           </CardContent>

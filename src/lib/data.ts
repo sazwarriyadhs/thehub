@@ -30,52 +30,52 @@ export const serviceRecords: ServiceRecord[] = [
 export const clients: Client[] = [
   { 
     id: 'cli-001', 
-    name: 'Klinik Estetika Jakarta', 
-    email: 'info@klinik-jakarta.com', 
-    phone: '021-555-0101', 
-    joinDate: '2022-03-10', 
+    name: 'Dermaster Clinic', 
+    email: 'info@dermaster.com', 
+    phone: '021-555-1111', 
+    joinDate: '2022-05-15', 
     avatar: 'https://placehold.co/100x100', 
-    treatmentHistory: 'Klinik ini berfokus pada perawatan laser dan peremajaan kulit. Pengguna rutin perangkat PicoWay® dan Vbeam Perfecta®. Sering membeli produk Geneskin® untuk perawatan pasca-prosedur.', 
-    preferences: ['Perawatan Laser', 'Pembelian Grosir'] 
+    treatmentHistory: 'Jaringan luas di kota-kota besar. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
+    preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'] 
   },
   { 
     id: 'cli-002', 
-    name: 'Dr. Amanda Sari, Sp.KK', 
-    email: 'dr.amanda@aestheticare.id', 
-    phone: '0812-3456-7890', 
-    joinDate: '2023-08-22', 
+    name: 'Natasha Skin Clinic', 
+    email: 'contact@natasha-skin.com', 
+    phone: '021-555-2222', 
+    joinDate: '2021-09-01', 
     avatar: 'https://placehold.co/100x100', 
-    treatmentHistory: 'Spesialis dalam solusi anti-penuaan non-invasif. Pengguna setia perangkat Sofwave™ dan Morpheus8. Lebih menyukai benang Ultra V untuk contouring wajah.', 
-    preferences: ['Anti-Penuaan', 'Non-Invasif'] 
+    treatmentHistory: 'Memiliki banyak cabang di area Jabodetabek. Menawarkan solusi estetika all-in-one, termasuk PRP, laser CO₂, serta produk skincare untuk klinik dan homecare.', 
+    preferences: ['PRP', 'Laser CO₂', 'Skincare'] 
   },
   { 
     id: 'cli-003', 
-    name: 'Surabaya Beauty Clinic', 
-    email: 'contact@sby-beauty.com', 
-    phone: '031-555-0202', 
-    joinDate: '2021-11-05', 
+    name: 'Profira Clinic Surabaya', 
+    email: 'info@profira-clinic.com', 
+    phone: '031-555-3333', 
+    joinDate: '2023-02-20', 
     avatar: 'https://placehold.co/100x100', 
-    treatmentHistory: 'Menawarkan berbagai perawatan tubuh menggunakan Indiba Deep Care. Klien reguler untuk Morpheus8 guna mengatasi selulit dan peremajaan kulit.', 
-    preferences: ['Perawatan Tubuh', 'Teknologi RF'] 
+    treatmentHistory: 'Spesialis dalam perawatan anti-penuaan, seperti kerutan, pigmentasi, dan penghilangan tahi lalat. Sangat direkomendasikan untuk perawatan facial dan anti-aging.', 
+    preferences: ['Anti-Aging', 'Pigmentasi', 'Facial'] 
   },
   { 
     id: 'cli-004', 
-    name: 'Dr. Budi Santoso', 
-    email: 'dr.budi@mediskin.co.id', 
-    phone: '0856-7890-1234', 
-    joinDate: '2024-01-15', 
+    name: 'Miracle Aesthetic Clinic', 
+    email: 'bali@miracle-clinic.com', 
+    phone: '0361-555-4444', 
+    joinDate: '2023-11-10', 
     avatar: 'https://placehold.co/100x100', 
-    treatmentHistory: 'Baru menyelesaikan konsultasi awal. Tertarik pada teknologi Laser Biaxis QS untuk perawatan pigmentasi dan penghapusan tato dengan downtime minimal.', 
-    preferences: ['Penghapusan Tato', 'Pigmentasi'] 
+    treatmentHistory: 'Cabang di Bali dan Batam. Populer untuk layanan microneedling dan thread lift (tarik benang).', 
+    preferences: ['Microneedling', 'Thread Lift'] 
   },
 ];
 
 export const appointments: Appointment[] = [
-  { id: 'apt-001', clientName: 'Klinik Estetika Jakarta', clientId: 'cli-001', service: 'Pelatihan PicoWay®', date: '2024-07-20', time: '10:00 AM', status: 'Confirmed' },
-  { id: 'apt-002', clientName: 'Dr. Amanda Sari, Sp.KK', clientId: 'cli-002', service: 'Demo Sofwave™', date: '2024-07-21', time: '02:00 PM', status: 'Confirmed' },
-  { id: 'apt-003', clientName: 'Dr. Budi Santoso', clientId: 'cli-004', service: 'Konsultasi Perangkat', date: '2024-07-22', time: '11:00 AM', status: 'Pending' },
-  { id: 'apt-004', clientName: 'Surabaya Beauty Clinic', clientId: 'cli-003', service: 'Training Indiba', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
-  { id: 'apt-005', clientName: 'Dr. Amanda Sari, Sp.KK', clientId: 'cli-002', service: 'Training Morpheus8', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
+  { id: 'apt-001', clientName: 'Dermaster Clinic', clientId: 'cli-001', service: 'Demo CoolSculpting', date: '2024-07-20', time: '10:00 AM', status: 'Confirmed' },
+  { id: 'apt-002', clientName: 'Natasha Skin Clinic', clientId: 'cli-002', service: 'Pelatihan Laser CO₂', date: '2024-07-21', time: '02:00 PM', status: 'Confirmed' },
+  { id: 'apt-003', clientName: 'Profira Clinic Surabaya', clientId: 'cli-003', service: 'Konsultasi Perangkat Anti-Aging', date: '2024-07-22', time: '11:00 AM', status: 'Pending' },
+  { id: 'apt-004', clientName: 'Miracle Aesthetic Clinic', clientId: 'cli-004', service: 'Training Microneedling', date: '2024-07-22', time: '03:30 PM', status: 'Confirmed' },
+  { id: 'apt-005', clientName: 'Dermaster Clinic', clientId: 'cli-001', service: 'Maintenance Perangkat HIFU', date: '2024-08-01', time: '09:00 AM', status: 'Cancelled' },
 ];
 
 export const technicians: Technician[] = [
@@ -102,5 +102,5 @@ export const clientDemographicsData = [
   
 export const inventoryStatusData = [
     { name: 'Devices', inStock: 13, lowStock: 0, outOfStock: 0 },
-    { name: 'Skincare', inStock: 150, lowStock: 8, outOfStock: 1 },
+    { name: 'Skincare', inStock: 50, lowStock: 8, outOfStock: 1 },
 ];
