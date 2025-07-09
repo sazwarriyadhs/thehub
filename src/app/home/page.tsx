@@ -26,7 +26,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="text-left overflow-hidden flex flex-col">
                 <Image 
-                    src="https://placehold.co/600x400.png"
+                    src="/images/admin.jpeg"
                     alt="Distributor Dashboard"
                     width={600}
                     height={400}
