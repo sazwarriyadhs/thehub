@@ -44,7 +44,7 @@ export const clients: Client[] = [
     email: 'info@dermaster.com', 
     phone: '021-555-1111', 
     joinDate: '2022-05-15', 
-    avatar: 'https://placehold.co/100x100.png', 
+    avatar: 'https://placehold.co/600x400.png', 
     treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
     location: { address: 'Jl. Kemang Sel. No.99, RT.1/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730', lat: -6.262846, lng: 106.812211 }
@@ -97,6 +97,7 @@ export const clientRequests: ClientRequest[] = [
   { id: 'req-002', clientName: 'Natasha Skin Clinic', clientId: 'cli-002', requestType: 'Troubleshoot', details: 'Laser Biaxis QS is showing an error code E-05.', status: 'New', date: '2024-07-27' },
   { id: 'req-003', clientName: 'Miracle Aesthetic Clinic', clientId: 'cli-004', requestType: 'Inquiry', details: 'Question about Ultra V thread compatibility with new procedure.', status: 'In Progress', date: '2024-07-26' },
   { id: 'req-004', clientName: 'Profira Clinic Surabaya', clientId: 'cli-003', requestType: 'Service', details: 'Indiba Deep Care handpiece is not heating correctly.', status: 'New', date: '2024-07-28' },
+  { id: 'req-005', clientName: 'Dermaster Clinic', clientId: 'cli-001', requestType: 'Service', details: 'Service for Morpheus8: The screen is flickering during use.', status: 'New', date: '2024-07-29' },
 ];
 
 export const revenueData = [

@@ -54,3 +54,34 @@ export async function getTroubleshootingSteps(
     return { error: 'Failed to generate troubleshooting steps. Please try again.' };
   }
 }
+
+type ServiceRequestInput = {
+    clientId: string;
+    clientName: string;
+    details: string;
+}
+
+export async function requestService(
+  input: ServiceRequestInput
+): Promise<ActionResult<{ success: boolean }>> {
+  try {
+    if (!input.clientId || !input.clientName || !input.details) {
+      return { error: 'Client ID, name, and details are required.' };
+    }
+    // In a real application, you would save this to a database.
+    // For this prototype, we'll just log it and return success.
+    // A new request has been manually added to lib/data.ts to demonstrate how it would appear on the dashboard.
+    console.log('New Service Request:', {
+        id: `req-${Date.now()}`,
+        ...input,
+        requestType: 'Service',
+        status: 'New',
+        date: new Date().toISOString().split('T')[0],
+    });
+    
+    return { data: { success: true } };
+  } catch (e: any) {
+    console.error(e);
+    return { error: 'Failed to submit service request. Please try again.' };
+  }
+}

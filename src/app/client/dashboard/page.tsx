@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import type { Appointment, InventoryItem } from '@/types';
 import { ClientTroubleshootingAssistant } from './components/client-troubleshooting-assistant';
+import { ClientServiceRequest } from './components/client-service-request';
 
 // Hardcode client ID for demonstration. In a real app, this would come from auth.
 const LOGGED_IN_CLIENT_ID = 'cli-001';
@@ -49,6 +50,7 @@ const isWarrantyExpiringSoon = (endDate: string): boolean => {
 export default function ClientDashboardPage() {
   const client = clients.find((c) => c.id === LOGGED_IN_CLIENT_ID);
   const [troubleshootingMachine, setTroubleshootingMachine] = useState<InventoryItem | null>(null);
+  const [serviceRequestMachine, setServiceRequestMachine] = useState<InventoryItem | null>(null);
   
   if (!client) {
     notFound();
@@ -114,7 +116,7 @@ export default function ClientDashboardPage() {
                                                 <BrainCircuit className="mr-2 h-4 w-4" />
                                                 Troubleshoot
                                             </Button>
-                                            <Button size="sm" variant="outline" className="w-full justify-start">
+                                            <Button size="sm" variant="outline" className="w-full justify-start" onClick={() => setServiceRequestMachine(machine)}>
                                                 <Wrench className="mr-2 h-4 w-4" />
                                                 Request Service
                                             </Button>
@@ -220,6 +222,17 @@ export default function ClientDashboardPage() {
                     setTroubleshootingMachine(null);
                 }
             }}
+        />
+        <ClientServiceRequest
+            machine={serviceRequestMachine}
+            isOpen={!!serviceRequestMachine}
+            onOpenChange={(isOpen) => {
+                if (!isOpen) {
+                    setServiceRequestMachine(null);
+                }
+            }}
+            clientId={client.id}
+            clientName={client.name}
         />
     </div>
   );
