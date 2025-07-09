@@ -28,6 +28,10 @@ type MapViewProps = {
 export default function MapView({ machines = [] }: MapViewProps) {
   // Default center of the map (e.g., around Indonesia)
   const mapCenter: [number, number] = [-2.5489, 118.0149];
+  
+  // By stringifying the machines array, we create a stable dependency for useMemo.
+  // This prevents the map from re-initializing on every render during development hot-reloads.
+  const stableMachinesIdentifier = JSON.stringify(machines);
 
   const displayMap = useMemo(
     () => (
@@ -69,7 +73,8 @@ export default function MapView({ machines = [] }: MapViewProps) {
         ))}
       </MapContainer>
     ),
-    [machines]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [stableMachinesIdentifier]
   );
 
   return displayMap;
