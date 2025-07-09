@@ -5,9 +5,11 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Calendar, Package, ShieldCheck, Tag } from 'lucide-react';
+import { Calendar, Package, ShieldCheck, Tag, Edit } from 'lucide-react';
 import type { InventoryItem } from '@/types';
 import { TroubleshootingAssistant } from './components/troubleshooting-assistant';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const statusVariant: Record<InventoryItem['status'], 'default' | 'secondary' | 'destructive'> = {
   'In Stock': 'default',
@@ -24,7 +26,15 @@ export default function InventoryDetailPage({ params }: { params: { id: string }
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={item.name} description={`Details for ${item.name}`} />
+      <div className="flex items-center justify-between">
+        <PageHeader title={item.name} description={`Details for ${item.name}`} />
+        <Button asChild>
+          <Link href={`/admin/inventory/${item.id}/edit`}>
+            <Edit />
+            Edit Item
+          </Link>
+        </Button>
+      </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-1 flex flex-col gap-8">

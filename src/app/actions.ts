@@ -5,11 +5,104 @@ import { aiHelpAssistant } from '@/ai/flows/ai-help-assistant';
 import { getTroubleshootingAssistance } from '@/ai/flows/ai-troubleshooting-assistant';
 import { serviceRecords } from '@/lib/data';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 type ActionResult<T> = {
     data?: T;
     error?: string;
 }
+
+export const inventoryFormSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(3, { message: 'Name must be at least 3 characters.' }),
+  type: z.enum(['Device', 'Skincare'], { required_error: 'Type is required.' }),
+  quantity: z.coerce.number().min(0, { message: 'Quantity cannot be negative.' }),
+  purchaseDate: z.date({ required_error: 'Purchase date is required.' }),
+  warrantyEndDate: z.string().transform((val, ctx) => {
+    if (val === '') return undefined;
+    const date = new Date(val);
+    if (isNaN(date.getTime())) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_date,
+        message: 'Invalid date',
+      });
+      return z.NEVER;
+    }
+    return date;
+  }).optional(),
+  status: z.enum(['In Stock', 'Low Stock', 'Out of Stock'], { required_error: 'Status is required.' }),
+  description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
+  imageUrl: z.string().url({ message: 'Please enter a valid URL.' }).optional().or(z.literal('')),
+  clientId: z.string().optional(),
+});
+
+
+export async function saveInventoryItem(formData: FormData) {
+  
+  const data = {
+    id: formData.get('id') || undefined,
+    name: formData.get('name'),
+    type: formData.get('type'),
+    quantity: formData.get('quantity'),
+    purchaseDate: new Date(formData.get('purchaseDate') as string),
+    warrantyEndDate: formData.get('warrantyEndDate') as string,
+    status: formData.get('status'),
+    description: formData.get('description'),
+    imageUrl: formData.get('imageUrl'),
+    clientId: formData.get('clientId') || undefined,
+  };
+
+  const validatedFields = inventoryFormSchema.safeParse(data);
+
+  if (!validatedFields.success) {
+    console.error('Validation Errors:', validatedFields.error.flatten().fieldErrors);
+    // In a real app, you would return these errors to the form.
+    // For this prototype, we'll just log and redirect.
+    return {
+      error: 'Invalid fields submitted.',
+    };
+  }
+  
+  const { id, ...itemData } = validatedFields.data;
+
+  try {
+    if (id) {
+      console.log(`Updating inventory item ${id}:`, itemData);
+      // In a real app, you would update the database here.
+      // e.g., await db.inventory.update({ where: { id }, data: itemData });
+    } else {
+      const newId = `inv-${Date.now()}`;
+      console.log(`Creating new inventory item ${newId}:`, itemData);
+      // In a real app, you would create a new record in the database.
+      // e.g., await db.inventory.create({ data: { id: newId, ...itemData } });
+    }
+  } catch (e: any) {
+    console.error('Failed to save inventory item:', e);
+    return { error: 'Failed to save inventory item. Please try again.' };
+  }
+  
+  revalidatePath('/admin/inventory');
+  redirect('/admin/inventory');
+}
+
+export async function deleteInventoryItem(id: string) {
+    try {
+        if (!id) {
+            return { error: 'Item ID is required.' };
+        }
+        console.log(`Deleting inventory item ${id}`);
+        // In a real app, you would delete the item from the database.
+        // e.g., await db.inventory.delete({ where: { id } });
+    } catch (e: any) {
+        console.error('Failed to delete inventory item:', e);
+        return { error: 'Failed to delete inventory item. Please try again.' };
+    }
+    
+    revalidatePath('/admin/inventory');
+}
+
 
 export async function generateRecommendations(
   clientProfile: string
