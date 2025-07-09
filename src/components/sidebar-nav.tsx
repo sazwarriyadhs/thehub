@@ -27,13 +27,13 @@ import { usePathname } from 'next/navigation';
 import { HelpAssistant } from './help-assistant';
 
 const menuItems = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/inventory', label: 'Inventory', icon: Box },
-  { href: '/services', label: 'Services', icon: Wrench },
-  { href: '/monitoring', label: 'Monitoring', icon: Activity },
-  { href: '/clients', label: 'Clients', icon: Users },
-  { href: '/appointments', label: 'Appointments', icon: CalendarDays },
-  { href: '/map', label: 'Technician Map', icon: Map },
+  { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/admin/inventory', label: 'Inventory', icon: Box },
+  { href: '/admin/services', label: 'Services', icon: Wrench },
+  { href: '/admin/monitoring', label: 'Monitoring', icon: Activity },
+  { href: '/admin/clients', label: 'Clients', icon: Users },
+  { href: '/admin/appointments', label: 'Appointments', icon: CalendarDays },
+  { href: '/admin/map', label: 'Technician Map', icon: Map },
 ];
 
 export function SidebarNav() {
@@ -59,7 +59,7 @@ export function SidebarNav() {
               <SidebarMenuButton
                 asChild
                 isActive={
-                  item.href === '/'
+                  item.href === '/admin/dashboard'
                     ? pathname === item.href
                     : pathname.startsWith(item.href)
                 }

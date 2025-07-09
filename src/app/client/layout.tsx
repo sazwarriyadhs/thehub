@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import './globals.css';
+import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'AesthetiCare Pro',
-  description: 'Your all-in-one platform for distributing aesthetic machines and products.',
+  title: 'Client Portal - AesthetiCare Pro',
+  description: 'Manage your orders, appointments, and view your history with AesthetiCare Pro.',
 };
 
-export default function RootLayout({
+export default function PortalLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -22,8 +22,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased">
-        {children}
+      <body className="font-body antialiased bg-muted/40">
+        <div className="p-4 sm:p-6 lg:p-8 container mx-auto max-w-7xl">
+            {children}
+        </div>
         <Toaster />
       </body>
     </html>
