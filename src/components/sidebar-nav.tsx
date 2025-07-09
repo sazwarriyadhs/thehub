@@ -28,19 +28,17 @@ import Image from 'next/image';
 export function SidebarNav() {
   const pathname = usePathname();
 
-  const mainLinks = [{ href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard }];
-  const operationsLinks = [
+  const navLinks = [
+    { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/admin/inventory', label: 'Inventory', icon: Box },
     { href: '/admin/services', label: 'Services', icon: Wrench },
     { href: '/admin/monitoring', label: 'Monitoring', icon: Activity },
-  ];
-  const clientLinks = [
     { href: '/admin/clients', label: 'Clients', icon: Users },
     { href: '/admin/appointments', label: 'Appointments', icon: CalendarDays },
+    { href: '/admin/map', label: 'Technician Map', icon: Map }
   ];
-  const mapLink = [{ href: '/admin/map', label: 'Technician Map', icon: Map }];
 
-  const renderLinks = (links: typeof mainLinks) =>
+  const renderLinks = (links: typeof navLinks) =>
     links.map((item) => (
       <SidebarMenuItem key={item.label}>
         <SidebarMenuButton
@@ -84,19 +82,7 @@ export function SidebarNav() {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>{renderLinks(mainLinks)}</SidebarMenu>
-        
-        <div>
-          <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider group-data-[collapsible=icon]:hidden">Operations</div>
-          <SidebarMenu>{renderLinks(operationsLinks)}</SidebarMenu>
-        </div>
-
-        <div>
-            <div className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider group-data-[collapsible=icon]:hidden">Clients</div>
-            <SidebarMenu>{renderLinks(clientLinks)}</SidebarMenu>
-        </div>
-
-        <SidebarMenu>{renderLinks(mapLink)}</SidebarMenu>
+        <SidebarMenu>{renderLinks(navLinks)}</SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
         <HelpAssistant>
