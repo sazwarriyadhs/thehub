@@ -69,7 +69,7 @@ export const clients: Client[] = [
     avatar: 'https://placehold.co/100x100', 
     treatmentHistory: 'Spesialis dalam perawatan anti-penuaan, seperti kerutan, pigmentasi, dan penghilangan tahi lalat. Sangat direkomendasikan untuk perawatan facial dan anti-aging.', 
     preferences: ['Anti-Aging', 'Pigmentasi', 'Facial'],
-    location: { address: 'Jl. HR Muhammad No.41, Surabaya', lat: -7.2892, lng: 112.6732 }
+    location: { address: 'Jl. HR Muhammad No.41, Pradahkalikendal, Kec. Dukuhpakis, Surabaya, Jawa Timur 60226', lat: -7.2892, lng: 112.6732 }
   },
   { 
     id: 'cli-004', 
