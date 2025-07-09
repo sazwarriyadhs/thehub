@@ -45,7 +45,7 @@ export const clients: Client[] = [
     phone: '021-555-2222', 
     joinDate: '2021-09-01', 
     avatar: 'https://placehold.co/100x100', 
-    treatmentHistory: 'Memiliki banyak cabang di area Jabodetabek. Menawarkan solusi estetika all-in-one, termasuk PRP, laser CO₂, serta produk skincare untuk klinik dan homecare.', 
+    treatmentHistory: 'Memiliki banyak cabang di area Jabodetabek. Menawarkan solusi estetika all-in-one, termasuk PRP, laser CO₂, serta produk skincare untuk klinik dan homecare. Klien ini telah membeli mesin Laser Biaxis QS dari distributor.', 
     preferences: ['PRP', 'Laser CO₂', 'Skincare'] 
   },
   { 
@@ -104,3 +104,4 @@ export const inventoryStatusData = [
     { name: 'Devices', inStock: 13, lowStock: 0, outOfStock: 0 },
     { name: 'Skincare', inStock: 50, lowStock: 8, outOfStock: 1 },
 ];
+
