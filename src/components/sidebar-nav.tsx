@@ -20,6 +20,7 @@ import {
   Moon,
   Sun,
   Bot,
+  Activity,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -29,6 +30,7 @@ const menuItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/inventory', label: 'Inventory', icon: Box },
   { href: '/services', label: 'Services', icon: Wrench },
+  { href: '/monitoring', label: 'Monitoring', icon: Activity },
   { href: '/clients', label: 'Clients', icon: Users },
   { href: '/appointments', label: 'Appointments', icon: CalendarDays },
   { href: '/map', label: 'Technician Map', icon: Map },
