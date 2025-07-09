@@ -21,7 +21,7 @@ const sliderServices = [
   {
     title: 'Manajemen Klien Terintegrasi',
     description: 'Kelola seluruh siklus hidup klien Anda, dari janji temu hingga riwayat perawatan, dalam satu platform.',
-    image: 'https://placehold.co/1200x600.png',
+    image: '/images/admin.jpeg',
     aiHint: 'clinic management',
   },
 ];
@@ -48,6 +48,16 @@ const newsArticles = [
     aiHint: 'laser technology',
     link: '#',
   },
+];
+
+const brandLogos = [
+    { name: 'Candela', image: 'https://placehold.co/200x100.png', aiHint: 'candela logo' },
+    { name: 'InMode', image: 'https://placehold.co/200x100.png', aiHint: 'inmode logo' },
+    { name: 'Sofwave', image: 'https://placehold.co/200x100.png', aiHint: 'sofwave logo' },
+    { name: 'BiAxis', image: 'https://placehold.co/200x100.png', aiHint: 'biaxis logo' },
+    { name: 'INDIBA', image: 'https://placehold.co/200x100.png', aiHint: 'indiba logo' },
+    { name: 'Pollogen', image: 'https://placehold.co/200x100.png', aiHint: 'pollogen logo' },
+    { name: 'Lumenis', image: 'https://placehold.co/200x100.png', aiHint: 'lumenis logo' },
 ];
 
 export default function HomePage() {
@@ -165,6 +175,41 @@ export default function HomePage() {
             <p className="mt-2">Platform Manajemen Distributor Estetika Terpadu</p>
           </div>
       </footer>
+      
+      {/* Brands Slider Section */}
+      <section className="w-full py-12 bg-background">
+        <div className="container mx-auto">
+           <h3 className="text-center text-lg font-semibold text-muted-foreground mb-8">Merek Terkemuka yang Kami Distribusikan</h3>
+           <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full max-w-6xl mx-auto"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {brandLogos.concat(brandLogos).map((logo, index) => ( // Duplicate for continuous effect
+                <CarouselItem key={index} className="pl-4 basis-1/3 md:basis-1/4 lg:basis-1/6">
+                  <div className="p-1">
+                    <Card className="bg-transparent border-0 shadow-none">
+                      <CardContent className="flex aspect-video items-center justify-center p-2">
+                         <Image
+                            src={logo.image}
+                            alt={`${logo.name} logo`}
+                            width={150}
+                            height={75}
+                            className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                            data-ai-hint={logo.aiHint}
+                         />
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
+      </section>
     </main>
   );
 }
