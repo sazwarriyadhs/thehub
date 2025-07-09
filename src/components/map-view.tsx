@@ -1,81 +1,136 @@
 'use client';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { DivIcon } from 'leaflet';
-import { renderToString } from 'react-dom/server';
-import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 import type { DeployedMachine } from '@/types';
-import { SquareTerminal } from 'lucide-react';
-import { useMemo } from 'react';
 
-const customIcon = () => new DivIcon({
-  html: renderToString(
-    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary shadow-lg ring-2 ring-primary-foreground">
-      <SquareTerminal className="h-5 w-5 text-primary-foreground" />
-    </div>
-  ),
-  className: 'bg-transparent border-0',
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
-  popupAnchor: [0, -32],
-});
+// OpenLayers
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
+import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import { fromLonLat } from 'ol/proj';
+import { Style, Circle, Fill, Stroke } from 'ol/style';
+import Overlay from 'ol/Overlay';
+import { X } from 'lucide-react';
 
 type MapViewProps = {
   machines?: DeployedMachine[];
 };
 
 export default function MapView({ machines = [] }: MapViewProps) {
-  // Default center of the map (e.g., around Indonesia)
-  const mapCenter: [number, number] = [-2.5489, 118.0149];
-  
-  // By stringifying the machines array, we create a stable dependency for useMemo.
-  // This prevents the map from re-initializing on every render during development hot-reloads.
-  const stableMachinesIdentifier = JSON.stringify(machines);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const popupContentRef = useRef<HTMLDivElement>(null);
+  const popupCloserRef = useRef<HTMLButtonElement>(null);
 
-  const displayMap = useMemo(
-    () => (
-      <MapContainer
-        center={mapCenter}
-        zoom={5}
-        scrollWheelZoom={true}
-        className="w-full h-full"
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+  const mapCenter: [number, number] = [118.0149, -2.5489]; // [lon, lat]
 
-        {machines.map((machine) => (
-          <Marker
-            key={machine.id}
-            position={[machine.location.lat, machine.location.lng]}
-            icon={customIcon()}
-          >
-            <Popup>
-              <div className="font-sans">
-                <h3 className="font-bold text-base mb-1">{machine.name}</h3>
-                <div className="text-sm text-muted-foreground mb-1">
-                  <span className="font-medium text-foreground">Client:</span> {machine.clientName}
-                </div>
-                <div className="text-xs text-muted-foreground mb-2">
-                  {machine.location.address}
-                </div>
-                <Link
-                  href={`/admin/inventory/${machine.id}`}
-                  className="text-primary text-sm font-medium hover:underline"
-                >
-                  View Machine Details
-                </Link>
+  useEffect(() => {
+    if (!mapRef.current || mapInstanceRef.current) {
+      return; // Already initialized or container not ready
+    }
+
+    const vectorSource = new VectorSource({
+      features: machines.map(machine => new Feature({
+        geometry: new Point(fromLonLat([machine.location.lng, machine.location.lat])),
+        machineData: machine,
+      })),
+    });
+
+    const markerStyle = new Style({
+      image: new Circle({
+        radius: 7,
+        fill: new Fill({ color: 'hsl(var(--primary))' }),
+        stroke: new Stroke({ color: 'hsl(var(--primary-foreground))', width: 2 }),
+      }),
+    });
+
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+      style: markerStyle,
+    });
+    
+    const popupOverlay = new Overlay({
+      element: popupRef.current!,
+      autoPan: { animation: { duration: 250 } },
+      offset: [0, -15],
+      positioning: 'bottom-center'
+    });
+    
+    const map = new Map({
+      target: mapRef.current!,
+      layers: [
+        new TileLayer({ source: new OSM() }),
+        vectorLayer
+      ],
+      view: new View({
+        center: fromLonLat(mapCenter),
+        zoom: 5,
+      }),
+      overlays: [popupOverlay],
+    });
+
+    mapInstanceRef.current = map;
+
+    map.on('click', (event) => {
+      const feature = map.forEachFeatureAtPixel(event.pixel, f => f);
+      
+      if (feature) {
+        const machine = feature.get('machineData') as DeployedMachine;
+        const coordinates = (feature.getGeometry() as Point).getCoordinates();
+        if (popupContentRef.current) {
+            popupContentRef.current.innerHTML = `
+              <h3 class="font-bold text-base mb-1">${machine.name}</h3>
+              <div class="text-sm text-muted-foreground mb-1">
+                <span class="font-medium text-foreground">Client:</span> ${machine.clientName}
               </div>
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [stableMachinesIdentifier]
-  );
+              <div class="text-xs text-muted-foreground mb-2">${machine.location.address}</div>
+              <a href="/admin/inventory/${machine.id}" class="text-primary text-sm font-medium hover:underline">
+                View Machine Details
+              </a>
+            `;
+        }
+        popupOverlay.setPosition(coordinates);
+      } else {
+        popupOverlay.setPosition(undefined);
+      }
+    });
 
-  return displayMap;
+    if (popupCloserRef.current) {
+      popupCloserRef.current.onclick = () => {
+        popupOverlay.setPosition(undefined);
+        popupCloserRef.current?.blur();
+        return false;
+      };
+    }
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.setTarget(undefined);
+        mapInstanceRef.current = null;
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
+
+  return (
+    <div className="w-full h-full relative">
+      <div ref={mapRef} className="w-full h-full bg-muted" />
+      {/* 
+        The popup element is positioned by OpenLayers, but styled with Tailwind.
+        It's hidden by default because it has no position.
+      */}
+      <div ref={popupRef} className="bg-card text-card-foreground rounded-lg shadow-xl border w-64 p-3 relative before:content-[''] before:absolute before:border-t-card before:border-t-8 before:border-x-8 before:border-x-transparent before:bottom-[-8px] before:left-1/2 before:-translate-x-1/2">
+          <button ref={popupCloserRef} className="absolute top-1 right-1 p-1 text-muted-foreground hover:text-foreground">
+            <X className="h-4 w-4" />
+          </button>
+          <div ref={popupContentRef}></div>
+      </div>
+    </div>
+  );
 }

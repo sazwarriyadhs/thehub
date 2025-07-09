@@ -44,7 +44,7 @@ export const clients: Client[] = [
     email: 'info@dermaster.com', 
     phone: '021-555-1111', 
     joinDate: '2022-05-15', 
-    avatar: 'https://placehold.co/400x400.png', 
+    avatar: '/images/dermaster.png', 
     treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'],
     location: { address: 'Jl. Kemang Sel. No.99, RT.1/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730', lat: -6.262846, lng: 106.812211 }
