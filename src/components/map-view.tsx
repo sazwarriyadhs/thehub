@@ -35,14 +35,18 @@ export default function MapView({ machines = [], activeMachine }: MapViewProps) 
   // Effect for initializing the map
   useEffect(() => {
     if (mapRef.current && !mapInstanceRef.current) { // Only run if map not initialized
+      const rootStyle = getComputedStyle(document.documentElement);
+      const primaryColor = `hsl(${rootStyle.getPropertyValue('--primary').trim()})`;
+      const primaryForegroundColor = `hsl(${rootStyle.getPropertyValue('--primary-foreground').trim()})`;
+
       const vectorSource = new VectorSource();
       const vectorLayer = new VectorLayer({
         source: vectorSource,
         style: new Style({
           image: new Circle({
             radius: 7,
-            fill: new Fill({ color: 'hsl(var(--primary))' }),
-            stroke: new Stroke({ color: 'hsl(var(--primary-foreground))', width: 2 }),
+            fill: new Fill({ color: primaryColor }),
+            stroke: new Stroke({ color: primaryForegroundColor, width: 2 }),
           }),
         }),
       });
