@@ -7,16 +7,16 @@ export const inventoryItems: InventoryItem[] = [
   { id: 'inv-003', name: 'Vbeam Perfecta®', type: 'Device', quantity: 2, purchaseDate: '2022-11-20', warrantyEndDate: '2024-11-20', status: 'In Stock' },
   { id: 'inv-004', name: 'PicoWay®', type: 'Device', quantity: 1, purchaseDate: '2023-08-01', warrantyEndDate: '2025-08-01', status: 'In Stock' },
   { id: 'inv-005', name: 'BiAxis QS™', type: 'Device', quantity: 1, purchaseDate: '2023-09-10', warrantyEndDate: '2025-09-10', status: 'In Stock' },
-  { id: 'inv-006', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock' },
-  { id: 'inv-007', name: 'Coolfase', type: 'Device', quantity: 1, purchaseDate: '2023-10-25', warrantyEndDate: '2025-10-25', status: 'In Stock' },
-  { id: 'inv-008', name: 'Lipodefine™', type: 'Device', quantity: 1, purchaseDate: '2023-11-30', warrantyEndDate: '2025-11-30', status: 'In Stock' },
-  { id: 'inv-009', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock' },
+  { id: 'inv-006', name: 'Ultra V', type: 'Device', quantity: 100, purchaseDate: '2024-04-01', warrantyEndDate: 'N/A', status: 'In Stock' },
+  { id: 'inv-007', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock' },
+  { id: 'inv-008', name: 'Coolfase', type: 'Device', quantity: 1, purchaseDate: '2023-10-25', warrantyEndDate: '2025-10-25', status: 'In Stock' },
+  { id: 'inv-009', name: 'Lipodefine™', type: 'Device', quantity: 1, purchaseDate: '2023-11-30', warrantyEndDate: '2025-11-30', status: 'In Stock' },
+  { id: 'inv-010', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock' },
   
   // Skincare and Consumables
   { id: 'inv-101', name: 'Geneskin® Serum', type: 'Skincare', quantity: 8, purchaseDate: '2024-03-01', warrantyEndDate: '2025-03-01', status: 'Low Stock' },
   { id: 'inv-102', name: 'Vitamin C Cleanser', type: 'Skincare', quantity: 50, purchaseDate: '2024-02-18', warrantyEndDate: '2025-02-18', status: 'In Stock' },
   { id: 'inv-103', name: 'Retinol Cream', type: 'Skincare', quantity: 0, purchaseDate: '2024-01-05', warrantyEndDate: '2025-01-05', status: 'Out of Stock' },
-  { id: 'inv-104', name: 'Ultra V', type: 'Skincare', quantity: 100, purchaseDate: '2024-04-01', warrantyEndDate: '2025-04-01', status: 'In Stock' },
 ];
 
 export const serviceRecords: ServiceRecord[] = [

@@ -47,6 +47,19 @@ const productRecommendationsPrompt = ai.definePrompt({
 Based on the following client profile, recommend products from the distributor's catalog that this client should consider purchasing.
 Explain why each product is a good fit for their practice. Format the response for clarity.
 
+Distributor's Product Catalog:
+- Sofwave™: Non-invasive ultrasound for skin lifting, fine line removal, and skin tightening, including face and neck.
+- Indiba Deep Care: Radio-frequency for body treatments, helps in circumference reduction & faster recovery.
+- Vbeam Perfecta®: PDL laser for treating pigmentation, spots, acne scars, rosacea, stretch marks, and more.
+- PicoWay®: Pico-second laser for melasma, pigmentation, and tattoo removal.
+- BiAxis QS™: Multidimensional laser for pigments, tattoos, rejuvenation, and hair removal.
+- Ultra V: Polydioxanone (PDO) threads for nose augmentation, volumizing, and collagen stimulation.
+- Morpheus8: Combination of microneedling and RF to address fine lines and cellulite.
+- Coolfase: Monopolar RF with Direct Cooling technology for skin tightening and contouring.
+- Lipodefine™: Endolifting technology using fat melting and collagen stimulation for double chin and facial contouring.
+- Laser Biaxis QS: Laser for improving melasma, pigmentation, and tattoo removal with minimal downtime.
+- Geneskin® Serum: Skincare product for post-procedure care.
+
 Client Profile:
 {{{clientProfile}}}`,
 });
