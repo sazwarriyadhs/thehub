@@ -167,14 +167,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="w-full bg-secondary text-secondary-foreground py-8">
-          <div className="container mx-auto text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} Serenity AesthetiCare Hub. All rights reserved.</p>
-            <p className="mt-2">Platform Manajemen Distributor Estetika Terpadu</p>
-          </div>
-      </footer>
       
       {/* Brands Slider Section */}
       <section className="w-full py-12 bg-background">
@@ -210,6 +202,14 @@ export default function HomePage() {
           </Carousel>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="w-full bg-secondary text-secondary-foreground py-8">
+          <div className="container mx-auto text-center text-sm">
+            <p>&copy; {new Date().getFullYear()} Serenity AesthetiCare Hub. All rights reserved.</p>
+            <p className="mt-2">Platform Manajemen Distributor Estetika Terpadu</p>
+          </div>
+      </footer>
     </main>
   );
 }
