@@ -11,7 +11,15 @@ export const inventoryItems: InventoryItem[] = [
   { id: 'inv-007', name: 'Morpheus8', type: 'Device', quantity: 2, purchaseDate: '2023-06-12', warrantyEndDate: '2025-06-12', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Kombinasi microneedling dan RF untuk mengatasi garis halus dan selulit.' },
   { id: 'inv-008', name: 'Coolfase', type: 'Device', quantity: 1, purchaseDate: '2023-10-25', warrantyEndDate: '2025-10-25', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Monopolar RF dengan teknologi pendinginan langsung (Direct Cooling), untuk skin tightening dan contouring.' },
   { id: 'inv-009', name: 'Lipodefine™', type: 'Device', quantity: 1, purchaseDate: '2023-11-30', warrantyEndDate: '2025-11-30', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Teknologi endolifting dengan metode melting fat dan stimulasi kolagen untuk double chin dan kontur wajah.' },
-  { id: 'inv-010', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Laser untuk perbaikan melasma, pigmentasi, dan penghapusan tato dengan downtime minimal.' },
+  { id: 'inv-010', name: 'Laser Biaxis QS', type: 'Device', quantity: 1, purchaseDate: '2024-02-15', warrantyEndDate: '2026-02-15', status: 'In Stock', imageUrl: 'https://placehold.co/600x400.png', description: `Laser untuk perbaikan melasma, pigmentasi, dan penghapusan tato dengan downtime minimal.
+
+Fitur:
+- Panjang Gelombang: 532 nm & 1064 nm
+- Mode Operasi: QS-Mode, Free-Running, HPT, Photo Acoustic
+- Energi Maksimum: Hingga 2,2 J per pulsa
+- Ukuran Spot: 1,5–7 mm (dengan penyesuaian 0,5 mm)
+- Aplikasi: Pigment, tato, jerawat, kolagen, penghapusan rambut halus
+- Produksi & Distribusi: Made in Germany; distribusi resmi oleh Regenesis Indonesia (sertifikasi AKL)` },
   
   // Skincare and Consumables
   { id: 'inv-101', name: 'Geneskin® Serum', type: 'Skincare', quantity: 8, purchaseDate: '2024-03-01', warrantyEndDate: '2025-03-01', status: 'Low Stock', imageUrl: 'https://placehold.co/600x400.png', description: 'Skincare product for post-procedure care.' },
@@ -35,7 +43,7 @@ export const clients: Client[] = [
     phone: '021-555-1111', 
     joinDate: '2022-05-15', 
     avatar: 'https://placehold.co/100x100', 
-    treatmentHistory: 'Jaringan luas di kota-kota besar. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
+    treatmentHistory: 'Jaringan luas di Jakarta, Bandung, Surabaya, dan Bali. Fokus utama pada perawatan HIFU, CoolSculpting, filler, dan botox. Menggunakan teknologi modern dengan dokter berpengalaman.', 
     preferences: ['HIFU', 'CoolSculpting', 'Filler', 'Botox'] 
   },
   { 
@@ -104,4 +112,3 @@ export const inventoryStatusData = [
     { name: 'Devices', inStock: 13, lowStock: 0, outOfStock: 0 },
     { name: 'Skincare', inStock: 50, lowStock: 8, outOfStock: 1 },
 ];
-
