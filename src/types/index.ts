@@ -6,6 +6,8 @@ export type InventoryItem = {
   purchaseDate: string;
   warrantyEndDate: string;
   status: 'In Stock' | 'Low Stock' | 'Out of Stock';
+  imageUrl: string;
+  description: string;
 };
 
 export type ServiceRecord = {
@@ -30,7 +32,7 @@ export type Client = {
 };
 
 export type Appointment = {
-  id: string;
+  id:string;
   clientName: string;
   clientId: string;
   service: string;

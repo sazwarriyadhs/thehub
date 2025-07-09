@@ -11,8 +11,9 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { inventoryItems } from '@/lib/data';
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Eye } from 'lucide-react';
 import type { InventoryItem } from '@/types';
+import Link from 'next/link';
 
 const statusVariant: Record<InventoryItem['status'], 'default' | 'secondary' | 'destructive'> = {
   'In Stock': 'default',
@@ -47,6 +48,7 @@ export default function InventoryPage() {
                 <TableHead>Purchase Date</TableHead>
                 <TableHead>Warranty End</TableHead>
                 <TableHead className="text-right">Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -61,6 +63,14 @@ export default function InventoryPage() {
                     <Badge variant={statusVariant[item.status]}>
                       {item.status}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button asChild variant="ghost" size="icon">
+                      <Link href={`/admin/inventory/${item.id}`}>
+                        <Eye className="h-4 w-4" />
+                        <span className="sr-only">View Details</span>
+                      </Link>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
