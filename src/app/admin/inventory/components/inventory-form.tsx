@@ -1,10 +1,13 @@
+
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { format, parseISO } from 'date-fns';
-import { CalendarIcon, Loader2 } from 'lucide-react';
+import { CalendarIcon, Loader2, Upload } from 'lucide-react';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
@@ -39,14 +42,41 @@ export function InventoryForm({ item }: InventoryFormProps) {
     status: 'In Stock',
     quantity: 1,
     clientId: 'N/A',
+    imageUrl: '',
   };
+  
+  const [imagePreview, setImagePreview] = useState(item?.imageUrl || 'https://placehold.co/600x400.png');
+
 
   const form = useForm<InventoryFormValues>({
     resolver: zodResolver(inventoryFormSchema),
     defaultValues,
   });
 
-  const { formState, handleSubmit } = form;
+  const { formState, handleSubmit, setValue, watch } = form;
+  
+  const imageUrlValue = watch('imageUrl');
+
+  React.useEffect(() => {
+    if (imageUrlValue) {
+      setImagePreview(imageUrlValue);
+    }
+  }, [imageUrlValue]);
+
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setValue('imageUrl', result, { shouldValidate: true });
+        setImagePreview(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const onSubmit = async (data: InventoryFormValues) => {
     const formData = new FormData();
@@ -278,19 +308,46 @@ export function InventoryForm({ item }: InventoryFormProps) {
             </FormItem>
           )}
         />
-         <FormField
-            control={form.control}
-            name="imageUrl"
-            render={({ field }) => (
-                <FormItem>
-                <FormLabel>Image URL</FormLabel>
-                <FormControl>
-                    <Input placeholder="https://placehold.co/600x400.png" {...field} />
-                </FormControl>
-                <FormMessage />
-                </FormItem>
+        
+        <div className="space-y-4">
+            <FormLabel>Item Image</FormLabel>
+            {imagePreview && (
+                <div className="relative w-full max-w-sm h-48 rounded-md overflow-hidden border">
+                    <Image
+                        src={imagePreview}
+                        alt="Image preview"
+                        fill
+                        className="object-contain"
+                        data-ai-hint="medical device"
+                    />
+                </div>
             )}
+            <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel className="sr-only">Image URL</FormLabel>
+                    <FormControl>
+                        <div className="flex items-center gap-2">
+                            <Input 
+                                placeholder="https://placehold.co/600x400.png" 
+                                className="flex-grow"
+                                {...field}
+                                value={field.value || ''}
+                            />
+                            <Button type="button" variant="outline" onClick={() => document.getElementById('image-upload')?.click()}>
+                                <Upload/>
+                                Upload File
+                            </Button>
+                            <Input id="image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                        </div>
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
             />
+        </div>
 
         <div className="flex justify-end">
           <Button type="submit" disabled={formState.isSubmitting}>
@@ -302,3 +359,5 @@ export function InventoryForm({ item }: InventoryFormProps) {
     </Form>
   );
 }
+
+    
