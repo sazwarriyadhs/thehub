@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { LogIn, Newspaper, ChevronRight } from 'lucide-react';
+import { LogIn, Newspaper, ChevronRight, Calendar, MapPin } from 'lucide-react';
 import Autoplay from "embla-carousel-autoplay"
 import React from 'react';
+import { Badge } from '@/components/ui/badge';
 
 const sliderServices = [
   {
@@ -50,6 +51,36 @@ const newsArticles = [
     summary: 'Generasi terbaru laser picosecond menawarkan hasil yang lebih cepat dan efektif untuk berbagai masalah pigmentasi yang kompleks.',
     image: '/images/terobos.jpeg',
     aiHint: 'laser technology',
+    link: '#',
+  },
+];
+
+const upcomingEvents = [
+  {
+    title: 'IMCAS Asia 2024',
+    date: '21-23 Juni 2024',
+    location: 'Bangkok, Thailand',
+    type: 'Internasional',
+    image: 'https://placehold.co/600x400.png',
+    aiHint: 'medical conference',
+    link: '#',
+  },
+  {
+    title: 'SWAM International Expo 2024',
+    date: '2-4 Agustus 2024',
+    location: 'ICE BSD, Indonesia',
+    type: 'Nasional',
+    image: 'https://placehold.co/600x400.png',
+    aiHint: 'exhibition hall',
+    link: '#',
+  },
+  {
+    title: 'AMWC Asia - TDAC 2024',
+    date: '24-26 Mei 2024',
+    location: 'Taipei, Taiwan',
+    type: 'Internasional',
+    image: 'https://placehold.co/600x400.png',
+    aiHint: 'aesthetic medicine congress',
     link: '#',
   },
 ];
@@ -163,19 +194,71 @@ export default function HomePage() {
                 <CardContent className="flex-grow">
                   <p className="text-muted-foreground">{article.summary}</p>
                 </CardContent>
-                <div className="p-6 pt-0">
+                <CardFooter>
                   <Button asChild variant="link" className="p-0 h-auto">
                     <Link href={article.link}>
                       Baca Selengkapnya <ChevronRight className="ml-1 h-4 w-4" />
                     </Link>
                   </Button>
-                </div>
+                </CardFooter>
               </Card>
             ))}
           </div>
         </div>
       </section>
       
+      {/* Events Section */}
+      <section className="w-full py-16 md:py-24 bg-muted/40">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <Calendar className="mx-auto h-12 w-12 text-primary mb-4" />
+            <h2 className="text-3xl font-bold tracking-tight">Acara Mendatang</h2>
+            <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
+              Ikuti kami di acara dan pameran estetika terkemuka di seluruh dunia.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {upcomingEvents.map((event) => (
+              <Card key={event.title} className="flex flex-col overflow-hidden group">
+                <div className="relative">
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    width={600}
+                    height={400}
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                    data-ai-hint={event.aiHint}
+                  />
+                  <Badge className="absolute top-4 right-4" variant={event.type === 'Internasional' ? 'default' : 'secondary'}>
+                    {event.type}
+                  </Badge>
+                </div>
+                <CardHeader>
+                  <CardTitle>{event.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow space-y-2">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Calendar className="h-4 w-4" />
+                    <span className="text-sm">{event.date}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <MapPin className="h-4 w-4" />
+                    <span className="text-sm">{event.location}</span>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href={event.link}>
+                      Lihat Detail Acara
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Brands Slider Section */}
       <section className="w-full py-12 bg-background">
         <div className="container mx-auto">
