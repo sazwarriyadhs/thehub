@@ -26,7 +26,7 @@ export function WorkOrderConfirmationForm() {
     defaultValues: {
       workOrderId: '',
       technicianNotes: '',
-      status: 'Completed',
+      status: 'In Progress',
       photoProofUrl: 'https://placehold.co/600x400.png'
     },
   });
@@ -100,10 +100,9 @@ export function WorkOrderConfirmationForm() {
                         </FormControl>
                         <SelectContent>
                             <SelectItem value="In Progress">In Progress</SelectItem>
-                            <SelectItem value="Completed">Completed</SelectItem>
                         </SelectContent>
                     </Select>
-                    <FormDescription>Perbarui status pekerjaan saat ini.</FormDescription>
+                    <FormDescription>Perbarui status pekerjaan. Status "Completed" hanya dapat diatur oleh klien.</FormDescription>
                     <FormMessage />
                 </FormItem>
             )}
