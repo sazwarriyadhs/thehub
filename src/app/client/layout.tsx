@@ -4,7 +4,6 @@ import { ClientSidebarNav } from './components/client-sidebar-nav';
 import ClientLayoutContent from './components/client-layout-content';
 import { fetchClientById } from '@/lib/data';
 
-// In a real app, this would come from user authentication
 const LOGGED_IN_CLIENT_ID = 'cli-001';
 
 export default async function ClientLayout({
@@ -17,7 +16,7 @@ export default async function ClientLayout({
   return (
     <div className="bg-muted/40">
       <SidebarProvider defaultOpen={true}>
-        <ClientSidebarNav client={client ?? null} />
+        <ClientSidebarNav />
         <ClientLayoutContent client={client}>
             {children}
         </ClientLayoutContent>

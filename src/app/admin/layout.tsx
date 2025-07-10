@@ -1,7 +1,7 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { SidebarNav } from '@/components/sidebar-nav';
-import { fetchAdminUser } from '@/lib/data';
 import AdminLayoutClient from './components/admin-layout-client';
+import { fetchAdminUser } from '@/lib/data';
 
 
 export default async function AdminLayout({

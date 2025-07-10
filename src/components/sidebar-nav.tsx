@@ -27,7 +27,6 @@ import { usePathname } from 'next/navigation';
 import { HelpAssistant } from './help-assistant';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { fetchAdminUser } from '@/lib/data';
 import type { AdminUser } from '@/types';
 
 export function SidebarNav() {
@@ -36,8 +35,17 @@ export function SidebarNav() {
 
   useEffect(() => {
     async function getAdmin() {
-      const adminData = await fetchAdminUser();
-      setAdmin(adminData);
+      try {
+        const response = await fetch('/api/admin/user');
+        if (!response.ok) {
+          throw new Error('Failed to fetch admin user');
+        }
+        const adminData = await response.json();
+        setAdmin(adminData);
+      } catch (error) {
+        console.error(error);
+        setAdmin(null);
+      }
     }
     getAdmin();
   }, []);
