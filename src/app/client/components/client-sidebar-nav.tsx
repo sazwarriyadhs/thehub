@@ -1,6 +1,6 @@
+
 'use client';
 
-import { useEffect, useState } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -25,24 +25,14 @@ import { usePathname } from 'next/navigation';
 import { HelpAssistant } from '@/components/help-assistant';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { fetchClientById } from '@/lib/data';
 import type { Client } from '@/types';
 
-const LOGGED_IN_CLIENT_ID = 'cli-001';
+type ClientSidebarNavProps = {
+  client: Client | null;
+}
 
-export function ClientSidebarNav() {
+export function ClientSidebarNav({ client }: ClientSidebarNavProps) {
   const pathname = usePathname();
-  const [client, setClient] = useState<Client | null>(null);
-
-  useEffect(() => {
-    async function getClient() {
-        const clientData = await fetchClientById(LOGGED_IN_CLIENT_ID);
-        if(clientData) {
-            setClient(clientData);
-        }
-    }
-    getClient();
-  }, [pathname]); // Re-fetch on path change to update avatar in layout
 
   const navLinks = [
     { href: '/client/dashboard', label: 'Dashboard', icon: LayoutDashboard },

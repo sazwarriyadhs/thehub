@@ -1,3 +1,4 @@
+
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { ClientSidebarNav } from './components/client-sidebar-nav';
 import ClientLayoutContent from './components/client-layout-content';
@@ -16,7 +17,7 @@ export default async function ClientLayout({
   return (
     <div className="bg-muted/40">
       <SidebarProvider defaultOpen={true}>
-        <ClientSidebarNav />
+        <ClientSidebarNav client={client ?? null} />
         <ClientLayoutContent client={client}>
             {children}
         </ClientLayoutContent>
