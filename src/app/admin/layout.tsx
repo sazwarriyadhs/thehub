@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { SidebarNav } from '@/components/sidebar-nav';
-import { SidebarInset } from '@/components/ui/sidebar';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Bell, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -14,19 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { fetchAdminUser } from '@/lib/data';
 import type { AdminUser } from '@/types';
 
-
-// Inner component to safely use the client-side hook.
-function AdminLayoutContent({ children }: { children: React.ReactNode }) {
-  const [admin, setAdmin] = useState<AdminUser | null>(null);
-
-  useEffect(() => {
-    async function getAdmin() {
-      const adminData = await fetchAdminUser();
-      setAdmin(adminData);
-    }
-    getAdmin();
-  }, []);
-
+function AdminLayoutClient({ admin, children }: { admin: AdminUser | null, children: React.ReactNode }) {
   return (
     <SidebarInset>
       <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4 sm:px-6">
@@ -77,17 +63,28 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   );
 }
 
+
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [admin, setAdmin] = useState<AdminUser | null>(null);
+
+  useEffect(() => {
+    async function getAdmin() {
+      const adminData = await fetchAdminUser();
+      setAdmin(adminData);
+    }
+    getAdmin();
+  }, []);
+  
   return (
     <SidebarProvider defaultOpen={true}>
       <SidebarNav />
-      <AdminLayoutContent>
+       <AdminLayoutClient admin={admin}>
         {children}
-      </AdminLayoutContent>
+       </AdminLayoutClient>
     </SidebarProvider>
   );
 }
