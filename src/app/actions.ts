@@ -3,16 +3,7 @@
 import { getProductRecommendations } from '@/ai/flows/ai-product-recommendations';
 import { aiHelpAssistant } from '@/ai/flows/ai-help-assistant';
 import { getTroubleshootingAssistance } from '@/ai/flows/ai-troubleshooting-assistant';
-import { 
-    inventoryItems, 
-    serviceRecords, 
-    clients, 
-    clientRequests,
-    adminUser,
-    fetchAllClients, 
-    fetchClientById, 
-    fetchInventoryItemById 
-} from '@/lib/data';
+import { db } from '@/lib/db';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -33,7 +24,7 @@ export async function saveInventoryItem(formData: FormData) {
     type: formData.get('type'),
     quantity: formData.get('quantity'),
     purchaseDate: new Date(formData.get('purchaseDate') as string),
-    warrantyEndDate: new Date(formData.get('warrantyEndDate') as string),
+    warrantyEndDate: formData.get('warrantyEndDate'),
     status: formData.get('status'),
     description: formData.get('description'),
     imageUrl: formData.get('imageUrl'),
@@ -51,31 +42,45 @@ export async function saveInventoryItem(formData: FormData) {
   
   const { id, ...itemData } = validatedFields.data;
 
-  const itemForDb = {
-    name: itemData.name,
-    type: itemData.type,
-    quantity: itemData.quantity,
-    purchase_date: itemData.purchaseDate.toISOString().split('T')[0],
-    warranty_end_date: itemData.warrantyEndDate ? itemData.warrantyEndDate.toISOString().split('T')[0] : 'N/A',
-    status: itemData.status,
-    description: itemData.description,
-    image_url: itemData.imageUrl || '',
-    client_id: itemData.clientId,
-  }
-
-  // This is where you would interact with your database
-  if (id) {
-    console.log(`Updating inventory item ${id}:`, itemForDb);
-    // e.g., await db.update('inventory', { where: { id }, data: itemData });
-    const index = inventoryItems.findIndex(item => item.id === id);
-    if (index !== -1) {
-        inventoryItems[index] = { ...inventoryItems[index], ...itemForDb };
+  try {
+    if (id) {
+        await db.query(`
+            UPDATE inventory
+            SET name = $1, type = $2, quantity = $3, purchase_date = $4, warranty_end_date = $5, status = $6, description = $7, image_url = $8, client_id = $9
+            WHERE id = $10
+        `, [
+            itemData.name,
+            itemData.type,
+            itemData.quantity,
+            itemData.purchaseDate,
+            itemData.warrantyEndDate,
+            itemData.status,
+            itemData.description,
+            itemData.imageUrl,
+            itemData.clientId,
+            id
+        ]);
+    } else {
+        const newId = `inv-${Math.random().toString(36).substr(2, 9)}`;
+        await db.query(`
+            INSERT INTO inventory (id, name, type, quantity, purchase_date, warranty_end_date, status, description, image_url, client_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        `, [
+            newId,
+            itemData.name,
+            itemData.type,
+            itemData.quantity,
+            itemData.purchaseDate,
+            itemData.warrantyEndDate,
+            itemData.status,
+            itemData.description,
+            itemData.imageUrl,
+            itemData.clientId
+        ]);
     }
-  } else {
-    console.log(`Creating new inventory item:`, itemForDb);
-    // e.g., await db.create('inventory', { data: itemData });
-    const newId = `inv-${Math.random().toString(36).substr(2, 9)}`;
-    inventoryItems.push({ id: newId, ...itemForDb });
+  } catch (error) {
+      console.error(error);
+      return { error: 'Database Error: Failed to save inventory item.'}
   }
   
   revalidatePath('/admin/inventory');
@@ -83,13 +88,10 @@ export async function saveInventoryItem(formData: FormData) {
 }
 
 export async function deleteInventoryItem(id: string) {
-    // This is where you would interact with your database
-    console.log(`Deleting inventory item ${id}`);
-    const index = inventoryItems.findIndex(item => item.id === id);
-    if (index !== -1) {
-        inventoryItems.splice(index, 1);
-    } else {
-        return { error: 'Item not found.' };
+    try {
+        await db.query('DELETE FROM inventory WHERE id = $1', [id]);
+    } catch (error) {
+        return { error: 'Database Error: Failed to delete inventory item.' };
     }
     
     revalidatePath('/admin/inventory');
@@ -123,35 +125,32 @@ export async function saveClient(formData: FormData) {
 
   const { id, ...clientData } = validatedFields.data;
 
-  const clientObject = {
-      name: clientData.name,
-      email: clientData.email,
-      phone: clientData.phone,
-      join_date: clientData.joinDate.toISOString().split('T')[0],
-      avatar: clientData.avatar as string,
-      penanggung_jawab: {
-          nama: clientData.penanggungJawabNama,
-          jabatan: clientData.penanggungJawabJabatan
-      },
-      treatment_history: clientData.treatmentHistory,
-      preferences: clientData.preferences || [],
-      location: {
-          address: clientData.locationAddress,
-          lat: clientData.locationLat,
-          lng: clientData.locationLng
-      }
-  }
-
-  if (id) {
-    console.log(`Updating client ${id}`);
-    const index = clients.findIndex(c => c.id === id);
-    if (index !== -1) {
-        clients[index] = { ...clients[index], ...clientObject };
+  try {
+    if (id) {
+        await db.query(`
+            UPDATE clients
+            SET name = $1, email = $2, phone = $3, join_date = $4, avatar = $5, penanggung_jawab_nama = $6, penanggung_jawab_jabatan = $7, treatment_history = $8, preferences = $9, location_address = $10, location_lat = $11, location_lng = $12
+            WHERE id = $13
+        `, [
+            clientData.name, clientData.email, clientData.phone, clientData.joinDate, clientData.avatar,
+            clientData.penanggungJawabNama, clientData.penanggungJawabJabatan, clientData.treatmentHistory,
+            clientData.preferences, clientData.locationAddress, clientData.locationLat, clientData.locationLng,
+            id
+        ]);
+    } else {
+        const newId = `cli-${Math.random().toString(36).substr(2, 9)}`;
+        await db.query(`
+            INSERT INTO clients (id, name, email, phone, join_date, avatar, penanggung_jawab_nama, penanggung_jawab_jabatan, treatment_history, preferences, location_address, location_lat, location_lng)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        `, [
+            newId, clientData.name, clientData.email, clientData.phone, clientData.joinDate, clientData.avatar,
+            clientData.penanggungJawabNama, clientData.penanggungJawabJabatan, clientData.treatmentHistory,
+            clientData.preferences, clientData.locationAddress, clientData.locationLat, clientData.locationLng
+        ]);
     }
-  } else {
-    console.log(`Creating new client`);
-    const newId = `cli-${Math.random().toString(36).substr(2, 9)}`;
-    clients.push({ id: newId, ...clientObject });
+  } catch (error) {
+    console.error(error);
+    return { error: 'Database Error: Failed to save client.' };
   }
   
   revalidatePath('/admin/clients');
@@ -160,12 +159,10 @@ export async function saveClient(formData: FormData) {
 }
 
 export async function deleteClient(id: string) {
-    console.log(`Deleting client ${id}`);
-    const index = clients.findIndex(c => c.id === id);
-    if (index !== -1) {
-        clients.splice(index, 1);
-    } else {
-        return { error: 'Client not found.' };
+    try {
+        await db.query('DELETE FROM clients WHERE id = $1', [id]);
+    } catch (error) {
+        return { error: 'Database Error: Failed to delete client.' };
     }
     
     revalidatePath('/admin/clients');
@@ -176,11 +173,16 @@ export async function saveAdminUser(formData: FormData) {
   const email = formData.get('email') as string;
   const avatar = formData.get('avatar') as string;
 
-  if(name) adminUser.name = name;
-  if(email) adminUser.email = email;
-  if(avatar) adminUser.avatar = avatar;
-
-  console.log('Admin user updated:', adminUser);
+  try {
+      // Assuming one admin, so we update the first entry
+      await db.query(
+        'UPDATE admin_users SET name = $1, email = $2, avatar = $3 WHERE id = 1',
+        [name, email, avatar]
+      );
+  } catch(error) {
+      console.error(error);
+      return { error: 'Database Error: Failed to update admin profile.' };
+  }
 
   revalidatePath('/admin/layout');
   revalidatePath('/admin/profile');
@@ -249,16 +251,24 @@ export async function requestService(
       return { error: 'Client ID, name, and details are required.' };
     }
     
+    const newId = `req-${Math.random().toString(36).substr(2, 9)}`;
     const newRequest = {
-        id: `req-${Math.random().toString(36).substr(2, 9)}`,
-        client_id: input.clientId,
-        client_name: input.clientName,
-        request_type: 'Service' as const,
+        id: newId,
+        clientId: input.clientId,
+        clientName: input.clientName,
+        requestType: 'Service' as const,
         details: input.details,
         status: 'New' as const,
-        date: new Date().toISOString().split('T')[0],
+        date: new Date(),
     };
-    clientRequests.unshift(newRequest); // Add to the beginning of the list
+    
+    await db.query(`
+        INSERT INTO client_requests (id, client_id, client_name, request_type, details, status, date)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `, [
+        newRequest.id, newRequest.clientId, newRequest.clientName, newRequest.requestType,
+        newRequest.details, newRequest.status, newRequest.date
+    ]);
 
     revalidatePath('/admin/dashboard');
     return { data: { success: true } };
@@ -284,7 +294,9 @@ export async function generateWorkOrderPdf(
   serviceRecordId: string
 ): Promise<ActionResult<string>> {
   try {
-    const record = serviceRecords.find(sr => sr.id === serviceRecordId);
+    const result = await db.query('SELECT * FROM service_records WHERE id = $1', [serviceRecordId]);
+    const record: ServiceRecord | undefined = result.rows[0];
+    
     if (!record) {
       return { error: 'Service record not found.' };
     }
@@ -470,21 +482,25 @@ export async function confirmWorkOrder(formData: FormData) {
 
   const { workOrderId, status, technicianNotes, photoProofUrl } = validatedFields.data;
   
-  const record = serviceRecords.find(r => r.id === workOrderId);
+  try {
+    const recordResult = await db.query('SELECT technician_notes FROM service_records WHERE id = $1', [workOrderId]);
+    if (recordResult.rows.length === 0) {
+      return { error: 'Work order not found.' };
+    }
+    
+    const currentNotes = recordResult.rows[0].technician_notes || '';
+    const newNotes = technicianNotes ? `${currentNotes}\n${technicianNotes}`.trim() : currentNotes;
 
-  if (!record) {
-    return { error: 'Work order not found.' };
-  }
-  
-  record.status = status;
-  if(technicianNotes) {
-    record.technician_notes = `${record.technician_notes ? record.technician_notes + '\n' : ''}${technicianNotes}`;
-  }
-  if(photoProofUrl) {
-    record.photo_proof_url = photoProofUrl;
-  }
+    await db.query(`
+      UPDATE service_records
+      SET status = $1, technician_notes = $2, photo_proof_url = COALESCE($3, photo_proof_url)
+      WHERE id = $4
+    `, [status, newNotes, photoProofUrl || null, workOrderId]);
 
-  console.log(`Work order ${workOrderId} confirmed with status ${status}`);
+  } catch(e) {
+    console.error(e);
+    return { error: 'Database Error: Failed to update work order.' };
+  }
 
   revalidatePath('/admin/services');
   redirect('/admin/services');
