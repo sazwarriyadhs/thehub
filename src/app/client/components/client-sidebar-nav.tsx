@@ -18,6 +18,7 @@ import {
   LifeBuoy,
   LogOut,
   User,
+  CheckSquare,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -36,6 +37,7 @@ export function ClientSidebarNav() {
     { href: '/client/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/client/profile', label: 'Profil Saya', icon: User },
     { href: '/client/appointments', label: 'Janji Temu Saya', icon: CalendarDays },
+    { href: '/client/confirm-work-order', label: 'Konfirmasi Surat Tugas', icon: CheckSquare },
   ];
 
   return (
