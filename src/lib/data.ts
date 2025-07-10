@@ -43,6 +43,9 @@ export async function fetchClientById(id: string): Promise<Client | undefined> {
     'SELECT *, penanggung_jawab_nama, penanggung_jawab_jabatan, location_address, location_lat, location_lng FROM clients WHERE id = $1',
     [id]
   );
+  if (result.rows.length === 0) {
+    return undefined;
+  }
   const client = mapToCamelCase(result.rows)[0];
   if (client) {
     client.penanggungJawab = {
@@ -147,8 +150,11 @@ export async function fetchCardData() {
 }
 
 // === ADMIN ===
-export async function fetchAdminUser(): Promise<AdminUser> {
+export async function fetchAdminUser(): Promise<AdminUser | null> {
   noStore();
   const result = await db.query('SELECT * FROM admin_users LIMIT 1');
+   if (result.rows.length === 0) {
+    return null;
+  }
   return mapToCamelCase(result.rows)[0] as AdminUser;
 }
