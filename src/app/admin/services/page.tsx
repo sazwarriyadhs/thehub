@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { serviceRecords } from '@/lib/data';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Eye } from 'lucide-react';
+import { PlusCircle, Eye, CheckSquare } from 'lucide-react';
 import type { ServiceRecord } from '@/types';
 import Link from 'next/link';
 
@@ -24,15 +24,23 @@ const statusVariant: Record<ServiceRecord['status'], 'default' | 'secondary' | '
 export default function ServicesPage() {
   return (
     <div className="flex flex-col gap-8">
-       <div className="flex items-center justify-between">
+       <div className="flex items-center justify-between gap-4">
         <PageHeader
           title="Service Management"
           description="Log and schedule equipment maintenance and repairs."
         />
-        <Button>
-          <PlusCircle />
-          Schedule Service
-        </Button>
+        <div className="flex gap-2">
+            <Button asChild>
+                <Link href="/admin/services/confirm">
+                    <CheckSquare />
+                    Konfirmasi Surat Tugas
+                </Link>
+            </Button>
+            <Button>
+                <PlusCircle />
+                Schedule Service
+            </Button>
+        </div>
       </div>
       <Card>
         <CardHeader>

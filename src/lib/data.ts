@@ -34,7 +34,8 @@ export const serviceRecords: ServiceRecord[] = [
     clientLocation: 'Jl. Kemang Sel. No.99, Jakarta Selatan',
     problemIdentification: 'Klien meminta perawatan rutin tahunan sesuai jadwal.',
     solution: 'Pemeriksaan standar, pembersihan filter, dan pembaruan perangkat lunak telah dijadwalkan.',
-    duration: '3 jam'
+    duration: '3 jam',
+    technicianNotes: 'Menunggu jadwal konfirmasi dari klien.'
   },
   {
     id: 'ser-002',
@@ -48,7 +49,8 @@ export const serviceRecords: ServiceRecord[] = [
     clientLocation: 'Jl. HR Muhammad No.41, Surabaya',
     problemIdentification: 'Output energi laser sedikit di bawah ambang batas yang ditentukan setelah 1 tahun penggunaan.',
     solution: 'Kalibrasi ulang output daya laser. Pengujian setelah kalibrasi menunjukkan tingkat energi yang optimal. Membersihkan optik.',
-    duration: '2 jam'
+    duration: '2 jam',
+    technicianNotes: 'Kalibrasi berhasil, alat berfungsi normal. Tidak ada masalah lebih lanjut yang dilaporkan oleh klien.'
   },
   {
     id: 'ser-003',
@@ -62,7 +64,8 @@ export const serviceRecords: ServiceRecord[] = [
     clientLocation: 'Jl. Kemang Sel. No.99, Jakarta Selatan',
     problemIdentification: 'Layar sentuh tidak merespons di bagian kanan bawah. Klien telah mencoba me-restart mesin beberapa kali.',
     solution: 'Tim teknisi sedang dalam proses mendiagnosis apakah ini masalah perangkat keras (digitizer) atau perangkat lunak. Penggantian layar mungkin diperlukan.',
-    duration: 'Berkelanjutan'
+    duration: 'Berkelanjutan',
+    technicianNotes: 'Suku cadang layar telah dipesan, menunggu pengiriman. Diperkirakan tiba dalam 5 hari kerja.'
   },
   {
     id: 'ser-004',
@@ -76,7 +79,8 @@ export const serviceRecords: ServiceRecord[] = [
     clientLocation: 'Jl. Kemang Sel. No.99, Jakarta Selatan',
     problemIdentification: 'Perawatan rutin preventif sesuai jadwal pabrikan.',
     solution: 'Semua sistem diperiksa, filter diganti, dan perangkat lunak diperbarui ke versi terbaru. Mesin berfungsi sesuai spesifikasi.',
-    duration: '4 jam'
+    duration: '4 jam',
+    technicianNotes: 'Perawatan selesai tanpa kendala. Klien puas.'
   },
   {
     id: 'ser-005',
@@ -90,7 +94,8 @@ export const serviceRecords: ServiceRecord[] = [
     clientLocation: 'Jl. Teuku Umar No.18A, Denpasar, Bali',
     problemIdentification: 'Jadwal pemeliharaan 6 bulan untuk memastikan kinerja puncak.',
     solution: 'Akan dilakukan pembersihan optik, pemeriksaan sistem pendingin, dan verifikasi output energi.',
-    duration: '3 jam'
+    duration: '3 jam',
+    technicianNotes: ''
   },
 ];
 

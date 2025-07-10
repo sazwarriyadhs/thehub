@@ -40,3 +40,10 @@ export const clientFormSchema = z.object({
     locationLat: z.coerce.number(),
     locationLng: z.coerce.number(),
 });
+
+export const workOrderConfirmationSchema = z.object({
+  workOrderId: z.string().min(3, { message: 'Nomor Surat Tugas harus diisi.' }),
+  technicianNotes: z.string().min(10, { message: 'Catatan harus memiliki setidaknya 10 karakter.' }),
+  status: z.enum(['In Progress', 'Completed'], { required_error: 'Status pekerjaan harus dipilih.' }),
+  photoProofUrl: z.string().url({ message: 'URL foto tidak valid.' }).optional().or(z.literal('')),
+});

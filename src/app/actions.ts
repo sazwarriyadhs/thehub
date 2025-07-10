@@ -7,7 +7,8 @@ import { serviceRecords } from '@/lib/data';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { inventoryFormSchema, clientFormSchema } from '@/lib/schemas';
+import { inventoryFormSchema, clientFormSchema, workOrderConfirmationSchema } from '@/lib/schemas';
+import type { ServiceRecord } from '@/types';
 
 type ActionResult<T> = {
     data?: T;
@@ -419,4 +420,48 @@ export async function generateWorkOrderPdf(
     console.error('PDF Generation Error:', e);
     return { error: 'Failed to generate PDF. ' + e.message };
   }
+}
+
+export async function confirmWorkOrder(formData: FormData) {
+  const data = {
+    workOrderId: formData.get('workOrderId'),
+    technicianNotes: formData.get('technicianNotes'),
+    status: formData.get('status'),
+    photoProofUrl: formData.get('photoProofUrl'),
+  };
+
+  const validatedFields = workOrderConfirmationSchema.safeParse(data);
+
+  if (!validatedFields.success) {
+    console.error('Validation Errors:', validatedFields.error.flatten().fieldErrors);
+    return {
+      error: 'Invalid fields submitted.',
+    };
+  }
+
+  const { workOrderId, status, technicianNotes, photoProofUrl } = validatedFields.data;
+
+  try {
+    // In a real app, you would find and update the record in your database.
+    // For this prototype, we'll find it in the mock data array.
+    const recordIndex = serviceRecords.findIndex((r) => r.id === workOrderId);
+
+    if (recordIndex === -1) {
+      return { error: 'Work order not found.' };
+    }
+    
+    // Update the record
+    serviceRecords[recordIndex].status = status as ServiceRecord['status'];
+    serviceRecords[recordIndex].technicianNotes = technicianNotes;
+    // In a real app, you would handle the file upload and get a URL.
+    // For now, we just log the placeholder URL.
+    console.log(`Updating work order ${workOrderId}:`, { status, technicianNotes, photoProofUrl });
+
+  } catch (e: any) {
+    console.error('Failed to confirm work order:', e);
+    return { error: 'Failed to confirm work order. Please try again.' };
+  }
+
+  revalidatePath('/admin/services');
+  redirect('/admin/services');
 }

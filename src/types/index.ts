@@ -24,6 +24,7 @@ export type ServiceRecord = {
   problemIdentification: string;
   solution: string;
   duration: string;
+  technicianNotes?: string;
 };
 
 export type Client = {
