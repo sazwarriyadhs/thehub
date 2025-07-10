@@ -1,15 +1,15 @@
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { inventoryItems, serviceRecords } from '@/lib/data';
+import { fetchAllInventoryItems, fetchAllServiceRecords } from '@/lib/data';
 import type { InventoryItem, ServiceRecord } from '@/types';
 import { ShoppingBag, Wrench, ShieldOff, CheckCircle, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 type TimelineEvent = {
   type: 'Purchase' | 'Service' | 'Warranty End';
   title: string;
-  date: string;
+  date: Date;
   details?: string;
   icon: React.ElementType;
 };
@@ -26,7 +26,12 @@ const serviceStatusIcon: Record<ServiceRecord['status'], React.ElementType> = {
     'In Progress': Wrench,
 };
 
-export default function MonitoringPage() {
+export default async function MonitoringPage() {
+  const [inventoryItems, serviceRecords] = await Promise.all([
+      fetchAllInventoryItems(),
+      fetchAllServiceRecords()
+  ]);
+
   const devices = inventoryItems.filter((item) => item.type === 'Device');
 
   const getDeviceTimeline = (device: InventoryItem): TimelineEvent[] => {
@@ -36,35 +41,36 @@ export default function MonitoringPage() {
     timeline.push({
       type: 'Purchase',
       title: 'Machine Acquired',
-      date: device.purchaseDate,
+      date: new Date(device.purchase_date),
       icon: ShoppingBag,
     });
 
     // Service Events
     const relatedServices = serviceRecords
-      .filter((record) => record.equipment === device.name)
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      .filter((record) => record.equipment === device.name);
 
     relatedServices.forEach((service) => {
       timeline.push({
         type: 'Service',
-        title: `${service.serviceType} (${service.status})`,
-        date: service.date,
+        title: `${service.service_type} (${service.status})`,
+        date: new Date(service.date),
         details: `Technician: ${service.technician} | Cost: $${service.cost.toFixed(2)}`,
         icon: serviceStatusIcon[service.status],
       });
     });
 
     // Warranty End Event
-    timeline.push({
-      type: 'Warranty End',
-      title: 'Warranty Expires',
-      date: device.warrantyEndDate,
-      icon: ShieldOff,
-    });
+    if (device.warranty_end_date && device.warranty_end_date !== 'N/A') {
+      timeline.push({
+        type: 'Warranty End',
+        title: 'Warranty Expires',
+        date: new Date(device.warranty_end_date),
+        icon: ShieldOff,
+      });
+    }
     
     // Sort all events by date
-    return timeline.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return timeline.sort((a, b) => a.date.getTime() - b.date.getTime());
   };
 
   return (
@@ -89,17 +95,17 @@ export default function MonitoringPage() {
                 <div className="relative">
                   {timeline.map((event, index) => (
                     <div key={index} className="flex gap-4 pl-8 relative pb-8 last:pb-0">
-                       <div className="absolute left-0 top-0 flex flex-col items-center">
-                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-secondary z-10">
+                       <div className="absolute left-0 top-0 flex flex-col items-center h-full">
+                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-secondary z-10 shrink-0">
                            <event.icon className="w-4 h-4 text-muted-foreground" />
                         </div>
                         {index < timeline.length - 1 && (
-                            <div className="w-px flex-grow bg-border mt-2"></div>
+                            <div className="w-px flex-grow bg-border my-2"></div>
                         )}
                       </div>
                       <div>
                         <p className="font-semibold text-sm">{event.title}</p>
-                        <p className="text-xs text-muted-foreground">{event.date}</p>
+                        <p className="text-xs text-muted-foreground">{format(event.date, 'PPP')}</p>
                         {event.details && <p className="text-xs text-muted-foreground mt-1">{event.details}</p>}
                       </div>
                     </div>

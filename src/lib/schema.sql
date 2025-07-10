@@ -1,132 +1,368 @@
--- Users table for authentication (future use)
--- CREATE TABLE users (
---   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
---   email VARCHAR(255) NOT NULL UNIQUE,
---   password VARCHAR(255) NOT NULL,
---   role VARCHAR(50) NOT NULL CHECK (role IN ('admin', 'client')),
---   client_id VARCHAR(255) -- Foreign key to clients table if role is 'client'
--- );
+import type { InventoryItem, ServiceRecord, Client, Appointment, DeployedMachine, ClientRequest } from '@/types';
 
--- Clients table
-CREATE TABLE clients (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  phone VARCHAR(50),
-  join_date DATE NOT NULL,
-  avatar VARCHAR(255),
-  penanggung_jawab_nama VARCHAR(255),
-  penanggung_jawab_jabatan VARCHAR(255),
-  treatment_history TEXT,
-  preferences TEXT[],
-  location_address TEXT,
-  location_lat NUMERIC,
-  location_lng NUMERIC
-);
+export const inventoryItems: InventoryItem[] = [
+  {
+    id: 'inv-001',
+    name: 'Sofwave™',
+    type: 'Device',
+    quantity: 5,
+    purchaseDate: '2023-01-15',
+    warrantyEndDate: '2025-01-15',
+    status: 'In Stock',
+    imageUrl: '/images/sofwave.jpeg',
+    description: '3D Ultrasound for face/neck lifting, fine lines, and cellulite.',
+    clientId: 'cli-001',
+  },
+  {
+    id: 'inv-002',
+    name: 'Vbeam Perfecta®',
+    type: 'Device',
+    quantity: 2,
+    purchaseDate: '2022-11-20',
+    warrantyEndDate: '2024-11-20',
+    status: 'Low Stock',
+    imageUrl: 'https://aspmedica.com/wp-content/uploads/2021/01/vbeam-perfecta-1.png',
+    description: 'Pulsed-Dye Laser (PDL) for rosacea, vascular issues, and pigmentation.',
+    clientId: 'cli-002',
+  },
+  {
+    id: 'inv-003',
+    name: 'Geneskin® Serum',
+    type: 'Skincare',
+    quantity: 50,
+    purchaseDate: '2023-08-01',
+    warrantyEndDate: 'N/A',
+    status: 'In Stock',
+    imageUrl: 'https://regenesis.co.id/wp-content/uploads/2020/12/GENESKIN-LIFT-SERUM-28ML.jpg',
+    description: 'Skincare product for post-procedure care.',
+  },
+  {
+    id: 'inv-004',
+    name: 'PicoWay®',
+    type: 'Device',
+    quantity: 0,
+    purchaseDate: '2023-03-10',
+    warrantyEndDate: '2025-03-10',
+    status: 'Out of Stock',
+    imageUrl: 'https://placehold.co/600x400.png',
+    description: 'Picosecond Laser for pigmentation, tattoo removal, and collagen remodeling.',
+    clientId: 'cli-003',
+  },
+    {
+    id: 'inv-005',
+    name: 'Morpheus8',
+    type: 'Device',
+    quantity: 3,
+    purchaseDate: '2023-05-22',
+    warrantyEndDate: '2025-05-22',
+    status: 'In Stock',
+    imageUrl: 'https://placehold.co/600x400.png',
+    description: 'RF Microneedling for wrinkles, skin laxity, and cellulite.',
+  },
+];
 
--- Inventory table
-CREATE TABLE inventory (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  type VARCHAR(50) NOT NULL CHECK (type IN ('Device', 'Skincare')),
-  quantity INTEGER NOT NULL,
-  purchase_date DATE NOT NULL,
-  warranty_end_date DATE,
-  status VARCHAR(50) NOT NULL CHECK (status IN ('In Stock', 'Low Stock', 'Out of Stock')),
-  description TEXT,
-  image_url VARCHAR(255),
-  client_id INTEGER REFERENCES clients(id) ON DELETE SET NULL
-);
+export const serviceRecords: ServiceRecord[] = [
+  {
+    id: 'ser-001',
+    equipment: 'Sofwave™',
+    serviceType: 'Maintenance',
+    date: '2023-07-22',
+    technician: 'Andi Wijaya',
+    cost: 250,
+    status: 'Completed',
+    clientName: 'Dermaster Clinic',
+    clientLocation: 'Pondok Indah, Jakarta Selatan',
+    problemIdentification: 'Unit requires annual preventive maintenance as per service agreement. No operational issues reported by the client. Standard check-up and system calibration needed.',
+    solution: 'Completed full diagnostic scan using manufacturer software. All parameters are within normal range. Cleaned all optical components and air filters. Re-calibrated the energy output to ensure accuracy. Provided a brief training refresher to the on-site operator. The machine is in optimal working condition.',
+    duration: '4 hours',
+  },
+  {
+    id: 'ser-002',
+    equipment: 'Vbeam Perfecta®',
+    serviceType: 'Repair',
+    date: '2023-09-05',
+    technician: 'Budi Santoso',
+    cost: 800,
+    status: 'In Progress',
+    clientName: 'Miracle Aesthetic Clinic',
+    clientLocation: 'Tunjungan Plaza, Surabaya',
+    problemIdentification: 'Client reported "Error 23 - Handpiece Cooling Failure" on the main display. The device is non-operational. Initial phone support was unable to resolve the issue.',
+    solution: 'On-site diagnosis confirmed a faulty cooling pump within the handpiece assembly. The pump was not circulating coolant, causing the system to overheat and trigger the error. Replaced the entire handpiece cooling module with a new part (Part #VB-HP-C4). Flushed and refilled the cooling system. Ran multiple test cycles successfully. The error is now cleared.',
+    duration: '6 hours',
+  },
+  {
+    id: 'ser-003',
+    equipment: 'PicoWay®',
+    serviceType: 'Calibration',
+    date: '2023-10-11',
+    technician: 'Andi Wijaya',
+    cost: 350,
+    status: 'Scheduled',
+    clientName: 'Erha Clinic',
+    clientLocation: 'Kemanggisan, Jakarta Barat',
+    problemIdentification: 'Scheduled bi-annual energy output calibration. Client has noted a slight perceived decrease in treatment efficacy, requesting a full system check.',
+    solution: 'Technician is scheduled to visit the site on the specified date. A power meter and beam profiler will be used to measure and adjust the laser output for all available wavelengths and spot sizes. The optical path will also be inspected and cleaned.',
+    duration: 'Scheduled',
+  },
+];
 
--- Service Records table
-CREATE TABLE service_records (
-  id SERIAL PRIMARY KEY,
-  equipment VARCHAR(255) NOT NULL,
-  service_type VARCHAR(50) NOT NULL CHECK (service_type IN ('Maintenance', 'Repair', 'Calibration')),
-  date DATE NOT NULL,
-  technician VARCHAR(255),
-  cost NUMERIC(10, 2),
-  status VARCHAR(50) NOT NULL CHECK (status IN ('Scheduled', 'In Progress', 'Completed')),
-  client_name VARCHAR(255),
-  client_location TEXT,
-  problem_identification TEXT,
-  solution TEXT,
-  duration VARCHAR(100),
-  technician_notes TEXT,
-  photo_proof_url VARCHAR(255)
-);
+export const clients: Client[] = [
+  {
+    id: 'cli-001',
+    name: 'Dermaster Clinic',
+    email: 'info@dermaster.com',
+    phone: '021-555-1111',
+    joinDate: '2021-05-12',
+    avatar: 'https://placehold.co/100x100.png',
+    penanggungJawab: {
+        nama: 'Dr. Andreas',
+        jabatan: 'Kepala Cabang'
+    },
+    treatmentHistory: 'Fokus utama pada perawatan laser dan peremajaan kulit. Telah membeli Sofwave dan beberapa produk Geneskin. Memiliki basis pelanggan yang besar untuk perawatan anti-aging. Sangat puas dengan hasil Sofwave. Pengiriman terakhir: 2 karton Geneskin Serum pada 1 Agustus 2023.',
+    preferences: ['HIFU', 'Botox', 'Filler'],
+    location: {
+        address: 'Jl. Metro Pondok Indah No.1, Jakarta Selatan',
+        lat: -6.262846,
+        lng: 106.784576,
+    }
+  },
+  {
+    id: 'cli-002',
+    name: 'Miracle Aesthetic Clinic',
+    email: 'contact@miracle-clinic.com',
+    phone: '031-444-2222',
+    joinDate: '2020-11-02',
+    avatar: 'https://placehold.co/100x100.png',
+     penanggungJawab: {
+        nama: 'Dr. Lanny Junita',
+        jabatan: 'Direktur Medis'
+    },
+    treatmentHistory: 'Klien lama dengan fokus pada perawatan vaskular dan pigmentasi. Membeli Vbeam Perfecta pada tahun 2022. Membutuhkan dukungan teknis berkala dan pelatihan staf baru. Terakhir kali meminta penawaran untuk laser picosecond.',
+    preferences: ['Vascular Laser', 'Chemical Peels'],
+     location: {
+        address: 'Tunjungan Plaza 4, Jl. Jenderal Basuki Rachmat No.8-12, Surabaya',
+        lat: -7.2612,
+        lng: 112.7412
+    }
+  },
+  {
+    id: 'cli-003',
+    name: 'Erha Clinic',
+    email: 'support@erha.co.id',
+    phone: '021-333-5555',
+    joinDate: '2022-01-20',
+    avatar: 'https://placehold.co/100x100.png',
+     penanggungJawab: {
+        nama: 'Ibu Ratna',
+        jabatan: 'Manajer Pembelian'
+    },
+    treatmentHistory: 'Jaringan klinik besar dengan banyak cabang. Tertarik pada teknologi terbaru. Membeli PicoWay untuk salah satu cabang premium mereka. Menunjukkan minat pada Morpheus8 untuk perluasan layanan.',
+    preferences: ['Pico Laser', 'Acne Treatment'],
+     location: {
+        address: 'Jl. Kemanggisan Utama Raya No.10, Jakarta Barat',
+        lat: -6.2023,
+        lng: 106.7825
+    }
+  },
+];
 
--- Appointments table
-CREATE TABLE appointments (
-  id SERIAL PRIMARY KEY,
-  client_name VARCHAR(255),
-  client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
-  service VARCHAR(255) NOT NULL,
-  date DATE NOT NULL,
-  time VARCHAR(50) NOT NULL,
-  status VARCHAR(50) NOT NULL CHECK (status IN ('Confirmed', 'Pending', 'Cancelled'))
-);
+export const appointments: Appointment[] = [
+  {
+    id: 'apt-001',
+    clientId: 'cli-001',
+    clientName: 'Dermaster Clinic',
+    service: 'Product Demo: Morpheus8',
+    date: '2023-11-15',
+    time: '10:00 AM',
+    status: 'Confirmed',
+  },
+  {
+    id: 'apt-002',
+    clientId: 'cli-002',
+    clientName: 'Miracle Aesthetic Clinic',
+    service: 'Staff Training: Vbeam Perfecta',
+    date: '2023-11-20',
+    time: '02:00 PM',
+    status: 'Pending',
+  },
+  {
+    id: 'apt-003',
+    clientId: 'cli-003',
+    clientName: 'Erha Clinic',
+    service: 'Consultation: Business Expansion',
+    date: '2023-11-05',
+    time: '11:00 AM',
+    status: 'Cancelled',
+  },
+  {
+    id: 'apt-004',
+    clientId: 'cli-001',
+    clientName: 'Dermaster Clinic',
+    service: 'Follow-up: Sofwave Performance',
+    date: '2023-12-01',
+    time: '03:00 PM',
+    status: 'Confirmed',
+  },
+];
 
--- Client Requests table
-CREATE TABLE client_requests (
-  id SERIAL PRIMARY KEY,
-  client_name VARCHAR(255),
-  client_id INTEGER REFERENCES clients(id) ON DELETE CASCADE,
-  request_type VARCHAR(50) NOT NULL CHECK (request_type IN ('Service', 'Inquiry', 'Troubleshoot')),
-  details TEXT NOT NULL,
-  status VARCHAR(50) NOT NULL CHECK (status IN ('New', 'In Progress', 'Resolved')),
-  date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
-);
+export const deployedMachines: DeployedMachine[] = [
+  {
+    id: 'inv-001',
+    name: 'Sofwave™',
+    clientName: 'Dermaster Clinic',
+    location: {
+        address: 'Jl. Metro Pondok Indah No.1, Jakarta Selatan',
+        lat: -6.262846,
+        lng: 106.784576,
+    }
+  },
+  {
+    id: 'inv-002',
+    name: 'Vbeam Perfecta®',
+    clientName: 'Miracle Aesthetic Clinic',
+    location: {
+        address: 'Tunjungan Plaza 4, Jl. Jenderal Basuki Rachmat No.8-12, Surabaya',
+        lat: -7.2612,
+        lng: 112.7412
+    }
+  },
+  {
+    id: 'inv-004',
+    name: 'PicoWay®',
+    clientName: 'Erha Clinic',
+    location: {
+        address: 'Jl. Kemanggisan Utama Raya No.10, Jakarta Barat',
+        lat: -6.2023,
+        lng: 106.7825
+    }
+  }
+];
 
+export const clientRequests: ClientRequest[] = [
+    {
+        id: 'req-001',
+        clientId: 'cli-001',
+        clientName: 'Dermaster Clinic',
+        requestType: 'Service',
+        details: 'Service for Sofwave™: Annual maintenance required.',
+        status: 'New',
+        date: '2023-11-01',
+    },
+    {
+        id: 'req-002',
+        clientId: 'cli-002',
+        clientName: 'Miracle Aesthetic Clinic',
+        requestType: 'Troubleshoot',
+        details: 'Troubleshoot Vbeam Perfecta®: Handpiece cooling failure reported.',
+        status: 'In Progress',
+        date: '2023-10-30',
+    },
+     {
+        id: 'req-003',
+        clientId: 'cli-003',
+        clientName: 'Erha Clinic',
+        requestType: 'Inquiry',
+        details: 'Inquiry: Requesting quote for Morpheus8 device.',
+        status: 'Resolved',
+        date: '2023-10-28',
+    },
+];
 
--- MOCK DATA INSERTION
--- You can run these commands to populate your database with the initial mock data.
+// --- CHART DATA (MOCK) ---
 
--- Insert Clients
-INSERT INTO clients (name, email, phone, join_date, avatar, penanggung_jawab_nama, penanggung_jawab_jabatan, treatment_history, preferences, location_address, location_lat, location_lng) VALUES
-('Dermaster Clinic', 'info@dermaster.com', '021-555-1111', '2022-05-15', 'https://placehold.co/100x100.png', 'Dr. Andreas', 'Kepala Cabang Kemang', 'Klien lama dengan beberapa cabang. Fokus utama pada perawatan HIFU, CoolSculpting, dan filler. Riwayat pembelian mencakup: 1x Sofwave™, 1x Vbeam Perfecta®, 1x Morpheus8. Pengiriman terakhir: Morpheus8 (Juni 2023). Membutuhkan pasokan rutin produk skincare.', '{"HIFU", "CoolSculpting", "Filler", "Botox"}', 'Jl. Kemang Sel. No.99, RT.1/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730', -6.262846, 106.812211),
-('Natasha Skin Clinic', 'contact@natasha-skin.com', '021-555-2222', '2021-09-01', 'https://placehold.co/100x100.png', 'Ibu Rina', 'Manajer Pembelian', 'Jaringan klinik besar dengan fokus pada perawatan laser dan produk skincare. Riwayat pembelian: 1x BiAxis QS™, 1x Divine Pro, 1x Laser Biaxis QS. Klien potensial untuk upgrade teknologi laser dan produk pendukungnya.', '{"PRP", "Laser CO₂", "Skincare"}', 'Jl. Boulevard Gading Serpong, Tangerang', -6.2349, 106.6294),
-('Profira Clinic Surabaya', 'info@profira-clinic.com', '031-555-3333', '2023-02-20', 'https://placehold.co/100x100.png', 'Dr. Liana', 'Pemilik', 'Klinik butik dengan spesialisasi anti-aging. Riwayat pembelian: 1x Indiba Deep Care. Klien setia yang menghargai kualitas dan hasil. Pengiriman alat berjalan lancar dan instalasi telah selesai pada Februari 2023.', '{"Anti-Aging", "Pigmentasi", "Facial"}', 'Jl. HR Muhammad No.41, Pradahkalikendal, Kec. Dukuhpakis, Surabaya, Jawa Timur 60226', -7.2892, 112.6732),
-('Miracle Aesthetic Clinic', 'bali@miracle-clinic.com', '0361-555-4444', '2023-11-10', 'https://placehold.co/100x100.png', 'Bapak Dewa', 'Direktur Operasional', 'Klinik populer di Bali dengan fokus pada prosedur invasif minimal. Riwayat pembelian: 1x PicoWay®. Menunjukkan minat pada teknologi thread lift. Pengiriman PicoWay® dilakukan pada November 2023.', '{"Microneedling", "Thread Lift", "Laser"}', 'Jl. Teuku Umar No.18A, Denpasar, Bali', -8.6756, 115.2040);
+export const revenueData = [
+  { month: 'May', revenue: 1800 },
+  { month: 'Jun', revenue: 2300 },
+  { month: 'Jul', revenue: 2100 },
+  { month: 'Aug', revenue: 3200 },
+  { month: 'Sep', revenue: 2500 },
+  { month: 'Oct', revenue: 3800 },
+];
 
--- Insert Inventory
-INSERT INTO inventory (name, type, quantity, purchase_date, warranty_end_date, status, image_url, description, client_id) VALUES
-('Sofwave™', 'Device', 3, '2023-01-15', '2025-01-15', 'In Stock', 'https://regenesis.co.id/wp-content/uploads/2023/06/Sofwave-1.png', 'From Sofwave Medical. 3D Ultrasound for face/neck lifting, fine lines, and cellulite.', 1),
-('Indiba Deep Care', 'Device', 1, '2023-02-20', '2025-02-20', 'In Stock', 'https://regenesis.co.id/wp-content/uploads/2023/06/Indiba-Deep-Care-1.png', 'From INDIBA®. Radio Frequency for body contouring, cellulite, post-surgery care, and circumference reduction.', 3),
-('Vbeam Perfecta®', 'Device', 2, '2022-11-20', '2024-11-20', 'In Stock', 'https://regenesis.co.id/wp-content/uploads/2023/06/Vbeam-Prima.png', 'From Candela. Pulsed-Dye Laser (PDL) for rosacea, vascular issues, pigmentation, acne scars, and keloids.', 1),
-('PicoWay®', 'Device', 1, '2023-08-01', '2025-08-01', 'In Stock', 'https://aspmedica.com/wp-content/uploads/2023/11/PicoWay-1.jpg', 'From Candela. Picosecond Laser for pigmentation (melasma, nevi), tattoo removal, and collagen remodeling.', 4),
-('BiAxis QS™', 'Device', 1, '2023-09-10', '2025-09-10', 'In Stock', 'https://placehold.co/600x400.png', 'From BiAxis. Q-switched Laser for acne scars, freckles, pigmentation, and tattoo removal.', 2),
-('Ultra V', 'Device', 100, '2024-04-01', NULL, 'In Stock', 'https://placehold.co/600x400.png', 'Benang polydioxanone (PDO) untuk nose augmentation, volumizing, dan stimulasi kolagen.', NULL),
-('Morpheus8', 'Device', 2, '2023-06-12', '2025-06-12', 'In Stock', 'https://regenesis.co.id/wp-content/uploads/2023/06/Morpheus8-1.png', 'From InMode. RF Microneedling for wrinkles, skin laxity, and cellulite.', 1),
-('Frax Pro', 'Device', 2, '2024-03-01', '2026-03-01', 'In Stock', 'https://placehold.co/600x400.png', 'From Ellipse / Candela. Non-ablative fractional laser for skin resurfacing, improving texture, and collagen stimulation.', NULL),
-('Divine Pro', 'Device', 1, '2024-05-10', '2026-05-10', 'In Stock', 'https://placehold.co/600x400.png', 'From Pollogen / Lumenis. Multi-treatment platform for facial rejuvenation, dermal volumizing, and skin firming.', 2),
-('OxyGeneo & Pollogen', 'Device', 3, '2024-06-20', '2026-06-20', 'In Stock', 'https://placehold.co/600x400.png', 'From Pollogen / Lumenis. Combines Oxygenation, RF, and Ultrasound for skin brightening, pigmentation, and anti-aging.', NULL),
-('BiAxis Pico™', 'Device', 2, '2024-07-01', '2026-07-01', 'In Stock', 'https://placehold.co/600x400.png', 'From BiAxis. Picosecond Laser for pigmentation (melasma, nevi), tattoo, and collagen remodeling.', NULL),
-('Laser Biaxis QS', 'Device', 1, '2024-02-15', '2026-02-15', 'In Stock', 'https://placehold.co/600x400.png', 'From BiAxis. Laser for improving melasma, pigmentation, and tattoo removal with minimal downtime.', 2),
-('Geneskin® Serum', 'Skincare', 8, '2024-03-01', '2025-03-01', 'Low Stock', 'https://placehold.co/600x400.png', 'Skincare product for post-procedure care.', NULL),
-('Vitamin C Cleanser', 'Skincare', 50, '2024-02-18', '2025-02-18', 'In Stock', 'https://placehold.co/600x400.png', 'A gentle cleanser with Vitamin C to brighten and refresh the skin.', NULL),
-('Retinol Cream', 'Skincare', 0, '2024-01-05', '2025-01-05', 'Out of Stock', 'https://placehold.co/600x400.png', 'A powerful retinol cream for anti-aging and skin renewal.', NULL);
+export const clientDemographicsData = [
+    { ageGroup: '18-25', value: 250 },
+    { ageGroup: '26-35', value: 400 },
+    { ageGroup: '36-45', value: 300 },
+    { ageGroup: '46plus', value: 200 },
+];
 
--- Insert Service Records
-INSERT INTO service_records (equipment, service_type, date, technician, cost, status, client_name, client_location, problem_identification, solution, duration, technician_notes) VALUES
-('Sofwave™', 'Maintenance', '2024-06-15', 'John Doe', 250, 'Scheduled', 'Dermaster Clinic', 'Jl. Kemang Sel. No.99, Jakarta Selatan', 'Klien meminta perawatan rutin tahunan sesuai jadwal.', 'Pemeriksaan standar, pembersihan filter, dan pembaruan perangkat lunak telah dijadwalkan.', '3 jam', 'Menunggu jadwal konfirmasi dari klien.'),
-('Vbeam Perfecta®', 'Calibration', '2024-05-20', 'Jane Smith', 180, 'Completed', 'Profira Clinic Surabaya', 'Jl. HR Muhammad No.41, Surabaya', 'Output energi laser sedikit di bawah ambang batas yang ditentukan setelah 1 tahun penggunaan.', 'Kalibrasi ulang output daya laser. Pengujian setelah kalibrasi menunjukkan tingkat energi yang optimal. Membersihkan optik.', '2 jam', 'Kalibrasi berhasil, alat berfungsi normal. Tidak ada masalah lebih lanjut yang dilaporkan oleh klien.'),
-('Morpheus8', 'Repair', '2024-06-01', 'Mike Johnson', 500, 'In Progress', 'Dermaster Clinic', 'Jl. Kemang Sel. No.99, Jakarta Selatan', 'Layar sentuh tidak merespons di bagian kanan bawah. Klien telah mencoba me-restart mesin beberapa kali.', 'Tim teknisi sedang dalam proses mendiagnosis apakah ini masalah perangkat keras (digitizer) atau perangkat lunak. Penggantian layar mungkin diperlukan.', 'Berkelanjutan', 'Suku cadang layar telah dipesan, menunggu pengiriman. Diperkirakan tiba dalam 5 hari kerja.'),
-('Sofwave™', 'Maintenance', '2023-12-15', 'John Doe', 250, 'Completed', 'Dermaster Clinic', 'Jl. Kemang Sel. No.99, Jakarta Selatan', 'Perawatan rutin preventif sesuai jadwal pabrikan.', 'Semua sistem diperiksa, filter diganti, dan perangkat lunak diperbarui ke versi terbaru. Mesin berfungsi sesuai spesifikasi.', '4 jam', 'Perawatan selesai tanpa kendala. Klien puas.'),
-('PicoWay®', 'Maintenance', '2024-07-01', 'Jane Smith', 300, 'Scheduled', 'Miracle Aesthetic Clinic', 'Jl. Teuku Umar No.18A, Denpasar, Bali', 'Jadwal pemeliharaan 6 bulan untuk memastikan kinerja puncak.', 'Akan dilakukan pembersihan optik, pemeriksaan sistem pendingin, dan verifikasi output energi.', '3 jam', NULL);
+export const inventoryStatusData = [
+  { name: 'PicoWay®', inStock: 3, lowStock: 1, outOfStock: 1 },
+  { name: 'Sofwave™', inStock: 5, lowStock: 2, outOfStock: 0 },
+  { name: 'Morpheus8', inStock: 8, lowStock: 0, outOfStock: 0 },
+  { name: 'Vbeam', inStock: 2, lowStock: 3, outOfStock: 2 },
+  { name: 'Geneskin®', inStock: 50, lowStock: 15, outOfStock: 0 },
+];
 
--- Insert Appointments
-INSERT INTO appointments (client_name, client_id, service, date, time, status) VALUES
-('Dermaster Clinic', 1, 'Demo Divine Pro', '2024-07-20', '10:00 AM', 'Confirmed'),
-('Natasha Skin Clinic', 2, 'Pelatihan Laser Biaxis QS', '2024-07-21', '02:00 PM', 'Confirmed'),
-('Profira Clinic Surabaya', 3, 'Konsultasi Perangkat Anti-Aging', '2024-07-22', '11:00 AM', 'Pending'),
-('Miracle Aesthetic Clinic', 4, 'Training Morpheus8', '2024-07-22', '03:30 PM', 'Confirmed'),
-('Dermaster Clinic', 1, 'Maintenance Perangkat Sofwave™', '2024-08-01', '09:00 AM', 'Cancelled');
+// --- MOCK FETCH FUNCTIONS ---
+export async function fetchAllInventoryItems(): Promise<InventoryItem[]> {
+  return Promise.resolve(inventoryItems);
+}
 
--- Insert Client Requests
-INSERT INTO client_requests (client_name, client_id, request_type, details, status, date) VALUES
-('Dermaster Clinic', 1, 'Service', 'Request for annual maintenance on Sofwave™.', 'New', '2024-07-28'),
-('Natasha Skin Clinic', 2, 'Troubleshoot', 'Laser Biaxis QS is showing an error code E-05.', 'New', '2024-07-27'),
-('Miracle Aesthetic Clinic', 4, 'Inquiry', 'Question about Ultra V thread compatibility with new procedure.', 'In Progress', '2024-07-26'),
-('Profira Clinic Surabaya', 3, 'Service', 'Indiba Deep Care handpiece is not heating correctly.', 'New', '2024-07-28'),
-('Dermaster Clinic', 1, 'Service', 'Service for Morpheus8: The screen is flickering during use.', 'New', '2024-07-29');
+export async function fetchInventoryItemById(id: string): Promise<InventoryItem | undefined> {
+  return Promise.resolve(inventoryItems.find(item => item.id === id));
+}
+
+export async function fetchAllClients(): Promise<Client[]> {
+  return Promise.resolve(clients);
+}
+
+export async function fetchClientById(id: string): Promise<Client | undefined> {
+  const numericId = parseInt(id, 10);
+  if (isNaN(numericId)) {
+    return Promise.resolve(clients.find(c => c.id === id));
+  }
+  return Promise.resolve(clients.find(c => c.id === `cli-00${numericId}`));
+}
+
+export async function fetchAllServiceRecords(): Promise<ServiceRecord[]> {
+    return Promise.resolve(serviceRecords);
+}
+
+export async function fetchServiceRecordById(id: string): Promise<ServiceRecord | undefined> {
+    return Promise.resolve(serviceRecords.find(record => record.id === id));
+}
+
+export async function fetchAllAppointments(): Promise<Appointment[]> {
+    return Promise.resolve(appointments);
+}
+
+export async function fetchAppointmentsByClientId(clientId: string): Promise<Appointment[]> {
+    return Promise.resolve(appointments.filter(apt => apt.clientId === clientId));
+}
+
+export async function fetchAllClientRequests(): Promise<ClientRequest[]> {
+    return Promise.resolve(clientRequests);
+}
+
+export async function fetchClientRequestsForClient(clientId: string): Promise<ClientRequest[]> {
+    return Promise.resolve(clientRequests.filter(req => req.clientId === clientId));
+}
+
+export async function fetchDeployedMachines(): Promise<DeployedMachine[]> {
+    return Promise.resolve(deployedMachines);
+}
+
+export async function fetchDeployedMachinesForClient(clientId: string): Promise<InventoryItem[]> {
+    return Promise.resolve(inventoryItems.filter(item => item.clientId === clientId));
+}
+
+export async function fetchCardData() {
+    const totalRevenue = serviceRecords
+        .filter(r => r.status === 'Completed')
+        .reduce((sum, r) => sum + r.cost, 0);
+    const totalClients = clients.length;
+    const totalInventory = inventoryItems.reduce((sum, item) => sum + item.quantity, 0);
+    const pendingServices = serviceRecords.filter(r => r.status === 'In Progress' || r.status === 'Scheduled').length;
+
+    return Promise.resolve({
+        totalRevenue,
+        totalClients,
+        totalInventory,
+        pendingServices
+    });
+}
+
+export async function fetchRevenueData() {
+    return Promise.resolve(revenueData);
+}

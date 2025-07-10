@@ -9,11 +9,12 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { serviceRecords } from '@/lib/data';
+import { fetchAllServiceRecords } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Eye, CheckSquare } from 'lucide-react';
 import type { ServiceRecord } from '@/types';
 import Link from 'next/link';
+import { format } from 'date-fns';
 
 const statusVariant: Record<ServiceRecord['status'], 'default' | 'secondary' | 'destructive'> = {
   'Completed': 'default',
@@ -21,7 +22,9 @@ const statusVariant: Record<ServiceRecord['status'], 'default' | 'secondary' | '
   'In Progress': 'destructive',
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const serviceRecords = await fetchAllServiceRecords();
+
   return (
     <div className="flex flex-col gap-8">
        <div className="flex items-center justify-between gap-4">
@@ -61,8 +64,8 @@ export default function ServicesPage() {
               {serviceRecords.map((record) => (
                 <TableRow key={record.id}>
                   <TableCell className="font-medium">{record.equipment}</TableCell>
-                  <TableCell>{record.clientName}</TableCell>
-                  <TableCell>{record.date}</TableCell>
+                  <TableCell>{record.client_name}</TableCell>
+                  <TableCell>{format(new Date(record.date), 'PPP')}</TableCell>
                   <TableCell className="text-right">
                     <Badge variant={statusVariant[record.status]}>
                         {record.status}

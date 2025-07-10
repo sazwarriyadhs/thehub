@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { serviceRecords } from '@/lib/data';
+import { fetchServiceRecordById } from '@/lib/data';
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { FileText, Calendar, User, MapPin, HardHat, Clock, AlertTriangle, ShieldCheck, Settings } from 'lucide-react';
 import type { ServiceRecord } from '@/types';
 import { ServiceReportActions } from './components/service-report-actions';
+import { format } from 'date-fns';
 
 const statusVariant: Record<ServiceRecord['status'], 'default' | 'secondary' | 'destructive'> = {
   'Completed': 'default',
@@ -14,8 +15,8 @@ const statusVariant: Record<ServiceRecord['status'], 'default' | 'secondary' | '
   'In Progress': 'destructive',
 };
 
-export default function ServiceDetailPage({ params }: { params: { id: string } }) {
-  const serviceRecord = serviceRecords.find((s) => s.id === params.id);
+export default async function ServiceDetailPage({ params }: { params: { id: string } }) {
+  const serviceRecord = await fetchServiceRecordById(params.id);
 
   if (!serviceRecord) {
     notFound();
@@ -41,7 +42,7 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">{serviceRecord.problemIdentification}</p>
+              <p className="text-muted-foreground">{serviceRecord.problem_identification}</p>
             </CardContent>
           </Card>
           <Card>
@@ -71,20 +72,20 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
             <CardContent className="space-y-4 text-sm">
                 <div className="flex items-center gap-3">
                     <User className="w-4 h-4 text-muted-foreground" />
-                    <span>Client: <strong>{serviceRecord.clientName}</strong></span>
+                    <span>Client: <strong>{serviceRecord.client_name}</strong></span>
                 </div>
                 <div className="flex items-start gap-3">
                     <MapPin className="w-4 h-4 text-muted-foreground mt-1" />
-                    <span>Location: <strong>{serviceRecord.clientLocation}</strong></span>
+                    <span>Location: <strong>{serviceRecord.client_location}</strong></span>
                 </div>
               <Separator />
                 <div className="flex items-center gap-3">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span>Date: <strong>{serviceRecord.date}</strong></span>
+                    <span>Date: <strong>{format(new Date(serviceRecord.date), 'PPP')}</strong></span>
                 </div>
                  <div className="flex items-center gap-3">
                     <Settings className="w-4 h-4 text-muted-foreground" />
-                    <span>Service Type: <strong>{serviceRecord.serviceType}</strong></span>
+                    <span>Service Type: <strong>{serviceRecord.service_type}</strong></span>
                 </div>
                 <div className="flex items-center gap-3">
                     <HardHat className="w-4 h-4 text-muted-foreground" />

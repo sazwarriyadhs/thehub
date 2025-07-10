@@ -1,4 +1,3 @@
-
 import { PageHeader } from '@/components/page-header';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +16,7 @@ import {
 import { fetchClientById } from '@/lib/data';
 import { format } from 'date-fns';
 
-const LOGGED_IN_CLIENT_ID = '1';
+const LOGGED_IN_CLIENT_ID = 'cli-001';
 
 export default async function ClientProfilePage() {
   const client = await fetchClientById(LOGGED_IN_CLIENT_ID);

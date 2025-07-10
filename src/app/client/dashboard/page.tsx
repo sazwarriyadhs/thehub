@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { clients, appointments, inventoryItems } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { notFound, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -23,9 +22,11 @@ import {
   Wrench,
   BrainCircuit,
 } from 'lucide-react';
-import type { Appointment, InventoryItem } from '@/types';
+import type { Appointment, InventoryItem, Client } from '@/types';
 import { ClientTroubleshootingAssistant } from './components/client-troubleshooting-assistant';
 import { ClientServiceRequest } from './components/client-service-request';
+import { fetchClientById, fetchAppointmentsByClientId, fetchDeployedMachinesForClient } from '@/lib/data';
+import { format } from 'date-fns';
 
 // Hardcode client ID for demonstration. In a real app, this would come from auth.
 const LOGGED_IN_CLIENT_ID = 'cli-001';
@@ -46,17 +47,45 @@ const isWarrantyExpiringSoon = (endDate: string): boolean => {
 };
 
 export default function ClientDashboardPage() {
-  const client = clients.find((c) => c.id === LOGGED_IN_CLIENT_ID);
+  const [client, setClient] = useState<Client | null>(null);
+  const [clientAppointments, setClientAppointments] = useState<Appointment[]>([]);
+  const [clientMachines, setClientMachines] = useState<InventoryItem[]>([]);
   const [troubleshootingMachine, setTroubleshootingMachine] = useState<InventoryItem | null>(null);
   const [serviceRequestMachine, setServiceRequestMachine] = useState<InventoryItem | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [clientData, appointmentsData, machinesData] = await Promise.all([
+          fetchClientById(LOGGED_IN_CLIENT_ID),
+          fetchAppointmentsByClientId(LOGGED_IN_CLIENT_ID),
+          fetchDeployedMachinesForClient(LOGGED_IN_CLIENT_ID),
+        ]);
+
+        if (clientData) {
+            setClient(clientData);
+            setClientAppointments(appointmentsData);
+            setClientMachines(machinesData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch client data", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
   
+  if (loading) {
+    return <div>Loading...</div>; // Or a proper skeleton loader
+  }
+
   if (!client) {
     notFound();
   }
 
-  const clientAppointments = appointments.filter(apt => apt.clientId === client.id);
   const upcomingAppointments = clientAppointments.filter(apt => new Date(apt.date) >= new Date() && apt.status !== 'Cancelled');
-  const clientMachines = inventoryItems.filter(item => item.clientId === client.id && item.type === 'Device');
 
   return (
     <div className="flex flex-col gap-8">
@@ -78,7 +107,7 @@ export default function ClientDashboardPage() {
                                 {clientMachines.map(machine => (
                                     <div key={machine.id} className="flex flex-col sm:flex-row items-start gap-4 p-4 border rounded-lg">
                                         <Image
-                                            src={machine.imageUrl}
+                                            src={machine.image_url}
                                             alt={machine.name}
                                             width={100}
                                             height={100}
@@ -88,13 +117,15 @@ export default function ClientDashboardPage() {
                                         <div className="flex-grow">
                                             <h3 className="font-semibold">{machine.name}</h3>
                                             <p className="text-sm text-muted-foreground">Status: <span className="text-green-600 font-medium">Operational</span></p>
-                                            {isWarrantyExpiringSoon(machine.warrantyEndDate) && (
+                                            {machine.warranty_end_date && isWarrantyExpiringSoon(machine.warranty_end_date) && (
                                                 <Badge variant="destructive" className="mt-2">
                                                     <ShieldAlert className="mr-2 h-4 w-4" />
                                                     Warranty Expiring Soon
                                                 </Badge>
                                             )}
-                                            <p className="text-xs text-muted-foreground mt-1">Warranty Ends: {machine.warrantyEndDate}</p>
+                                            <p className="text-xs text-muted-foreground mt-1">
+                                                Warranty Ends: {machine.warranty_end_date ? format(new Date(machine.warranty_end_date), 'PPP') : 'N/A'}
+                                            </p>
                                         </div>
                                         <div className="flex sm:flex-col gap-2 w-full sm:w-auto mt-2 sm:mt-0 shrink-0">
                                             <Button size="sm" className="w-full justify-start" onClick={() => setTroubleshootingMachine(machine)}>
@@ -135,7 +166,7 @@ export default function ClientDashboardPage() {
                                                 </div>
                                                 <div>
                                                     <p className="font-semibold">{apt.service}</p>
-                                                    <p className="text-sm text-muted-foreground">{apt.date} at {apt.time}</p>
+                                                    <p className="text-sm text-muted-foreground">{format(new Date(apt.date), 'PPP')} at {apt.time}</p>
                                                 </div>
                                             </div>
                                             <Badge variant={config.variant}>
@@ -164,7 +195,7 @@ export default function ClientDashboardPage() {
                             <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <CardTitle>{client.name}</CardTitle>
-                        <p className="text-sm text-muted-foreground">Joined on {client.joinDate}</p>
+                        <p className="text-sm text-muted-foreground">Joined on {format(new Date(client.join_date), 'PPP')}</p>
                     </CardHeader>
                     <CardContent className="space-y-4 text-sm">
                         <Separator />
@@ -192,7 +223,7 @@ export default function ClientDashboardPage() {
                                 <CardTitle className="text-base">Purchase History</CardTitle>
                             </CardHeader>
                             <CardContent className="p-4 pt-0">
-                                <p className="text-sm text-muted-foreground whitespace-pre-wrap">{client.treatmentHistory}</p>
+                                <p className="text-sm text-muted-foreground whitespace-pre-wrap">{client.treatment_history}</p>
                             </CardContent>
                         </Card>
                     </CardContent>

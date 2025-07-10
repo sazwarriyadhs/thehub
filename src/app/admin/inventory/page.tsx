@@ -1,6 +1,3 @@
-
-'use client';
-
 import { PageHeader } from '@/components/page-header';
 import {
   Table,
@@ -14,10 +11,10 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Eye, Edit } from 'lucide-react';
-import type { InventoryItem, Client } from '@/types';
+import type { InventoryItem } from '@/types';
 import Link from 'next/link';
 import { DeleteItemButton } from './components/delete-item-button';
-import { useEffect, useState } from 'react';
+import { fetchAllInventoryItems, fetchAllClients } from '@/lib/data';
 
 const statusVariant: Record<InventoryItem['status'], 'default' | 'secondary' | 'destructive'> = {
   'In Stock': 'default',
@@ -25,31 +22,13 @@ const statusVariant: Record<InventoryItem['status'], 'default' | 'secondary' | '
   'Out of Stock': 'destructive',
 };
 
-// This is a temporary solution to fetch data on the client side until server components are updated.
-async function fetchInventoryAndClients(): Promise<{ inventoryItems: InventoryItem[], clients: Client[] }> {
-    const resInv = await fetch('/api/inventory');
-    const inventoryItems = await resInv.json();
-    const resClients = await fetch('/api/clients');
-    const clients = await resClients.json();
-    return { inventoryItems, clients };
-}
+export default async function InventoryPage() {
+  const [inventoryItems, clients] = await Promise.all([
+    fetchAllInventoryItems(),
+    fetchAllClients(),
+  ]);
 
-
-export default function InventoryPage() {
-  // Client-side data fetching as a temporary measure.
-  // In a real app, this would be a server component fetching data directly.
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
-  const [clientMap, setClientMap] = useState<Map<string, string>>(new Map());
-
-  useEffect(() => {
-    async function loadData() {
-        const res = await fetch('/api/data?q=inventory');
-        const { inventoryItems, clients } = await res.json();
-        setInventoryItems(inventoryItems);
-        setClientMap(new Map(clients.map((c: any) => [c.id, c.name])));
-    }
-    loadData();
-  }, []);
+  const clientMap = new Map(clients.map(c => [c.id, c.name]));
 
   return (
     <div className="flex flex-col gap-8">

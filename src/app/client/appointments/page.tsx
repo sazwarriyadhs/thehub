@@ -1,10 +1,10 @@
-
 import { PageHeader } from '@/components/page-header';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { appointments } from '@/lib/data';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { fetchAppointmentsByClientId } from '@/lib/data';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import type { Appointment } from '@/types';
+import { format } from 'date-fns';
 
 // Hardcode client ID for demonstration. In a real app, this would come from auth.
 const LOGGED_IN_CLIENT_ID = 'cli-001';
@@ -15,8 +15,8 @@ const statusConfig: Record<Appointment['status'], { variant: 'default' | 'second
     'Cancelled': { variant: 'destructive', icon: XCircle },
 };
 
-export default function ClientAppointmentsPage() {
-  const clientAppointments = appointments.filter(apt => apt.clientId === LOGGED_IN_CLIENT_ID);
+export default async function ClientAppointmentsPage() {
+  const clientAppointments = await fetchAppointmentsByClientId(LOGGED_IN_CLIENT_ID);
   
   return (
     <div className="flex flex-col gap-8">
@@ -40,7 +40,7 @@ export default function ClientAppointmentsPage() {
                               <h3 className="font-semibold text-lg">{apt.service}</h3>
                               <div className="flex items-center gap-2 text-muted-foreground mt-2">
                                   <Calendar className="w-4 h-4" />
-                                  <span>{apt.date}</span>
+                                  <span>{format(new Date(apt.date), 'PPP')}</span>
                               </div>
                               <div className="flex items-center gap-2 text-muted-foreground">
                                   <Clock className="w-4 h-4" />

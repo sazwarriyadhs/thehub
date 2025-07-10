@@ -1,4 +1,3 @@
-
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientProfileForm } from '../components/client-profile-form';
@@ -6,7 +5,8 @@ import { notFound } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { fetchClientById } from '@/lib/data';
 
-const LOGGED_IN_CLIENT_ID = '1';
+// In a real app, this would come from user authentication
+const LOGGED_IN_CLIENT_ID = 'cli-001';
 
 export default async function EditClientProfilePage() {
   const client = await fetchClientById(LOGGED_IN_CLIENT_ID);

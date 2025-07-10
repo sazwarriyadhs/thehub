@@ -3,13 +3,20 @@
 import { getProductRecommendations } from '@/ai/flows/ai-product-recommendations';
 import { aiHelpAssistant } from '@/ai/flows/ai-help-assistant';
 import { getTroubleshootingAssistance } from '@/ai/flows/ai-troubleshooting-assistant';
-import { db } from '@/lib/db';
+import { 
+    inventoryItems, 
+    serviceRecords, 
+    clients, 
+    clientRequests,
+    fetchAllClients, 
+    fetchClientById, 
+    fetchInventoryItemById 
+} from '@/lib/data';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { inventoryFormSchema, clientFormSchema, workOrderConfirmationSchema } from '@/lib/schemas';
 import type { ServiceRecord } from '@/types';
-import { unstable_noStore as noStore } from 'next/cache';
 
 
 type ActionResult<T> = {
@@ -43,34 +50,19 @@ export async function saveInventoryItem(formData: FormData) {
   
   const { id, ...itemData } = validatedFields.data;
 
-  try {
-    if (id) {
-      console.log(`Updating inventory item ${id}:`, itemData);
-       await db.query(
-          `UPDATE inventory
-           SET name = $1, type = $2, quantity = $3, purchase_date = $4, warranty_end_date = $5, status = $6, description = $7, image_url = $8, client_id = $9
-           WHERE id = $10`,
-          [
-            itemData.name, itemData.type, itemData.quantity, itemData.purchaseDate, 
-            itemData.warrantyEndDate, itemData.status, itemData.description, 
-            itemData.imageUrl, itemData.clientId, id
-          ]
-        );
-    } else {
-      console.log(`Creating new inventory item:`, itemData);
-      await db.query(
-          `INSERT INTO inventory (name, type, quantity, purchase_date, warranty_end_date, status, description, image_url, client_id)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-          [
-            itemData.name, itemData.type, itemData.quantity, itemData.purchaseDate, 
-            itemData.warrantyEndDate, itemData.status, itemData.description, 
-            itemData.imageUrl, itemData.clientId
-          ]
-        );
+  // This is where you would interact with your database
+  if (id) {
+    console.log(`Updating inventory item ${id}:`, itemData);
+    // e.g., await db.update('inventory', { where: { id }, data: itemData });
+    const index = inventoryItems.findIndex(item => item.id === id);
+    if (index !== -1) {
+        inventoryItems[index] = { ...inventoryItems[index], id, ...itemData };
     }
-  } catch (e: any) {
-    console.error('Failed to save inventory item:', e);
-    return { error: 'Database Error: Failed to save inventory item.' };
+  } else {
+    console.log(`Creating new inventory item:`, itemData);
+    // e.g., await db.create('inventory', { data: itemData });
+    const newId = `inv-${Math.random().toString(36).substr(2, 9)}`;
+    inventoryItems.push({ id: newId, ...itemData });
   }
   
   revalidatePath('/admin/inventory');
@@ -78,14 +70,13 @@ export async function saveInventoryItem(formData: FormData) {
 }
 
 export async function deleteInventoryItem(id: string) {
-    try {
-        if (!id) {
-            return { error: 'Item ID is required.' };
-        }
-        await db.query(`DELETE FROM inventory WHERE id = $1`, [id]);
-    } catch (e: any) {
-        console.error('Failed to delete inventory item:', e);
-        return { error: 'Database Error: Failed to delete inventory item.' };
+    // This is where you would interact with your database
+    console.log(`Deleting inventory item ${id}`);
+    const index = inventoryItems.findIndex(item => item.id === id);
+    if (index !== -1) {
+        inventoryItems.splice(index, 1);
+    } else {
+        return { error: 'Item not found.' };
     }
     
     revalidatePath('/admin/inventory');
@@ -119,41 +110,35 @@ export async function saveClient(formData: FormData) {
 
   const { id, ...clientData } = validatedFields.data;
 
-  try {
-    if (id) {
-        console.log(`Updating client ${id}`);
-        await db.query(
-            `UPDATE clients
-             SET name = $1, email = $2, phone = $3, join_date = $4, avatar = $5,
-                 penanggung_jawab_nama = $6, penanggung_jawab_jabatan = $7,
-                 treatment_history = $8, preferences = $9, location_address = $10,
-                 location_lat = $11, location_lng = $12
-             WHERE id = $13`,
-            [
-              clientData.name, clientData.email, clientData.phone, clientData.joinDate,
-              clientData.avatar, clientData.penanggungJawabNama, clientData.penanggungJawabJabatan,
-              clientData.treatmentHistory, clientData.preferences, clientData.locationAddress,
-              clientData.locationLat, clientData.locationLng, id
-            ]
-        );
-    } else {
-      console.log(`Creating new client`);
-      await db.query(
-          `INSERT INTO clients (name, email, phone, join_date, avatar, penanggung_jawab_nama,
-                               penanggung_jawab_jabatan, treatment_history, preferences,
-                               location_address, location_lat, location_lng)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
-          [
-            clientData.name, clientData.email, clientData.phone, clientData.joinDate,
-            clientData.avatar, clientData.penanggungJawabNama, clientData.penanggungJawabJabatan,
-            clientData.treatmentHistory, clientData.preferences, clientData.locationAddress,
-            clientData.locationLat, clientData.locationLng
-          ]
-      );
+  const clientObject = {
+      name: clientData.name,
+      email: clientData.email,
+      phone: clientData.phone,
+      joinDate: clientData.joinDate.toISOString().split('T')[0],
+      avatar: clientData.avatar as string,
+      penanggungJawab: {
+          nama: clientData.penanggungJawabNama,
+          jabatan: clientData.penanggungJawabJabatan
+      },
+      treatmentHistory: clientData.treatmentHistory,
+      preferences: clientData.preferences || [],
+      location: {
+          address: clientData.locationAddress,
+          lat: clientData.locationLat,
+          lng: clientData.locationLng
+      }
+  }
+
+  if (id) {
+    console.log(`Updating client ${id}`);
+    const index = clients.findIndex(c => c.id === id);
+    if (index !== -1) {
+        clients[index] = { ...clients[index], ...clientObject };
     }
-  } catch (e: any) {
-    console.error('Failed to save client:', e);
-    return { error: 'Database Error: Failed to save client.' };
+  } else {
+    console.log(`Creating new client`);
+    const newId = `cli-${Math.random().toString(36).substr(2, 9)}`;
+    clients.push({ id: newId, ...clientObject });
   }
   
   revalidatePath('/admin/clients');
@@ -162,14 +147,12 @@ export async function saveClient(formData: FormData) {
 }
 
 export async function deleteClient(id: string) {
-    try {
-        if (!id) {
-            return { error: 'Client ID is required.' };
-        }
-        await db.query(`DELETE FROM clients WHERE id = $1`, [id]);
-    } catch (e: any) {
-        console.error('Failed to delete client:', e);
-        return { error: 'Database Error: Failed to delete client.' };
+    console.log(`Deleting client ${id}`);
+    const index = clients.findIndex(c => c.id === id);
+    if (index !== -1) {
+        clients.splice(index, 1);
+    } else {
+        return { error: 'Client not found.' };
     }
     
     revalidatePath('/admin/clients');
@@ -232,23 +215,27 @@ type ServiceRequestInput = {
 export async function requestService(
   input: ServiceRequestInput
 ): Promise<ActionResult<{ success: boolean }>> {
-  noStore();
   try {
     if (!input.clientId || !input.clientName || !input.details) {
       return { error: 'Client ID, name, and details are required.' };
     }
     
-    await db.query(
-        `INSERT INTO client_requests (client_id, client_name, request_type, details, status, date)
-         VALUES ($1, $2, 'Service', $3, 'New', NOW())`,
-        [input.clientId, input.clientName, input.details]
-    );
+    const newRequest = {
+        id: `req-${Math.random().toString(36).substr(2, 9)}`,
+        clientId: input.clientId,
+        clientName: input.clientName,
+        requestType: 'Service' as const,
+        details: input.details,
+        status: 'New' as const,
+        date: new Date().toISOString().split('T')[0],
+    };
+    clientRequests.unshift(newRequest); // Add to the beginning of the list
 
     revalidatePath('/admin/dashboard');
     return { data: { success: true } };
   } catch (e: any) {
     console.error(e);
-    return { error: 'Database Error: Failed to submit service request.' };
+    return { error: 'Failed to submit service request.' };
   }
 }
 
@@ -268,8 +255,7 @@ export async function generateWorkOrderPdf(
   serviceRecordId: string
 ): Promise<ActionResult<string>> {
   try {
-    const result = await db.query<ServiceRecord>('SELECT * FROM service_records WHERE id = $1', [serviceRecordId]);
-    const record = result.rows[0];
+    const record = serviceRecords.find(sr => sr.id === serviceRecordId);
     if (!record) {
       return { error: 'Service record not found.' };
     }
@@ -311,7 +297,7 @@ export async function generateWorkOrderPdf(
     const recordDate = new Date(record.date);
     const monthRoman = toRoman(recordDate.getMonth() + 1);
     const year = recordDate.getFullYear();
-    const noSurat = `No: ${String(record.id).padStart(3, '0')}/ST/SAH/${monthRoman}/${year}`;
+    const noSurat = `No: ${String(record.id).replace('ser-', '').padStart(3, '0')}/ST/SAH/${monthRoman}/${year}`;
     drawText(noSurat, 0, y, { size: 11, align: 'center' });
     
     const noSuratWidth = textWidth(noSurat, 11, font);
@@ -369,9 +355,9 @@ export async function generateWorkOrderPdf(
     y -= 35;
 
     const assignmentDetails = [
-        { label: 'Nama Klien / Cabang', value: record.client_name },
-        { label: 'Lokasi', value: record.client_location },
-        { label: 'Jenis Masalah', value: record.problem_identification },
+        { label: 'Nama Klien / Cabang', value: record.clientName },
+        { label: 'Lokasi', value: record.clientLocation },
+        { label: 'Jenis Masalah', value: record.problemIdentification },
     ];
     assignmentDetails.forEach(detail => {
       drawText(detail.label, 60, y);
@@ -454,24 +440,22 @@ export async function confirmWorkOrder(formData: FormData) {
   }
 
   const { workOrderId, status, technicianNotes, photoProofUrl } = validatedFields.data;
+  
+  const record = serviceRecords.find(r => r.id === workOrderId);
 
-  try {
-    const result = await db.query('SELECT id FROM service_records WHERE id = $1', [workOrderId]);
-    if (result.rowCount === 0) {
-        return { error: 'Work order not found.' };
-    }
-    
-    await db.query(
-        `UPDATE service_records
-         SET status = $1, technician_notes = CONCAT(COALESCE(technician_notes, ''), '\n', $2), photo_proof_url = $3
-         WHERE id = $4`,
-        [status, technicianNotes, photoProofUrl, workOrderId]
-    );
-
-  } catch (e: any) {
-    console.error('Failed to confirm work order:', e);
-    return { error: 'Database Error: Failed to confirm work order.' };
+  if (!record) {
+    return { error: 'Work order not found.' };
   }
+  
+  record.status = status;
+  if(technicianNotes) {
+    record.technicianNotes = `${record.technicianNotes ? record.technicianNotes + '\n' : ''}${technicianNotes}`;
+  }
+  if(photoProofUrl) {
+    record.photoProofUrl = photoProofUrl;
+  }
+
+  console.log(`Work order ${workOrderId} confirmed with status ${status}`);
 
   revalidatePath('/admin/services');
   redirect('/admin/services');

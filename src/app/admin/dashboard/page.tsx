@@ -1,19 +1,18 @@
-'use client';
-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { DollarSign, Users, Box, Wrench, Bell, BrainCircuit, HelpCircle, ArrowRight } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
 import { RevenueChart } from '@/components/charts/revenue-chart';
 import { ClientDemographicsChart } from '@/components/charts/client-demographics-chart';
 import { InventoryStatusChart } from '@/components/charts/inventory-status-chart';
-import { clientRequests, clients, inventoryItems } from '@/lib/data';
-import type { ClientRequest, DeployedMachine } from '@/types';
+import { fetchCardData, fetchAllClientRequests, fetchDeployedMachines } from '@/lib/data';
+import type { ClientRequest } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { MapDisplay } from '../map/components/map-display';
+import { format } from 'date-fns';
 
-const requestIcons: Record<ClientRequest['requestType'], React.ElementType> = {
+const requestIcons: Record<ClientRequest['request_type'], React.ElementType> = {
   'Service': Wrench,
   'Troubleshoot': BrainCircuit,
   'Inquiry': HelpCircle,
@@ -25,24 +24,11 @@ const requestStatusVariant: Record<ClientRequest['status'], 'default' | 'seconda
   'Resolved': 'default',
 };
 
-export default function DashboardPage() {
-  const deployedMachines: DeployedMachine[] = [];
-  const clientMap = new Map(clients.map(c => [c.id, c]));
-
-  inventoryItems.forEach(item => {
-    if (item.type === 'Device' && item.clientId) {
-      const client = clientMap.get(item.clientId);
-      if (client) {
-        deployedMachines.push({
-          id: item.id,
-          name: item.name,
-          clientName: client.name,
-          location: client.location,
-        });
-      }
-    }
-  });
-
+export default async function DashboardPage() {
+  const { totalRevenue, totalClients, totalInventory, pendingServices } = await fetchCardData();
+  const recentRequests = (await fetchAllClientRequests()).slice(0, 5);
+  const deployedMachines = await fetchDeployedMachines();
+  
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
@@ -56,7 +42,7 @@ export default function DashboardPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
+            <div className="text-2xl font-bold">${totalRevenue.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               +20.1% from last month
             </p>
@@ -68,7 +54,7 @@ export default function DashboardPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+2350</div>
+            <div className="text-2xl font-bold">+{totalClients}</div>
             <p className="text-xs text-muted-foreground">
               +180.1% from last month
             </p>
@@ -82,7 +68,7 @@ export default function DashboardPage() {
             <Box className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,257</div>
+            <div className="text-2xl font-bold">{totalInventory.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               +19% from last month
             </p>
@@ -96,7 +82,7 @@ export default function DashboardPage() {
             <Wrench className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12</div>
+            <div className="text-2xl font-bold">+{pendingServices}</div>
             <p className="text-xs text-muted-foreground">
               +5 since last week
             </p>
@@ -111,8 +97,8 @@ export default function DashboardPage() {
             <CardTitle className="text-xl">Client Requests & Alerts</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {clientRequests.map((request) => {
-              const Icon = requestIcons[request.requestType];
+            {recentRequests.map((request) => {
+              const Icon = requestIcons[request.request_type];
               return (
                 <div key={request.id} className="flex items-start gap-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary shrink-0 mt-1">
@@ -120,11 +106,11 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex-grow">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium">{request.clientName}</p>
+                      <p className="text-sm font-medium">{request.client_name}</p>
                        <Badge variant={requestStatusVariant[request.status]}>{request.status}</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground">{request.details}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{request.date}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{format(new Date(request.date), 'PPP')}</p>
                   </div>
                 </div>
               )

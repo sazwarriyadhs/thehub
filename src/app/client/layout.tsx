@@ -1,19 +1,30 @@
-
 'use client';
 
+import { useEffect, useState } from 'react';
 import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { ClientSidebarNav } from './components/client-sidebar-nav';
 import { Bell } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { clients } from '@/lib/data';
+import { fetchClientById } from '@/lib/data';
+import type { Client } from '@/types';
 import Link from 'next/link';
 
 const LOGGED_IN_CLIENT_ID = 'cli-001';
 
 function ClientLayoutContent({ children }: { children: React.ReactNode }) {
-  const client = clients.find((c) => c.id === LOGGED_IN_CLIENT_ID);
+  const [client, setClient] = useState<Client | null>(null);
+
+  useEffect(() => {
+    async function getClient() {
+        const clientData = await fetchClientById(LOGGED_IN_CLIENT_ID);
+        if(clientData) {
+            setClient(clientData);
+        }
+    }
+    getClient();
+  }, []);
 
   return (
     <SidebarInset>
