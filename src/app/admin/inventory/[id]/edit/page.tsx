@@ -15,6 +15,19 @@ export default async function EditInventoryItemPage({ params }: { params: { id: 
     notFound();
   }
 
+  const itemForForm = {
+    id: item.id,
+    name: item.name,
+    type: item.type,
+    quantity: item.quantity,
+    purchase_date: item.purchase_date,
+    warranty_end_date: item.warranty_end_date,
+    status: item.status,
+    image_url: item.image_url,
+    description: item.description,
+    client_id: item.client_id,
+  }
+
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
@@ -26,7 +39,7 @@ export default async function EditInventoryItemPage({ params }: { params: { id: 
           <CardTitle>Item Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <InventoryForm item={item} clients={clients} />
+          <InventoryForm item={itemForForm} clients={clients} />
         </CardContent>
       </Card>
     </div>
