@@ -8,6 +8,7 @@ import {
     serviceRecords, 
     clients, 
     clientRequests,
+    adminUser,
     fetchAllClients, 
     fetchClientById, 
     fetchInventoryItemById 
@@ -32,11 +33,11 @@ export async function saveInventoryItem(formData: FormData) {
     type: formData.get('type'),
     quantity: formData.get('quantity'),
     purchaseDate: new Date(formData.get('purchaseDate') as string),
-    warrantyEndDate: formData.get('warrantyEndDate') || undefined,
+    warrantyEndDate: new Date(formData.get('warrantyEndDate') as string),
     status: formData.get('status'),
     description: formData.get('description'),
     imageUrl: formData.get('imageUrl'),
-    clientId: formData.get('clientId') || undefined,
+    clientId: formData.get('clientId'),
   };
   
   const validatedFields = await inventoryFormSchema.safeParseAsync(data);
@@ -50,19 +51,31 @@ export async function saveInventoryItem(formData: FormData) {
   
   const { id, ...itemData } = validatedFields.data;
 
+  const itemForDb = {
+    name: itemData.name,
+    type: itemData.type,
+    quantity: itemData.quantity,
+    purchase_date: itemData.purchaseDate.toISOString().split('T')[0],
+    warranty_end_date: itemData.warrantyEndDate ? itemData.warrantyEndDate.toISOString().split('T')[0] : 'N/A',
+    status: itemData.status,
+    description: itemData.description,
+    image_url: itemData.imageUrl || '',
+    client_id: itemData.clientId,
+  }
+
   // This is where you would interact with your database
   if (id) {
-    console.log(`Updating inventory item ${id}:`, itemData);
+    console.log(`Updating inventory item ${id}:`, itemForDb);
     // e.g., await db.update('inventory', { where: { id }, data: itemData });
     const index = inventoryItems.findIndex(item => item.id === id);
     if (index !== -1) {
-        inventoryItems[index] = { ...inventoryItems[index], id, ...itemData };
+        inventoryItems[index] = { ...inventoryItems[index], ...itemForDb };
     }
   } else {
-    console.log(`Creating new inventory item:`, itemData);
+    console.log(`Creating new inventory item:`, itemForDb);
     // e.g., await db.create('inventory', { data: itemData });
     const newId = `inv-${Math.random().toString(36).substr(2, 9)}`;
-    inventoryItems.push({ id: newId, ...itemData });
+    inventoryItems.push({ id: newId, ...itemForDb });
   }
   
   revalidatePath('/admin/inventory');
@@ -114,13 +127,13 @@ export async function saveClient(formData: FormData) {
       name: clientData.name,
       email: clientData.email,
       phone: clientData.phone,
-      joinDate: clientData.joinDate.toISOString().split('T')[0],
+      join_date: clientData.joinDate.toISOString().split('T')[0],
       avatar: clientData.avatar as string,
-      penanggungJawab: {
+      penanggung_jawab: {
           nama: clientData.penanggungJawabNama,
           jabatan: clientData.penanggungJawabJabatan
       },
-      treatmentHistory: clientData.treatmentHistory,
+      treatment_history: clientData.treatmentHistory,
       preferences: clientData.preferences || [],
       location: {
           address: clientData.locationAddress,
@@ -156,6 +169,22 @@ export async function deleteClient(id: string) {
     }
     
     revalidatePath('/admin/clients');
+}
+
+export async function saveAdminUser(formData: FormData) {
+  const name = formData.get('name') as string;
+  const email = formData.get('email') as string;
+  const avatar = formData.get('avatar') as string;
+
+  if(name) adminUser.name = name;
+  if(email) adminUser.email = email;
+  if(avatar) adminUser.avatar = avatar;
+
+  console.log('Admin user updated:', adminUser);
+
+  revalidatePath('/admin/layout');
+  revalidatePath('/admin/profile');
+  redirect('/admin/profile');
 }
 
 
@@ -222,9 +251,9 @@ export async function requestService(
     
     const newRequest = {
         id: `req-${Math.random().toString(36).substr(2, 9)}`,
-        clientId: input.clientId,
-        clientName: input.clientName,
-        requestType: 'Service' as const,
+        client_id: input.clientId,
+        client_name: input.clientName,
+        request_type: 'Service' as const,
         details: input.details,
         status: 'New' as const,
         date: new Date().toISOString().split('T')[0],
@@ -355,9 +384,9 @@ export async function generateWorkOrderPdf(
     y -= 35;
 
     const assignmentDetails = [
-        { label: 'Nama Klien / Cabang', value: record.clientName },
-        { label: 'Lokasi', value: record.clientLocation },
-        { label: 'Jenis Masalah', value: record.problemIdentification },
+        { label: 'Nama Klien / Cabang', value: record.client_name },
+        { label: 'Lokasi', value: record.client_location },
+        { label: 'Jenis Masalah', value: record.problem_identification },
     ];
     assignmentDetails.forEach(detail => {
       drawText(detail.label, 60, y);
@@ -449,10 +478,10 @@ export async function confirmWorkOrder(formData: FormData) {
   
   record.status = status;
   if(technicianNotes) {
-    record.technicianNotes = `${record.technicianNotes ? record.technicianNotes + '\n' : ''}${technicianNotes}`;
+    record.technician_notes = `${record.technician_notes ? record.technician_notes + '\n' : ''}${technicianNotes}`;
   }
   if(photoProofUrl) {
-    record.photoProofUrl = photoProofUrl;
+    record.photo_proof_url = photoProofUrl;
   }
 
   console.log(`Work order ${workOrderId} confirmed with status ${status}`);

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { SidebarInset } from '@/components/ui/sidebar';
@@ -10,10 +11,22 @@ import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { fetchAdminUser } from '@/lib/data';
+import type { AdminUser } from '@/types';
 
 
 // Inner component to safely use the client-side hook.
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
+  const [admin, setAdmin] = useState<AdminUser | null>(null);
+
+  useEffect(() => {
+    async function getAdmin() {
+      const adminData = await fetchAdminUser();
+      setAdmin(adminData);
+    }
+    getAdmin();
+  }, []);
+
   return (
     <SidebarInset>
       <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4 sm:px-6">
@@ -32,27 +45,31 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
             <span className="sr-only">Notifications</span>
           </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar>
-                        <AvatarImage src="https://placehold.co/100x100.png" alt="Admin" data-ai-hint="person portrait" />
-                        <AvatarFallback>A</AvatarFallback>
-                    </Avatar>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <p className="font-semibold">Admin</p>
-                <p className="text-xs text-muted-foreground font-normal">admin@aestheticare.pro</p>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild><Link href="/login">Logout</Link></DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {admin && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                      <Avatar>
+                          <AvatarImage src={admin.avatar} alt={admin.name} data-ai-hint="person portrait" />
+                          <AvatarFallback>{admin.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                  </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <p className="font-semibold">{admin.name}</p>
+                  <p className="text-xs text-muted-foreground font-normal">{admin.email}</p>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/admin/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild><Link href="/login">Logout</Link></DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </header>
       <main className="p-4 sm:p-6 lg:p-8">{children}</main>

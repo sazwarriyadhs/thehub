@@ -1,3 +1,9 @@
+export type AdminUser = {
+  name: string;
+  email: string;
+  avatar: string;
+};
+
 export type InventoryItem = {
   id: string;
   name: string;

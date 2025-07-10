@@ -1,4 +1,10 @@
-import type { InventoryItem, ServiceRecord, Client, Appointment, DeployedMachine, ClientRequest } from '@/types';
+import type { InventoryItem, ServiceRecord, Client, Appointment, DeployedMachine, ClientRequest, AdminUser } from '@/types';
+
+export let adminUser: AdminUser = {
+  name: 'Admin User',
+  email: 'admin@aestheticare.pro',
+  avatar: 'https://placehold.co/100x100.png',
+};
 
 export const inventoryItems: InventoryItem[] = [
   {
@@ -238,30 +244,30 @@ export const deployedMachines: DeployedMachine[] = [
   }
 ];
 
-export const clientRequests: ClientRequest[] = [
+export let clientRequests: ClientRequest[] = [
     {
         id: 'req-001',
-        clientId: 'cli-001',
-        clientName: 'Dermaster Clinic',
-        requestType: 'Service',
+        client_id: 'cli-001',
+        client_name: 'Dermaster Clinic',
+        request_type: 'Service',
         details: 'Service for Sofwave™: Annual maintenance required.',
         status: 'New',
         date: '2023-11-01',
     },
     {
         id: 'req-002',
-        clientId: 'cli-002',
-        clientName: 'Miracle Aesthetic Clinic',
-        requestType: 'Troubleshoot',
+        client_id: 'cli-002',
+        client_name: 'Miracle Aesthetic Clinic',
+        request_type: 'Troubleshoot',
         details: 'Troubleshoot Vbeam Perfecta®: Handpiece cooling failure reported.',
         status: 'In Progress',
         date: '2023-10-30',
     },
      {
         id: 'req-003',
-        clientId: 'cli-003',
-        clientName: 'Erha Clinic',
-        requestType: 'Inquiry',
+        client_id: 'cli-003',
+        client_name: 'Erha Clinic',
+        request_type: 'Inquiry',
         details: 'Inquiry: Requesting quote for Morpheus8 device.',
         status: 'Resolved',
         date: '2023-10-28',
@@ -332,7 +338,7 @@ export async function fetchAllClientRequests(): Promise<ClientRequest[]> {
 }
 
 export async function fetchClientRequestsForClient(clientId: string): Promise<ClientRequest[]> {
-    return Promise.resolve(clientRequests.filter(req => req.clientId === clientId));
+    return Promise.resolve(clientRequests.filter(req => req.client_id === clientId));
 }
 
 export async function fetchDeployedMachines(): Promise<DeployedMachine[]> {
@@ -372,4 +378,8 @@ export async function fetchCardData() {
 
 export async function fetchRevenueData() {
     return Promise.resolve(revenueData);
+}
+
+export async function fetchAdminUser(): Promise<AdminUser> {
+  return Promise.resolve(adminUser);
 }

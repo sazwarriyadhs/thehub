@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -26,9 +27,20 @@ import { usePathname } from 'next/navigation';
 import { HelpAssistant } from './help-assistant';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { fetchAdminUser } from '@/lib/data';
+import type { AdminUser } from '@/types';
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const [admin, setAdmin] = useState<AdminUser | null>(null);
+
+  useEffect(() => {
+    async function getAdmin() {
+      const adminData = await fetchAdminUser();
+      setAdmin(adminData);
+    }
+    getAdmin();
+  }, []);
 
   const navLinks = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -85,16 +97,18 @@ export function SidebarNav() {
       </SidebarHeader>
       
       <SidebarContent>
-        <div className="p-2 flex flex-col items-center text-center gap-2 group-data-[collapsible=icon]:hidden">
-            <Avatar className="w-20 h-20">
-                <AvatarImage src="https://placehold.co/100x100.png" alt="Admin User" data-ai-hint="person portrait" />
-                <AvatarFallback>AD</AvatarFallback>
-            </Avatar>
-            <div>
-                <p className="font-semibold">Admin</p>
-                <p className="text-xs text-muted-foreground">admin@aestheticare.pro</p>
-            </div>
-        </div>
+        {admin && (
+          <div className="p-2 flex flex-col items-center text-center gap-2 group-data-[collapsible=icon]:hidden">
+              <Avatar className="w-20 h-20">
+                  <AvatarImage src={admin.avatar} alt={admin.name} data-ai-hint="person portrait" />
+                  <AvatarFallback>{admin.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div>
+                  <p className="font-semibold">{admin.name}</p>
+                  <p className="text-xs text-muted-foreground">{admin.email}</p>
+              </div>
+          </div>
+        )}
         <SidebarSeparator className="my-2" />
 
         <SidebarMenu>{renderLinks(navLinks)}</SidebarMenu>
