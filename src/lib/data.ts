@@ -1,5 +1,3 @@
-// src/lib/data.ts
-
 import { db } from './db';
 import { unstable_noStore as noStore } from 'next/cache';
 import type {
