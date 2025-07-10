@@ -3,12 +3,12 @@
 import { getProductRecommendations } from '@/ai/flows/ai-product-recommendations';
 import { aiHelpAssistant } from '@/ai/flows/ai-help-assistant';
 import { getTroubleshootingAssistance } from '@/ai/flows/ai-troubleshooting-assistant';
-import { mockDb as db } from '@/lib/db';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { inventoryFormSchema, clientFormSchema, workOrderConfirmationSchema } from '@/lib/schemas';
 import type { ServiceRecord } from '@/types';
+import { createClient } from './lib/supabase/server';
 
 
 type ActionResult<T> = {
@@ -17,7 +17,7 @@ type ActionResult<T> = {
 }
 
 export async function saveInventoryItem(formData: FormData) {
-  
+  const supabase = createClient();
   const data = {
     id: formData.get('id') || undefined,
     name: formData.get('name'),
@@ -43,41 +43,13 @@ export async function saveInventoryItem(formData: FormData) {
   const { id, ...itemData } = validatedFields.data;
 
   try {
-    if (id) {
-        await db.query(`
-            UPDATE inventory
-            SET name = $1, type = $2, quantity = $3, purchase_date = $4, warranty_end_date = $5, status = $6, description = $7, image_url = $8, client_id = $9
-            WHERE id = $10
-        `, [
-            itemData.name,
-            itemData.type,
-            itemData.quantity,
-            itemData.purchaseDate,
-            itemData.warrantyEndDate,
-            itemData.status,
-            itemData.description,
-            itemData.imageUrl,
-            itemData.clientId,
-            id
-        ]);
-    } else {
-        const newId = `inv-${Math.random().toString(36).substr(2, 9)}`;
-        await db.query(`
-            INSERT INTO inventory (id, name, type, quantity, purchase_date, warranty_end_date, status, description, image_url, client_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-        `, [
-            newId,
-            itemData.name,
-            itemData.type,
-            itemData.quantity,
-            itemData.purchaseDate,
-            itemData.warrantyEndDate,
-            itemData.status,
-            itemData.description,
-            itemData.imageUrl,
-            itemData.clientId
-        ]);
-    }
+    const query = id
+      ? supabase.from('inventory').update({ ...itemData, client_id: itemData.clientId, purchase_date: itemData.purchaseDate.toISOString(), warranty_end_date: itemData.warrantyEndDate ? itemData.warrantyEndDate.toISOString() : null, image_url: itemData.imageUrl  }).eq('id', id)
+      : supabase.from('inventory').insert([{ ...itemData, client_id: itemData.clientId, purchase_date: itemData.purchaseDate.toISOString(), warranty_end_date: itemData.warrantyEndDate ? itemData.warrantyEndDate.toISOString() : null, image_url: itemData.imageUrl }]);
+
+    const { error } = await query;
+    if (error) throw error;
+
   } catch (error) {
       console.error(error);
       return { error: 'Database Error: Failed to save inventory item.'}
@@ -88,8 +60,10 @@ export async function saveInventoryItem(formData: FormData) {
 }
 
 export async function deleteInventoryItem(id: string) {
+    const supabase = createClient();
     try {
-        await db.query('DELETE FROM inventory WHERE id = $1', [id]);
+        const { error } = await supabase.from('inventory').delete().eq('id', id);
+        if (error) throw error;
     } catch (error) {
         return { error: 'Database Error: Failed to delete inventory item.' };
     }
@@ -98,6 +72,7 @@ export async function deleteInventoryItem(id: string) {
 }
 
 export async function saveClient(formData: FormData) {
+  const supabase = createClient();
   const data = {
     id: formData.get('id') || undefined,
     name: formData.get('name'),
@@ -124,30 +99,33 @@ export async function saveClient(formData: FormData) {
   }
 
   const { id, ...clientData } = validatedFields.data;
+  
+  const dbData = {
+    name: clientData.name,
+    email: clientData.email,
+    phone: clientData.phone,
+    join_date: clientData.joinDate.toISOString(),
+    avatar: clientData.avatar,
+    penanggung_jawab: {
+        nama: clientData.penanggungJawabNama,
+        jabatan: clientData.penanggungJawabJabatan,
+    },
+    treatment_history: clientData.treatmentHistory,
+    preferences: clientData.preferences,
+    location: {
+        address: clientData.locationAddress,
+        lat: clientData.locationLat,
+        lng: clientData.locationLng,
+    }
+  }
 
   try {
-    if (id) {
-        await db.query(`
-            UPDATE clients
-            SET name = $1, email = $2, phone = $3, join_date = $4, avatar = $5, penanggung_jawab_nama = $6, penanggung_jawab_jabatan = $7, treatment_history = $8, preferences = $9, location_address = $10, location_lat = $11, location_lng = $12
-            WHERE id = $13
-        `, [
-            clientData.name, clientData.email, clientData.phone, clientData.joinDate, clientData.avatar,
-            clientData.penanggungJawabNama, clientData.penanggungJawabJabatan, clientData.treatmentHistory,
-            clientData.preferences, clientData.locationAddress, clientData.locationLat, clientData.locationLng,
-            id
-        ]);
-    } else {
-        const newId = `cli-${Math.random().toString(36).substr(2, 9)}`;
-        await db.query(`
-            INSERT INTO clients (id, name, email, phone, join_date, avatar, penanggung_jawab_nama, penanggung_jawab_jabatan, treatment_history, preferences, location_address, location_lat, location_lng)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-        `, [
-            newId, clientData.name, clientData.email, clientData.phone, clientData.joinDate, clientData.avatar,
-            clientData.penanggungJawabNama, clientData.penanggungJawabJabatan, clientData.treatmentHistory,
-            clientData.preferences, clientData.locationAddress, clientData.locationLat, clientData.locationLng
-        ]);
-    }
+     const query = id
+      ? supabase.from('clients').update(dbData).eq('id', id)
+      : supabase.from('clients').insert([dbData]);
+
+    const { error } = await query;
+    if (error) throw error;
   } catch (error) {
     console.error(error);
     return { error: 'Database Error: Failed to save client.' };
@@ -159,8 +137,10 @@ export async function saveClient(formData: FormData) {
 }
 
 export async function deleteClient(id: string) {
+    const supabase = createClient();
     try {
-        await db.query('DELETE FROM clients WHERE id = $1', [id]);
+        const { error } = await supabase.from('clients').delete().eq('id', id);
+        if (error) throw error;
     } catch (error) {
         return { error: 'Database Error: Failed to delete client.' };
     }
@@ -169,16 +149,14 @@ export async function deleteClient(id: string) {
 }
 
 export async function saveAdminUser(formData: FormData) {
+  const supabase = createClient();
   const name = formData.get('name') as string;
   const email = formData.get('email') as string;
   const avatar = formData.get('avatar') as string;
 
   try {
-      // Assuming one admin, so we update the first entry
-      await db.query(
-        'UPDATE admin_users SET name = $1, email = $2, avatar = $3 WHERE id = 1',
-        [name, email, avatar, 1]
-      );
+      const { error } = await supabase.from('admin_users').update({ name, email, avatar }).eq('id', 1);
+      if (error) throw error;
   } catch(error) {
       console.error(error);
       return { error: 'Database Error: Failed to update admin profile.' };
@@ -246,29 +224,23 @@ type ServiceRequestInput = {
 export async function requestService(
   input: ServiceRequestInput
 ): Promise<ActionResult<{ success: boolean }>> {
+  const supabase = createClient();
   try {
     if (!input.clientId || !input.clientName || !input.details) {
       return { error: 'Client ID, name, and details are required.' };
     }
     
-    const newId = `req-${Math.random().toString(36).substr(2, 9)}`;
     const newRequest = {
-        id: newId,
-        clientId: input.clientId,
-        clientName: input.clientName,
-        requestType: 'Service' as const,
+        client_id: input.clientId,
+        client_name: input.clientName,
+        request_type: 'Service' as const,
         details: input.details,
         status: 'New' as const,
-        date: new Date(),
+        date: new Date().toISOString(),
     };
     
-    await db.query(`
-        INSERT INTO client_requests (id, client_id, client_name, request_type, details, status, date)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-    `, [
-        newRequest.id, newRequest.clientId, newRequest.clientName, newRequest.requestType,
-        newRequest.details, newRequest.status, newRequest.date
-    ]);
+    const { error } = await supabase.from('client_requests').insert([newRequest]);
+    if (error) throw error;
 
     revalidatePath('/admin/dashboard');
     return { data: { success: true } };
@@ -293,11 +265,15 @@ function toRoman(num: number): string {
 export async function generateWorkOrderPdf(
   serviceRecordId: string
 ): Promise<ActionResult<string>> {
+  const supabase = createClient();
   try {
-    const result = await db.query('SELECT * FROM service_records WHERE id = $1', [serviceRecordId]);
-    const record: ServiceRecord | undefined = result.rows[0];
+    const { data: record, error } = await supabase
+      .from('service_records')
+      .select('*')
+      .eq('id', serviceRecordId)
+      .single();
     
-    if (!record) {
+    if (error || !record) {
       return { error: 'Service record not found.' };
     }
 
@@ -338,7 +314,7 @@ export async function generateWorkOrderPdf(
     const recordDate = new Date(record.date);
     const monthRoman = toRoman(recordDate.getMonth() + 1);
     const year = recordDate.getFullYear();
-    const noSurat = `No: ${String(record.id).replace('ser-', '').padStart(3, '0')}/ST/SAH/${monthRoman}/${year}`;
+    const noSurat = `No: ${String(record.id).padStart(3, '0')}/ST/SAH/${monthRoman}/${year}`;
     drawText(noSurat, 0, y, { size: 11, align: 'center' });
     
     const noSuratWidth = textWidth(noSurat, 11, font);
@@ -464,6 +440,7 @@ export async function generateWorkOrderPdf(
 }
 
 export async function confirmWorkOrder(formData: FormData) {
+  const supabase = createClient();
   const data = {
     workOrderId: formData.get('workOrderId'),
     technicianNotes: formData.get('technicianNotes'),
@@ -483,19 +460,29 @@ export async function confirmWorkOrder(formData: FormData) {
   const { workOrderId, status, technicianNotes, photoProofUrl } = validatedFields.data;
   
   try {
-    const recordResult = await db.query('SELECT technician_notes FROM service_records WHERE id = $1', [workOrderId]);
-    if (recordResult.rows.length === 0) {
+    const { data: record, error: fetchError } = await supabase
+        .from('service_records')
+        .select('technician_notes')
+        .eq('id', workOrderId)
+        .single();
+    
+    if (fetchError || !record) {
       return { error: 'Work order not found.' };
     }
     
-    const currentNotes = recordResult.rows[0].technician_notes || '';
+    const currentNotes = record.technician_notes || '';
     const newNotes = technicianNotes ? `${currentNotes}\n${technicianNotes}`.trim() : currentNotes;
 
-    await db.query(`
-      UPDATE service_records
-      SET status = $1, technician_notes = $2, photo_proof_url = COALESCE($3, photo_proof_url)
-      WHERE id = $4
-    `, [status, newNotes, photoProofUrl || null, workOrderId]);
+    const { error } = await supabase
+        .from('service_records')
+        .update({
+            status: status,
+            technician_notes: newNotes,
+            photo_proof_url: photoProofUrl || undefined,
+        })
+        .eq('id', workOrderId);
+
+    if (error) throw error;
 
   } catch(e) {
     console.error(e);
