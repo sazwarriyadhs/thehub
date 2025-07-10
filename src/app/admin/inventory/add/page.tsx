@@ -1,8 +1,11 @@
+
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { InventoryForm } from '../components/inventory-form';
+import { fetchAllClients } from '@/lib/data';
 
-export default function AddInventoryItemPage() {
+export default async function AddInventoryItemPage() {
+  const clients = await fetchAllClients();
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
@@ -14,7 +17,7 @@ export default function AddInventoryItemPage() {
           <CardTitle>Item Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <InventoryForm />
+          <InventoryForm clients={clients} />
         </CardContent>
       </Card>
     </div>

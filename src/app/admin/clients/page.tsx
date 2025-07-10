@@ -1,3 +1,4 @@
+
 import { PageHeader } from '@/components/page-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,13 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { clients } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PlusCircle, Edit, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { DeleteClientButton } from './components/delete-client-button';
+import { fetchAllClients } from '@/lib/data';
+import { format } from 'date-fns';
 
-export default function ClientsPage() {
+export default async function ClientsPage() {
+  const clients = await fetchAllClients();
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
@@ -61,7 +65,7 @@ export default function ClientsPage() {
                     <div className="text-sm">{client.email}</div>
                     <div className="text-xs text-muted-foreground">{client.phone}</div>
                   </TableCell>
-                  <TableCell>{client.joinDate}</TableCell>
+                  <TableCell>{format(new Date(client.join_date), 'PPP')}</TableCell>
                   <TableCell className="text-right">
                     <Button asChild variant="ghost" size="icon">
                       <Link href={`/admin/clients/${client.id}`}>

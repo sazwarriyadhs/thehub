@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, Upload } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -16,6 +16,7 @@ import type { Client } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Label } from '@/components/ui/label';
 
 // Simplified schema for client-side editing
 const clientProfileFormSchema = z.object({
@@ -52,13 +53,13 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
     email: client.email,
     phone: client.phone,
     avatar: client.avatar,
-    penanggungJawabNama: client.penanggungJawab.nama,
-    penanggungJawabJabatan: client.penanggungJawab.jabatan,
+    penanggungJawabNama: client.penanggung_jawab.nama,
+    penanggungJawabJabatan: client.penanggung_jawab.jabatan,
     locationAddress: client.location.address,
     // Pass through hidden/readonly values
-    joinDate: new Date(client.joinDate),
+    joinDate: new Date(client.join_date),
     preferences: client.preferences.join(', '),
-    treatmentHistory: client.treatmentHistory,
+    treatmentHistory: client.treatment_history,
     locationLat: client.location.lat,
     locationLng: client.location.lng,
   };
@@ -94,6 +95,7 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
         }
       }
     });
+    formData.append('redirect_path', '/client/profile');
 
     try {
         await saveClient(formData);
@@ -101,7 +103,7 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
             title: `Profil diperbarui`,
             description: `Profil Anda telah berhasil diperbarui.`,
         });
-        // Redirect to the profile view page after saving
+        // The action will handle redirection, but we can push here as a fallback
         router.push('/client/profile');
     } catch (error: any) {
         // Since redirect() throws an error, we catch it here.

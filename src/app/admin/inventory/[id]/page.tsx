@@ -1,5 +1,5 @@
+
 import { PageHeader } from '@/components/page-header';
-import { inventoryItems } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -10,6 +10,8 @@ import type { InventoryItem } from '@/types';
 import { TroubleshootingAssistant } from './components/troubleshooting-assistant';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { fetchInventoryItemById } from '@/lib/data';
+import { format } from 'date-fns';
 
 const statusVariant: Record<InventoryItem['status'], 'default' | 'secondary' | 'destructive'> = {
   'In Stock': 'default',
@@ -17,8 +19,8 @@ const statusVariant: Record<InventoryItem['status'], 'default' | 'secondary' | '
   'Out of Stock': 'destructive',
 };
 
-export default function InventoryDetailPage({ params }: { params: { id: string } }) {
-  const item = inventoryItems.find((i) => i.id === params.id);
+export default async function InventoryDetailPage({ params }: { params: { id: string } }) {
+  const item = await fetchInventoryItemById(params.id);
 
   if (!item) {
     notFound();
@@ -41,7 +43,7 @@ export default function InventoryDetailPage({ params }: { params: { id: string }
           <Card className="overflow-hidden">
             <div className="relative w-full h-64">
                 <Image
-                    src={item.imageUrl}
+                    src={item.image_url}
                     alt={item.name}
                     fill
                     className="object-cover"
@@ -66,12 +68,14 @@ export default function InventoryDetailPage({ params }: { params: { id: string }
               <Separator />
                <div className="flex items-center gap-3">
                 <Calendar className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm">Purchased: {item.purchaseDate}</span>
+                <span className="text-sm">Purchased: {format(new Date(item.purchase_date), 'PPP')}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <ShieldCheck className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm">Warranty Ends: {item.warrantyEndDate}</span>
-              </div>
+              {item.warranty_end_date &&
+                <div className="flex items-center gap-3">
+                    <ShieldCheck className="w-5 h-5 text-muted-foreground" />
+                    <span className="text-sm">Warranty Ends: {format(new Date(item.warranty_end_date), 'PPP')}</span>
+                </div>
+              }
             </CardContent>
           </Card>
         </div>

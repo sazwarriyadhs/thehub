@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -29,10 +29,11 @@ export function ClientForm({ client }: ClientFormProps) {
   
   const defaultValues: Partial<ClientFormValues> = client ? {
     ...client,
-    joinDate: typeof client.joinDate === 'string' ? parseISO(client.joinDate) : new Date(client.joinDate),
+    joinDate: new Date(client.join_date),
     preferences: client.preferences.join(', '),
-    penanggungJawabNama: client.penanggungJawab.nama,
-    penanggungJawabJabatan: client.penanggungJawab.jabatan,
+    penanggungJawabNama: client.penanggung_jawab.nama,
+    penanggungJawabJabatan: client.penanggung_jawab.jabatan,
+    treatmentHistory: client.treatment_history,
     locationAddress: client.location.address,
     locationLat: client.location.lat,
     locationLng: client.location.lng,

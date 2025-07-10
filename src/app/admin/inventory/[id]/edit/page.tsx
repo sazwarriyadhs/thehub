@@ -1,11 +1,15 @@
+
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { InventoryForm } from '../../components/inventory-form';
-import { inventoryItems } from '@/lib/data';
 import { notFound } from 'next/navigation';
+import { fetchInventoryItemById, fetchAllClients } from '@/lib/data';
 
-export default function EditInventoryItemPage({ params }: { params: { id: string } }) {
-  const item = inventoryItems.find((i) => i.id === params.id);
+export default async function EditInventoryItemPage({ params }: { params: { id: string } }) {
+  const [item, clients] = await Promise.all([
+    fetchInventoryItemById(params.id),
+    fetchAllClients()
+  ]);
 
   if (!item) {
     notFound();
@@ -22,7 +26,7 @@ export default function EditInventoryItemPage({ params }: { params: { id: string
           <CardTitle>Item Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <InventoryForm item={item} />
+          <InventoryForm item={item} clients={clients} />
         </CardContent>
       </Card>
     </div>

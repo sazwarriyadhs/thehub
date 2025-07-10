@@ -1,6 +1,5 @@
 
 import { PageHeader } from '@/components/page-header';
-import { clients } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -10,17 +9,18 @@ import Link from 'next/link';
 import { 
     Mail, 
     Phone, 
-    Calendar as CalendarIcon, 
     MapPin, 
     Edit,
     User,
     Building
 } from 'lucide-react';
+import { fetchClientById } from '@/lib/data';
+import { format } from 'date-fns';
 
-const LOGGED_IN_CLIENT_ID = 'cli-001';
+const LOGGED_IN_CLIENT_ID = '1';
 
-export default function ClientProfilePage() {
-  const client = clients.find((c) => c.id === LOGGED_IN_CLIENT_ID);
+export default async function ClientProfilePage() {
+  const client = await fetchClientById(LOGGED_IN_CLIENT_ID);
 
   if (!client) {
     notFound();
@@ -47,7 +47,7 @@ export default function ClientProfilePage() {
                 </Avatar>
                 <div>
                     <CardTitle className="text-3xl">{client.name}</CardTitle>
-                    <p className="text-muted-foreground">Bergabung pada {client.joinDate}</p>
+                    <p className="text-muted-foreground">Bergabung pada {format(new Date(client.join_date), 'PPP')}</p>
                 </div>
             </div>
         </CardHeader>
@@ -74,11 +74,11 @@ export default function ClientProfilePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center gap-3 p-3 bg-muted rounded-md">
                             <User className="w-5 h-5 text-muted-foreground" />
-                            <span>{client.penanggungJawab.nama}</span>
+                            <span>{client.penanggung_jawab.nama}</span>
                         </div>
                         <div className="flex items-center gap-3 p-3 bg-muted rounded-md">
                             <Building className="w-5 h-5 text-muted-foreground" />
-                            <span>{client.penanggungJawab.jabatan}</span>
+                            <span>{client.penanggung_jawab.jabatan}</span>
                         </div>
                     </div>
                 </div>

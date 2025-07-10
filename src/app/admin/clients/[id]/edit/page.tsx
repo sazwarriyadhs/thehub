@@ -1,11 +1,12 @@
+
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientForm } from '../../components/client-form';
-import { clients } from '@/lib/data';
 import { notFound } from 'next/navigation';
+import { fetchClientById } from '@/lib/data';
 
-export default function EditClientPage({ params }: { params: { id: string } }) {
-  const client = clients.find((c) => c.id === params.id);
+export default async function EditClientPage({ params }: { params: { id: string } }) {
+  const client = await fetchClientById(params.id);
 
   if (!client) {
     notFound();

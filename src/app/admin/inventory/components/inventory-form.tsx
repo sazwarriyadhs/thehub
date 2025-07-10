@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { CalendarIcon, Loader2, Upload } from 'lucide-react';
 import Image from 'next/image';
 
@@ -18,25 +18,26 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { saveInventoryItem } from '@/app/actions';
 import { inventoryFormSchema } from '@/lib/schemas';
-import type { InventoryItem } from '@/types';
+import type { InventoryItem, Client } from '@/types';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { clients } from '@/lib/data';
 
 type InventoryFormValues = z.infer<typeof inventoryFormSchema>;
 
 type InventoryFormProps = {
   item?: InventoryItem;
+  clients: Client[];
 };
 
-export function InventoryForm({ item }: InventoryFormProps) {
+export function InventoryForm({ item, clients }: InventoryFormProps) {
   const { toast } = useToast();
   
   const defaultValues: Partial<InventoryFormValues> = item ? {
     ...item,
-    purchaseDate: typeof item.purchaseDate === 'string' ? parseISO(item.purchaseDate) : item.purchaseDate,
-    warrantyEndDate: item.warrantyEndDate && item.warrantyEndDate !== 'N/A' ? new Date(item.warrantyEndDate) : undefined,
-    clientId: item.clientId || 'N/A',
+    purchaseDate: new Date(item.purchase_date),
+    warrantyEndDate: item.warranty_end_date ? new Date(item.warranty_end_date) : undefined,
+    clientId: item.client_id || 'N/A',
+    imageUrl: item.image_url,
   } : {
     type: 'Device',
     status: 'In Stock',
@@ -45,7 +46,7 @@ export function InventoryForm({ item }: InventoryFormProps) {
     imageUrl: '',
   };
   
-  const [imagePreview, setImagePreview] = useState(item?.imageUrl || 'https://placehold.co/600x400.png');
+  const [imagePreview, setImagePreview] = useState(item?.image_url || 'https://placehold.co/600x400.png');
 
 
   const form = useForm<InventoryFormValues>({
@@ -359,7 +360,3 @@ export function InventoryForm({ item }: InventoryFormProps) {
     </Form>
   );
 }
-
-    
-
-    

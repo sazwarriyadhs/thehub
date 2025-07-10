@@ -3,28 +3,29 @@ export type InventoryItem = {
   name: string;
   type: 'Device' | 'Skincare';
   quantity: number;
-  purchaseDate: string;
-  warrantyEndDate: string;
+  purchase_date: string;
+  warranty_end_date: string;
   status: 'In Stock' | 'Low Stock' | 'Out of Stock';
-  imageUrl: string;
+  image_url: string;
   description: string;
-  clientId?: string;
+  client_id?: string;
 };
 
 export type ServiceRecord = {
   id: string;
   equipment: string;
-  serviceType: 'Maintenance' | 'Repair' | 'Calibration';
+  service_type: 'Maintenance' | 'Repair' | 'Calibration';
   date: string;
   technician: string;
   cost: number;
   status: 'Scheduled' | 'In Progress' | 'Completed';
-  clientName: string;
-  clientLocation: string;
-  problemIdentification: string;
+  client_name: string;
+  client_location: string;
+  problem_identification: string;
   solution: string;
   duration: string;
-  technicianNotes?: string;
+  technician_notes?: string;
+  photo_proof_url?: string;
 };
 
 export type Client = {
@@ -32,13 +33,13 @@ export type Client = {
   name: string;
   email: string;
   phone: string;
-  joinDate: string;
+  join_date: string;
   avatar: string;
-  penanggungJawab: {
+  penanggung_jawab: {
     nama: string;
     jabatan: string;
   };
-  treatmentHistory: string;
+  treatment_history: string;
   preferences: string[];
   location: {
     address: string;
@@ -49,8 +50,8 @@ export type Client = {
 
 export type Appointment = {
   id:string;
-  clientName: string;
-  clientId: string;
+  client_name: string;
+  client_id: string;
   service: string;
   date: string;
   time: string;
@@ -70,9 +71,9 @@ export type DeployedMachine = {
 
 export type ClientRequest = {
   id: string;
-  clientName: string;
-  clientId: string;
-  requestType: 'Service' | 'Inquiry' | 'Troubleshoot';
+  client_name: string;
+  client_id: string;
+  request_type: 'Service' | 'Inquiry' | 'Troubleshoot';
   details: string;
   status: 'New' | 'In Progress' | 'Resolved';
   date: string;

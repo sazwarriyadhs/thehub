@@ -1,6 +1,7 @@
+
 import { PageHeader } from '@/components/page-header';
-import { clients, inventoryItems, clientRequests } from '@/lib/data';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
@@ -25,6 +26,8 @@ import {
     History,
 } from 'lucide-react';
 import type { ClientRequest } from '@/types';
+import { fetchClientById, fetchDeployedMachinesForClient, fetchClientRequestsForClient } from '@/lib/data';
+import { format } from 'date-fns';
 
 const requestIcons: Record<ClientRequest['requestType'], React.ElementType> = {
   'Service': Wrench,
@@ -38,17 +41,19 @@ const requestStatusVariant: Record<ClientRequest['status'], 'default' | 'seconda
   'Resolved': 'default',
 };
 
-export default function ClientDetailPage({ params }: { params: { id: string } }) {
-  const client = clients.find((c) => c.id === params.id);
+export default async function ClientDetailPage({ params }: { params: { id: string } }) {
+  const client = await fetchClientById(params.id);
 
   if (!client) {
     notFound();
   }
 
-  const deployedMachines = inventoryItems.filter(item => item.clientId === client.id && item.type === 'Device');
-  const clientSpecificRequests = clientRequests.filter(req => req.clientId === client.id);
+  const [deployedMachines, clientSpecificRequests] = await Promise.all([
+    fetchDeployedMachinesForClient(client.id),
+    fetchClientRequestsForClient(client.id)
+  ]);
 
-  const clientProfile = `Client: ${client.name}\nHistory and Focus: ${client.treatmentHistory}`;
+  const clientProfile = `Client: ${client.name}\nHistory and Focus: ${client.treatment_history}`;
 
   return (
     <div className="flex flex-col gap-8">
@@ -76,8 +81,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
               <div className="flex items-start gap-3">
                 <Building className="w-5 h-5 text-muted-foreground mt-1 shrink-0" />
                 <div>
-                    <p className="text-sm font-medium">{client.penanggungJawab.nama}</p>
-                    <p className="text-xs text-muted-foreground">{client.penanggungJawab.jabatan}</p>
+                    <p className="text-sm font-medium">{client.penanggung_jawab.nama}</p>
+                    <p className="text-xs text-muted-foreground">{client.penanggung_jawab.jabatan}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -90,7 +95,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
               </div>
               <div className="flex items-center gap-3">
                 <CalendarIcon className="w-5 h-5 text-muted-foreground" />
-                <span className="text-sm">Joined on {client.joinDate}</span>
+                <span className="text-sm">Joined on {format(new Date(client.join_date), 'PPP')}</span>
               </div>
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-muted-foreground mt-1 shrink-0" />
@@ -113,7 +118,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                     <CardTitle className="flex items-center gap-2"><History className="w-5 h-5" /> Purchase History & Notes</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{client.treatmentHistory}</p>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{client.treatment_history}</p>
                 </CardContent>
             </Card>
 
@@ -128,10 +133,10 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                             {deployedMachines.map(machine => (
                                 <li key={machine.id} className="flex items-center justify-between p-3 rounded-lg border">
                                     <div className="flex items-center gap-3">
-                                        <Image src={machine.imageUrl} alt={machine.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint="medical device" />
+                                        <Image src={machine.image_url} alt={machine.name} width={40} height={40} className="rounded-md object-cover" data-ai-hint="medical device" />
                                         <div>
                                             <span className="font-medium">{machine.name}</span>
-                                            <p className="text-xs text-muted-foreground">Purchased: {machine.purchaseDate}</p>
+                                            <p className="text-xs text-muted-foreground">Purchased: {format(new Date(machine.purchase_date), 'PPP')}</p>
                                         </div>
                                     </div>
                                     <Button asChild variant="ghost" size="icon">
@@ -169,7 +174,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                                                 <p className="text-sm font-medium">{request.details}</p>
                                                 <Badge variant={requestStatusVariant[request.status]}>{request.status}</Badge>
                                             </div>
-                                            <p className="text-xs text-muted-foreground mt-1">{request.date} &bull; {request.requestType}</p>
+                                            <p className="text-xs text-muted-foreground mt-1">{format(new Date(request.date), 'PPP')} &bull; {request.requestType}</p>
                                         </div>
                                     </div>
                                 )
