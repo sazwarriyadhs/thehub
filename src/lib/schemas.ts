@@ -21,7 +21,7 @@ export const inventoryFormSchema = z.object({
   status: z.enum(['In Stock', 'Low Stock', 'Out of Stock'], { required_error: 'Status is required.' }),
   description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
   imageUrl: z.string().url({ message: 'Please enter a valid URL.' }).optional().or(z.literal('')),
-  clientId: z.string().optional(),
+  clientId: z.string().optional().transform(value => value === 'N/A' ? undefined : value),
 });
 
 

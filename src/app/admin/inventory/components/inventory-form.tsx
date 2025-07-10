@@ -33,10 +33,12 @@ export function InventoryForm({ item }: InventoryFormProps) {
     ...item,
     purchaseDate: typeof item.purchaseDate === 'string' ? parseISO(item.purchaseDate) : item.purchaseDate,
     warrantyEndDate: item.warrantyEndDate && item.warrantyEndDate !== 'N/A' ? new Date(item.warrantyEndDate) : undefined,
+    clientId: item.clientId || 'N/A',
   } : {
     type: 'Device',
     status: 'In Stock',
     quantity: 1,
+    clientId: 'N/A',
   };
 
   const form = useForm<InventoryFormValues>({
@@ -57,6 +59,10 @@ export function InventoryForm({ item }: InventoryFormProps) {
         }
       }
     });
+    
+    if (item?.id) {
+        formData.append('id', item.id);
+    }
 
     try {
         await saveInventoryItem(formData);
@@ -244,7 +250,7 @@ export function InventoryForm({ item }: InventoryFormProps) {
                         </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            <SelectItem value="">N/A (In Warehouse)</SelectItem>
+                            <SelectItem value="N/A">N/A (In Warehouse)</SelectItem>
                             {clients.map(client => (
                                 <SelectItem key={client.id} value={client.id}>{client.name}</SelectItem>
                             ))}

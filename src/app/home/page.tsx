@@ -13,13 +13,13 @@ const sliderServices = [
   {
     title: 'Teknologi Laser Canggih',
     description: 'Solusi presisi untuk pigmentasi, peremajaan kulit, dan penghapusan tato dengan downtime minimal.',
-    image: 'https://regenesis.co.id/wp-content/uploads/2023/06/Vbeam-Prima.png',
+    image: '/images/tekno.jpeg',
     aiHint: 'laser treatment',
   },
   {
     title: 'Perawatan RF & Ultrasound',
     description: 'Mengencangkan kulit, membentuk kontur wajah dan tubuh, serta mengurangi kerutan tanpa prosedur bedah.',
-    image: 'https://regenesis.co.id/wp-content/uploads/2023/06/Sofwave-1.png',
+    image: '/images/rfultrasound.jpeg',
     aiHint: 'ultrasound therapy',
   },
   {
@@ -34,34 +34,34 @@ const newsArticles = [
   {
     title: 'AI Merevolusi Diagnosis Kulit',
     summary: 'Kecerdasan buatan kini mampu menganalisis kondisi kulit dengan akurasi yang lebih tinggi, memberikan rekomendasi perawatan yang dipersonalisasi.',
-    image: 'https://placehold.co/600x400.png',
+    image: '/images/aikulit.jpeg',
     aiHint: 'artificial intelligence skin',
     link: '#',
   },
   {
     title: 'Tren Baru: "Skinimalism" dan Perangkat Non-Invasif',
     summary: 'Pasien semakin mencari perawatan dengan hasil alami dan downtime minimal, mendorong inovasi perangkat non-invasif.',
-    image: 'https://placehold.co/600x400.png',
+    image: '/images/skinm.jpeg',
     aiHint: 'natural skincare',
     link: '#',
   },
   {
     title: 'Terobosan dalam Teknologi Picosecond Laser',
     summary: 'Generasi terbaru laser picosecond menawarkan hasil yang lebih cepat dan efektif untuk berbagai masalah pigmentasi yang kompleks.',
-    image: 'https://placehold.co/600x400.png',
+    image: '/images/terobos.jpeg',
     aiHint: 'laser technology',
     link: '#',
   },
 ];
 
 const brandLogos = [
-    { name: 'Candela', image: '/images/merk/candela.png', aiHint: 'candela logo' },
+    { name: 'Candela', image: '/images/merk/candela.jpg', aiHint: 'candela logo' },
     { name: 'InMode', image: '/images/merk/inmode.png', aiHint: 'inmode logo' },
-    { name: 'Sofwave', image: '/images/merk/sofwave.png', aiHint: 'sofwave logo' },
+    { name: 'Sofwave', image: '/images/merk/sofwavebener.png', aiHint: 'sofwave logo' },
     { name: 'BiAxis', image: '/images/merk/biaxis.png', aiHint: 'biaxis logo' },
-    { name: 'INDIBA', image: '/images/merk/indiba.png', aiHint: 'indiba logo' },
+    { name: 'INDIBA', image: '/images/merk/indiba.jpg', aiHint: 'indiba logo' },
     { name: 'Pollogen', image: '/images/merk/pollogen.png', aiHint: 'pollogen logo' },
-    { name: 'Lumenis', image: '/images/merk/lumenis.png', aiHint: 'lumenis logo' },
+    { name: 'Lumenis', image: '/images/merk/lumenis.jpg', aiHint: 'lumenis logo' },
 ];
 
 export default function HomePage() {
