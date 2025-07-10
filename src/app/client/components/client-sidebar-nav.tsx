@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -16,6 +17,7 @@ import {
   CalendarDays,
   LifeBuoy,
   LogOut,
+  User,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -32,7 +34,8 @@ export function ClientSidebarNav() {
 
   const navLinks = [
     { href: '/client/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/client/appointments', label: 'My Appointments', icon: CalendarDays },
+    { href: '/client/profile', label: 'Profil Saya', icon: User },
+    { href: '/client/appointments', label: 'Janji Temu Saya', icon: CalendarDays },
   ];
 
   return (
@@ -80,9 +83,9 @@ export function ClientSidebarNav() {
               <SidebarMenuButton
                 asChild
                 isActive={
-                  item.href === '/client/dashboard'
-                    ? pathname === item.href
-                    : pathname.startsWith(item.href)
+                  item.href === '/client/dashboard' && pathname === item.href
+                    ? true
+                    : item.href !== '/client/dashboard' && pathname.startsWith(item.href)
                 }
                 tooltip={item.label}
               >

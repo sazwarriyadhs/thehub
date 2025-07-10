@@ -1,14 +1,14 @@
+
 'use client';
 
 import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { ClientSidebarNav } from './components/client-sidebar-nav';
-import Image from 'next/image';
-import Link from 'next/link';
 import { Bell } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { clients } from '@/lib/data';
+import Link from 'next/link';
 
 const LOGGED_IN_CLIENT_ID = 'cli-001';
 
@@ -44,7 +44,9 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
                   <p className="text-xs text-muted-foreground font-normal">{client.email}</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/client/profile">Profil Saya</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild><Link href="/login">Logout</Link></DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

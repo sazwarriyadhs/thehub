@@ -1,3 +1,4 @@
+
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { appointments } from '@/lib/data';
@@ -20,13 +21,13 @@ export default function ClientAppointmentsPage() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="My Appointments"
-        description="View your upcoming and past appointments."
+        title="Janji Temu Saya"
+        description="Lihat riwayat janji temu Anda yang akan datang dan yang sudah lalu."
       />
 
       <Card>
         <CardHeader>
-          <CardTitle>Appointment History</CardTitle>
+          <CardTitle>Riwayat Janji Temu</CardTitle>
         </CardHeader>
         <CardContent>
           {clientAppointments.length > 0 ? (
@@ -56,7 +57,7 @@ export default function ClientAppointmentsPage() {
             </div>
           ) : (
             <div className="text-center text-muted-foreground py-8">
-                <p>You have no appointments scheduled.</p>
+                <p>Anda tidak memiliki janji temu yang dijadwalkan.</p>
             </div>
           )}
         </CardContent>
