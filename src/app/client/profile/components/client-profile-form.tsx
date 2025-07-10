@@ -1,10 +1,11 @@
 
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Upload } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -14,6 +15,7 @@ import { saveClient } from '@/app/actions';
 import type { Client } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // Simplified schema for client-side editing
 const clientProfileFormSchema = z.object({
@@ -21,7 +23,7 @@ const clientProfileFormSchema = z.object({
   name: z.string().min(3, { message: 'Nama harus memiliki setidaknya 3 karakter.' }),
   email: z.string().email({ message: 'Silakan masukkan alamat email yang valid.' }),
   phone: z.string().min(10, { message: 'Silakan masukkan nomor telepon yang valid.' }),
-  avatar: z.string().url({ message: 'Silakan masukkan URL yang valid untuk avatar.' }).optional().or(z.literal('')),
+  avatar: z.string().optional(),
   penanggungJawabNama: z.string().min(3, { message: 'Nama penanggung jawab harus diisi.' }),
   penanggungJawabJabatan: z.string().min(3, { message: 'Jabatan penanggung jawab harus diisi.' }),
   locationAddress: z.string().min(10, { message: 'Alamat harus memiliki setidaknya 10 karakter.' }),
@@ -42,6 +44,7 @@ type ClientProfileFormProps = {
 export function ClientProfileForm({ client }: ClientProfileFormProps) {
   const { toast } = useToast();
   const router = useRouter();
+  const [avatarPreview, setAvatarPreview] = useState(client.avatar);
   
   const defaultValues: ClientProfileFormValues = {
     id: client.id,
@@ -65,7 +68,20 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
     defaultValues,
   });
 
-  const { formState, handleSubmit } = form;
+  const { formState, handleSubmit, setValue } = form;
+
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setAvatarPreview(result);
+        setValue('avatar', result, { shouldValidate: true });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const onSubmit = async (data: ClientProfileFormValues) => {
     const formData = new FormData();
@@ -104,6 +120,18 @@ export function ClientProfileForm({ client }: ClientProfileFormProps) {
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         
+        <div className="flex items-center gap-4">
+          <Avatar className="w-20 h-20">
+            <AvatarImage src={avatarPreview} alt={client.name} data-ai-hint="person portrait" />
+            <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="avatar-upload">Ubah Foto Profil</Label>
+            <Input id="avatar-upload" type="file" accept="image/*" onChange={handleAvatarChange} />
+             <FormMessage>{form.formState.errors.avatar?.message}</FormMessage>
+          </div>
+        </div>
+
         <FormField
             control={form.control}
             name="name"
