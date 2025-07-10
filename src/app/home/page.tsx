@@ -55,13 +55,13 @@ const newsArticles = [
 ];
 
 const brandLogos = [
-    { name: 'Candela', image: 'https://placehold.co/200x100.png', aiHint: 'candela logo' },
-    { name: 'InMode', image: 'https://placehold.co/200x100.png', aiHint: 'inmode logo' },
-    { name: 'Sofwave', image: 'https://placehold.co/200x100.png', aiHint: 'sofwave logo' },
-    { name: 'BiAxis', image: 'https://placehold.co/200x100.png', aiHint: 'biaxis logo' },
-    { name: 'INDIBA', image: 'https://placehold.co/200x100.png', aiHint: 'indiba logo' },
-    { name: 'Pollogen', image: 'https://placehold.co/200x100.png', aiHint: 'pollogen logo' },
-    { name: 'Lumenis', image: 'https://placehold.co/200x100.png', aiHint: 'lumenis logo' },
+    { name: 'Candela', image: '/images/merk/candela.png', aiHint: 'candela logo' },
+    { name: 'InMode', image: '/images/merk/inmode.png', aiHint: 'inmode logo' },
+    { name: 'Sofwave', image: '/images/merk/sofwave.png', aiHint: 'sofwave logo' },
+    { name: 'BiAxis', image: '/images/merk/biaxis.png', aiHint: 'biaxis logo' },
+    { name: 'INDIBA', image: '/images/merk/indiba.png', aiHint: 'indiba logo' },
+    { name: 'Pollogen', image: '/images/merk/pollogen.png', aiHint: 'pollogen logo' },
+    { name: 'Lumenis', image: '/images/merk/lumenis.png', aiHint: 'lumenis logo' },
 ];
 
 export default function HomePage() {
