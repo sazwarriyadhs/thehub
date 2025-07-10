@@ -16,7 +16,7 @@ export default async function ClientLayout({
   return (
     <div className="bg-muted/40">
       <SidebarProvider defaultOpen={true}>
-        <ClientSidebarNav />
+        <ClientSidebarNav client={client} />
         <ClientLayoutContent client={client}>
             {children}
         </ClientLayoutContent>

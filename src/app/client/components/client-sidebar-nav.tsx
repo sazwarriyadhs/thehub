@@ -1,7 +1,6 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -28,28 +27,12 @@ import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Client } from '@/types';
 
-const LOGGED_IN_CLIENT_ID = 'cli-001';
+type ClientSidebarNavProps = {
+    client: Client | null | undefined;
+}
 
-export function ClientSidebarNav() {
+export function ClientSidebarNav({ client }: ClientSidebarNavProps) {
   const pathname = usePathname();
-  const [client, setClient] = useState<Client | null>(null);
-
-  useEffect(() => {
-    async function getClient() {
-      try {
-        const response = await fetch(`/api/clients/${LOGGED_IN_CLIENT_ID}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch client data');
-        }
-        const clientData = await response.json();
-        setClient(clientData);
-      } catch (error) {
-        console.error(error);
-        setClient(null);
-      }
-    }
-    getClient();
-  }, []);
 
   const navLinks = [
     { href: '/client/dashboard', label: 'Dashboard', icon: LayoutDashboard },

@@ -26,12 +26,6 @@ export default function ClientLayoutContent({
   client: Client | null | undefined;
   children: React.ReactNode;
 }) {
-  const [currentClient, setCurrentClient] = useState(client);
-
-  useEffect(() => {
-    setCurrentClient(client);
-  }, [client]);
-
   return (
     <SidebarInset>
       <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4 sm:px-6">
@@ -45,20 +39,20 @@ export default function ClientLayoutContent({
             <span className="sr-only">Notifications</span>
           </Button>
 
-          {currentClient && (
+          {client && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                       <Avatar>
-                          <AvatarImage src={currentClient.avatar} alt={currentClient.name} data-ai-hint="person portrait"/>
-                          <AvatarFallback>{currentClient.name.charAt(0)}</AvatarFallback>
+                          <AvatarImage src={client.avatar} alt={client.name} data-ai-hint="person portrait"/>
+                          <AvatarFallback>{client.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                   </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
-                  <p className="font-semibold">{currentClient.name}</p>
-                  <p className="text-xs text-muted-foreground font-normal">{currentClient.email}</p>
+                  <p className="font-semibold">{client.name}</p>
+                  <p className="text-xs text-muted-foreground font-normal">{client.email}</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
