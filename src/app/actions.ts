@@ -3,7 +3,7 @@
 import { getProductRecommendations } from '@/ai/flows/ai-product-recommendations';
 import { aiHelpAssistant } from '@/ai/flows/ai-help-assistant';
 import { getTroubleshootingAssistance } from '@/ai/flows/ai-troubleshooting-assistant';
-import { db } from '@/lib/db';
+import { mockDb as db } from '@/lib/db';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -177,7 +177,7 @@ export async function saveAdminUser(formData: FormData) {
       // Assuming one admin, so we update the first entry
       await db.query(
         'UPDATE admin_users SET name = $1, email = $2, avatar = $3 WHERE id = 1',
-        [name, email, avatar]
+        [name, email, avatar, 1]
       );
   } catch(error) {
       console.error(error);
