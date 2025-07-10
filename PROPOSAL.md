@@ -33,6 +33,7 @@ Dasbor komprehensif untuk distributor mengelola semua aspek bisnis mereka.
     -   Mencatat dan menjadwalkan pemeliharaan, perbaikan, dan kalibrasi peralatan.
     -   Melihat riwayat layanan lengkap untuk setiap perangkat.
     -   Menghasilkan Laporan Perintah Kerja (Work Order) dalam format PDF.
+    -   Formulir konfirmasi pekerjaan untuk teknisi di lapangan.
 
 -   **Manajemen Klien (CRUD Penuh):**
     -   Mengelola database klien dengan profil terperinci (kontak, alamat, penanggung jawab).
@@ -58,6 +59,10 @@ Portal layanan mandiri yang disederhanakan bagi klien untuk berinteraksi dengan 
 -   **Peralatan Saya:**
     -   Daftar semua perangkat yang dibeli dari distributor.
     -   Akses mudah ke pemecahan masalah berbasis AI atau untuk mengajukan permintaan layanan untuk perangkat tertentu.
+    -   Melihat riwayat layanan untuk setiap perangkat.
+
+-   **Konfirmasi Pekerjaan:**
+    -   Fitur bagi klien untuk secara resmi mengonfirmasi penyelesaian pekerjaan setelah layanan teknisi selesai, menggunakan nomor surat tugas.
 
 -   **Riwayat Janji Temu:**
     -   Melihat riwayat janji temu yang akan datang dan yang sudah lewat untuk pelatihan, demo, atau layanan.
@@ -88,5 +93,6 @@ Tujuannya adalah menciptakan antarmuka yang bersih, profesional, dan menenangkan
 -   **Bahasa:** TypeScript
 -   **Styling:** Tailwind CSS dengan variabel tema untuk warna, dan komponen dari **shadcn/ui**.
 -   **AI Generatif:** Google AI (melalui Gemini) diimplementasikan menggunakan **Genkit**.
+-   **Database:** PostgreSQL (dengan data tiruan sebagai fallback).
 -   **Pustaka Peta:** OpenLayers untuk peta interaktif.
 -   **Skema & Validasi:** Zod untuk validasi skema yang kuat.
