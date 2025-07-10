@@ -1,15 +1,15 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { fetchAdminUser } from '@/lib/data';
-import AdminLayoutClient from '@/app/admin/components/admin-layout-client';
+import AdminLayoutClient from './components/admin-layout-client';
 
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) { 
-  const admin = fetchAdminUser();
+  const admin = await fetchAdminUser();
 
   return (
     <SidebarProvider defaultOpen={true}>
