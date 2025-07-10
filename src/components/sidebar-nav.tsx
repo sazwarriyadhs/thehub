@@ -66,9 +66,9 @@ export function SidebarNav() {
         <SidebarMenuButton
           asChild
           isActive={
-            item.href === '/admin/dashboard'
-              ? pathname === item.href
-              : pathname.startsWith(item.href)
+            item.href === '/admin/dashboard' && pathname === item.href
+              ? true
+              : item.href !== '/admin/dashboard' && pathname.startsWith(item.href)
           }
           tooltip={item.label}
         >
